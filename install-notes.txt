@@ -1,0 +1,16 @@
+install auf ubuntu 12.04
+
+#benötigte Pakete installieren
+sudo apt-get install binutils-avr gcc-avr avr-libc avrdude subversion eclipse-cdt 
+
+#source code holen:
+mkdir ctbot && cd ctbot
+svn checkout https://www.heise.de:444/svn/ctbot/stable
+#-> Repo in ~/ctbot/stable
+
+#source im eclipse einbinden:
+File -> Import
+General -> Existing Projects into Workspace
+Browse...
+~/ctbot/stable/ct-Bot
+#evtl nochmal mit ct-Sim wenn gewollt
