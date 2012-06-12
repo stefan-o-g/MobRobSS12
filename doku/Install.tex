@@ -1,0 +1,86 @@
+\subsection{Installation}
+Für die Entwicklung wurde ein aktuelles Ubuntu Linux verwendet. In diesem Abschnitt ist beschrieben was für vorbereitende Schritte auf dem System durcheführt werden müssen um entwickeln und den ct-Bot flashen zu können.
+
+
+\subsubsection{System vorbereiten}
+Zunächst müssen einige Softwarepakete nachinstalliert werden:
+\begin{itemize}
+\item eclipse-cdt\\
+Die Eclipse-Variante zur C/C++-Entwicklung. (Der ct-Bot wird in C programmiert.)
+\item binutils-avr, gcc-avr, avr-libc\\
+Werden zum Kompilieren für den Microcontrollers des ct-Bot benötigt. (Cross-Compiler)
+\item avrdude\\
+Wird zum Flashen des Microcontrollers des ct-Bot benötigt.
+\item subversion\\
+Wird zum Holen des aktuellen Quellcodes für den ct-Bot aus dem heise-Repository benötigt.
+\end{itemize}
+Der konkrete Befehl um die Pakete unter Ubuntu zu installieren sieht folgendermaßen aus:
+\begin{lstlisting}
+	sudo apt-get install eclipse-cdt binutils-avr gcc-avr \
+	avr-libc ^avrdude subversion
+\end{lstlisting}
+
+
+\subsubsection{Quellcode holen}
+Für den Quellcode erstellen wir zunächst ein Verzeichnis \textit{ctbot} und wechseln hinein:
+\begin{lstlisting}
+	mkdir ctbot && cd ctbot
+\end{lstlisting}
+Nun holen wir uns den aktuellen stable-Code vom heise-Repository:
+\begin{lstlisting}
+	svn checkout https://www.heise.de:444/svn/ctbot/stable
+\end{lstlisting}
+Der aktuelle Quellcode des ct-Bot befindet sich nun also unter \textit{\~{}/ctbot/stable} und muss im nächsten Schritt nur noch in Eclipse eingebunden werden.
+
+
+\subsubsection{Eclipse einrichten}
+TODO:
+\begin{lstlisting}
+#source im eclipse einbinden:
+File -> Import
+General -> Existing Projects into Workspace
+Browse...
+~/ctbot/stable/ct-Bot
+#evtl nochmal mit ct-Sim wenn gewollt
+
+
+ct-Bot Projekt wählen #evtl. selbes mit ct-Sim
+Project->Properties
+C/C++-Build
+Manage Configurations...
+Debug-MCU-m32
+Set active
+Ok
+Apply
+Ok
+
+#SPEED_CONTROL_AVAILABLE aktivieren für Kompilieren ohne Warnungen
+in der ct-Bot.h den Kommentar vor
+    #define SPEED_CONTROL_AVAILABLE
+entfernen...
+\end{lstlisting}
+
+\subsection{Inbetriebnahme}
+\subsubsection{AVR ISP mkII und avrdude}
+TODO:
+\begin{lstlisting}
+#in betrieb nehmen
+Programmer einstecken
+lsusb zeigt "Atmel Corp. AVR ISP mkII
+
+#flashen mit avrdude
+avrdude
+    -c avrispmkII -> legt den Prgrammer fest
+    -P usb -> usb als connection port
+    -p m32 -> legt das AVR device fest: m32
+    -U flash:w:"<file>":i -> flash gibt an dass der Flash-Speicher verwendet werden soll
+                          -> w gibt an dass geschrieben werden soll (file -> flash)
+                          -> "<file>" is der Pfad zur Datei die ins Flash 
+                             geschrieben werden soll (hier ct-Bot.hex)
+                          -> i gibt das Format der Datei an, hier i für Intel Hex
+sudo!!!
+
+konkret:
+ sudo avrdude -c avrispmkII -P usb -p m32 -U flash:w:"~/ctbot/stable/ct-Bot/Debug-MCU-m32/ct-Bot.hex":i
+
+\end{lstlisting}
