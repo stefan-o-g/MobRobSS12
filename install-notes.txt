@@ -1,4 +1,4 @@
-install auf ubuntu 12.04
+install+inbetriebnahme auf ubuntu 12.04
 
 #benötigte Pakete installieren
 sudo apt-get install binutils-avr gcc-avr avr-libc avrdude subversion eclipse-cdt 
@@ -14,3 +14,40 @@ General -> Existing Projects into Workspace
 Browse...
 ~/ctbot/stable/ct-Bot
 #evtl nochmal mit ct-Sim wenn gewollt
+
+
+ct-Bot Projekt wählen #evtl. selbes mit ct-Sim
+Project->Properties
+C/C++-Build
+Manage Configurations...
+Debug-MCU-m32
+Set active
+Ok
+Apply
+Ok
+
+#SPEED_CONTROL_AVAILABLE aktivieren für Kompilieren ohne Warnungen
+in der ct-Bot.h den Kommentar vor
+    #define SPEED_CONTROL_AVAILABLE
+entfernen...
+
+#in betrieb nehmen
+Programmer einstecken
+$lsusb zeigt "Atmel Corp. AVR ISP mkII
+
+#flashen mit avrdude
+avrdude
+    -c avrispmkII -> legt den Prgrammer fest
+    -P usb -> usb als connection port
+    -p m32 -> legt das AVR device fest: m32
+    -U flash:w:"<file>":i -> flash gibt an dass der Flash-Speicher verwendet werden soll
+                          -> w gibt an dass geschrieben werden soll (file -> flash)
+                          -> "<file>" is der Pfad zur Datei die ins Flash 
+                             geschrieben werden soll (hier ct-Bot.hex)
+                          -> i gibt das Format der Datei an, hier i für Intel Hex
+sudo!!!
+
+konkret:
+$ sudo avrdude -c avrispmkII -P usb -p m32 -U flash:w:"~/ctbot/stable/ct-Bot/Debug-MCU-m32/ct-Bot.hex":i
+
+
