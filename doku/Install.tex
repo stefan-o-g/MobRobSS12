@@ -34,53 +34,52 @@ Der aktuelle Quellcode des ct-Bot befindet sich nun also unter \textit{\~{}/ctbo
 
 
 \subsubsection{Eclipse einrichten}
-TODO:
+Zunächst müssen wir den Quellcode in Eclipse einbinden:
+\begin{itemize}
+\item Dazu wählen wir zunächst im Menü \textit{File} den Unterpunkt \textit{Import}.
+\item Dort wählen wir \textit{General -> Existing Projects into Workspace} und bestätigen mit \textit{Next >}.
+\item Unter der Auswahl \textit{Select root directory} geben wir entweder direkt das Quellcodeverzeichnis an (\textit{\~{}/ctbot/stable/ct-Bot}) oder wählen das Verzeichnis über \textit{Browse...}.
+\end{itemize}
+Nun ist der Quellcode als Projekt in Eclipse eingebunden. Um für den ct-Bot zu kompilieren muss jedoch noch die Build-Configuration angepasst werden:
+\begin{itemize}
+\item Auf der linken Seite wählen wir zunächst das Projekt \textit{ct-Bot} aus.
+\item Im Menü \textit{Project} wählen wir \textit{Properties} und dort \textit{C/C++-Build}.
+\item Dort gehen wir auf \textit{Manage Configurations...} und wählen die Konfiguration \textit{Debug-MCU-m32}. Mit dieser Konfiguration wird der zuvor installierte Cross-Compiler genutzt um eine hex-Datei zum Flashen des ct-Bot zu erstellen.
+\item Wir bestätigen die Auswahl der Konfiguration mit \textit{Set active} und verlassen die Einstellungen mit \textit{Ok}, \textit{Apply} und nochmals \textit{Ok}.
+\end{itemize}
+Nachdem nun auch die passende Konfiguration gewählt wurde lässt sich das Projekt nun auch kompilieren. Jedoch kommt es zu einigen Warnmeldungen.
+Um diese Warnungen loszuwerden öffnen wir die Datei \textit{ct-Bot.h} (\textit{include/ct-Bot.h}) und suchen die Zeile
 \begin{lstlisting}
-#source im eclipse einbinden:
-File -> Import
-General -> Existing Projects into Workspace
-Browse...
-~/ctbot/stable/ct-Bot
-#evtl nochmal mit ct-Sim wenn gewollt
-
-
-ct-Bot Projekt wählen #evtl. selbes mit ct-Sim
-Project->Properties
-C/C++-Build
-Manage Configurations...
-Debug-MCU-m32
-Set active
-Ok
-Apply
-Ok
-
-#SPEED_CONTROL_AVAILABLE aktivieren für Kompilieren ohne Warnungen
-in der ct-Bot.h den Kommentar vor
-    #define SPEED_CONTROL_AVAILABLE
-entfernen...
+//#define SPEED_CONTROL_AVAILABLE
 \end{lstlisting}
+und entfernen die Kommentarzeichen \textit{//}.
+Nun lässt sich das Projekt ohne Warnungen kompilieren und die  eigentliche Entwicklung kann beginnen.
 
 \subsection{Inbetriebnahme}
 \subsubsection{AVR ISP mkII und avrdude}
-TODO:
+Der \textit{AVR ISP mkII} ist der Programmer, mit dem wir die den ct-Bot flashen können. Also Tool dazu verwenden wir \textit{avrdude}, der den \textit{AVR ISP mkII} ansprechen kann.
+
+Nach dem Einstecken des Programmers können wir mit dem Befehl \textit{lsusb} prüfen, ob er korrekt vom System erkannt wird. Die Ausgabe sollte folgenden Text enthalten:
 \begin{lstlisting}
-#in betrieb nehmen
-Programmer einstecken
-lsusb zeigt "Atmel Corp. AVR ISP mkII
+Atmel Corp. AVR ISP mkII
+\end{lstlisting}
 
-#flashen mit avrdude
-avrdude
-    -c avrispmkII -> legt den Prgrammer fest
-    -P usb -> usb als connection port
-    -p m32 -> legt das AVR device fest: m32
-    -U flash:w:"<file>":i -> flash gibt an dass der Flash-Speicher verwendet werden soll
-                          -> w gibt an dass geschrieben werden soll (file -> flash)
-                          -> "<file>" is der Pfad zur Datei die ins Flash 
-                             geschrieben werden soll (hier ct-Bot.hex)
-                          -> i gibt das Format der Datei an, hier i für Intel Hex
-sudo!!!
-
-konkret:
- sudo avrdude -c avrispmkII -P usb -p m32 -U flash:w:"~/ctbot/stable/ct-Bot/Debug-MCU-m32/ct-Bot.hex":i
-
+Um unsere hex-Datei nun auf den ct-Bot zu bekommen, müssen wir \textit{avrdude} mit entsprechenden Parametern aufrufen:
+\begin{itemize}
+\item \textit{-c avrispmkII} legt den \textit{AVR ISP mkII} als Programmer fest.
+\item \textit{-P usb} gibt USB als connection port an.
+\item \textit{-p m32} legt m32 (ATmega32) als AVR device fest.
+\item \textit{-U flash:w:<pfad>:i} legt die Aktion fest:
+	\begin{itemize}
+	\item \textit{flash} gibt an, dass geflasht werden soll.
+	\item \textit{w} (write) gibt an, dass geschrieben werden soll. (Von der Datei in den Flash-Speicher, \textit{r} (read) würde bedeuten vom Flash in die Datei.)
+	\item \textit{<pfad>} gibt den Pfad zu der Datei an.
+	\item \textit{i} gibt (optional) das Format der Datei an. (Hier \textit{i} für \textit{Intel Hex}.)
+	\end{itemize}
+\end{itemize}
+Zu beachten ist, dass \textit{avrude} als root oder über \textit{sudo} aufgerufen werden muss.
+Der konkrete Aufruf würde also folgendermaßen aussehen:
+\begin{lstlisting}
+sudo avrdude -c avrispmkII -P usb -p m32 -U \
+flash:w:"~/ctbot/stable/ct-Bot/Debug-MCU-m32/ct-Bot.hex":i
 \end{lstlisting}

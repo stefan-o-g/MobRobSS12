@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.12.25)  12 JUN 2012 12:50
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.12.25)  13 JUN 2012 13:40
 entering extended mode
  %&-line parsing enabled.
 **Doku.tex
@@ -613,144 +613,27 @@ Class scrartcl Info: You've told me to use the font selection of the element
 (./Install.tex
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 8.
- [4]
-
-! Package inputenc Error: Unicode char \u8:�\expandafter not set up for use wit
-h LaTeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.47 ct-Bot Projekt wählen 
-                            #evtl. selbes mit ct-Sim
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.47 ct-Bot Projekt wählen 
-                            #evtl. selbes mit ct-Sim
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
-
-! Package inputenc Error: Unicode char \u8:�\expandafter not set up for use wit
-h LaTeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.57 #SPEED_CONTROL_AVAILABLE aktivieren für 
-                                              Kompilieren ohne Warnungen
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.57 #SPEED_CONTROL_AVAILABLE aktivieren für 
-                                              Kompilieren ohne Warnungen
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
-
-Overfull \hbox (24.10782pt too wide) in paragraph at lines 57--58
-[][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (172.12296pt too wide) in paragraph at lines 76--77
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (136.88126pt too wide) in paragraph at lines 77--78
-[][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (66.39786pt too wide) in paragraph at lines 78--79
-[][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-
-Overfull \hbox (45.25284pt too wide) in paragraph at lines 79--80
-[][][][][][][][][][][][][][][][][][][] 
- []
-
-
-! Package inputenc Error: Unicode char \u8:�\expandafter not set up for use wit
-h LaTeX.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.80 ...gibt das Format der Datei an, hier i für 
-                                                  Intel Hex
-Your command was ignored.
-Type  I <command> <return>  to replace it with another command,
-or  <return>  to continue without it.
-
-
-! Package inputenc Error: Keyboard character used is undefined
-(inputenc)                in inputencoding `utf8'.
-
-See the inputenc package documentation for explanation.
-Type  H <return>  for immediate help.
- ...                                              
-                                                  
-l.80 ...gibt das Format der Datei an, hier i für 
-                                                  Intel Hex
-You need to provide a definition with \DeclareInputText 
-or \DeclareInputMath before using this key.
-
-
-Overfull \hbox (129.83292pt too wide) in paragraph at lines 80--81
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][] 
- []
-
-[5]
-Overfull \hbox (277.84805pt too wide) in paragraph at lines 84--86
-[][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][][
-][][][][][][][][][][][] 
- []
-
-) [6] (./Doku.aux) ) 
+ [4] [5]) [6] (./Doku.aux) ) 
 Here is how much of TeX's memory you used:
- 8165 strings out of 495021
- 114196 string characters out of 1181034
- 242220 words of memory out of 3000000
+ 8131 strings out of 495021
+ 113689 string characters out of 1181034
+ 210220 words of memory out of 3000000
  11169 multiletter control sequences out of 15000+50000
- 13353 words of font info for 34 fonts, out of 3000000 for 9000
+ 14129 words of font info for 35 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
- 43i,8n,43p,288b,1717s stack positions out of 5000i,500n,10000p,200000b,50000s
- </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecti
-1200.600pk> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1440.600p
-k> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk> </home
-/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1728.600pk> </home/andreas/
-.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/andreas/.texmf-va
-r/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/andreas/.texmf-var/fonts/p
-k/ljfour/jknappen/ec/ecsx2488.600pk></usr/share/texmf-texlive/fonts/type1/publi
-c/amsfonts/cm/cmsy10.pfb>
-Output written on Doku.pdf (6 pages, 106751 bytes).
+ 43i,7n,43p,289b,982s stack positions out of 5000i,500n,10000p,200000b,50000s
+ </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen
+/ec/ecbx1200.600pk> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1
+200.600pk> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1440.600pk
+> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk> </home/
+andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1728.600pk> </home/andreas/.
+texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/andreas/.texmf-var
+/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/andreas/.texmf-var/fonts/pk
+/ljfour/jknappen/ec/ecsx2488.600pk></usr/share/texmf-texlive/fonts/type1/public
+/amsfonts/cm/cmsy10.pfb>
+Output written on Doku.pdf (6 pages, 120189 bytes).
 PDF statistics:
- 386 PDF objects out of 1000 (max. 8388607)
- 67 named destinations out of 1000 (max. 500000)
+ 392 PDF objects out of 1000 (max. 8388607)
+ 32 named destinations out of 1000 (max. 500000)
  81 words of extra memory for PDF output out of 10000 (max. 10000000)
 
