@@ -72,7 +72,6 @@ void line(){
 }
 
 int display_remote(){
-	bot_sens_isr();
 	int16 c = ir_read();
 	int16 n = c & ~(1<<11);
 
