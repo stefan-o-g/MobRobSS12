@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.27)  23 JUL 2012 13:27
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.27)  23 JUL 2012 18:36
 entering extended mode
  %&-line parsing enabled.
 **Doku.tex
@@ -623,27 +623,42 @@ Class scrartcl Info: You've told me to use the font selection of the element
 (./Install.tex
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 8.
- [4] [5]) [6] (./Motte.tex) (./Zeitplan.tex) [7] (./Doku.aux) ) 
+ [4] [5]) [6] (./Motte.tex
+Underfull \hbox (badness 10000) in paragraph at lines 14--16
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 17--34
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 35--38
+
+ []
+
+[7]) (./Zeitplan.tex) [8] (./Doku.aux) ) 
 Here is how much of TeX's memory you used:
- 8157 strings out of 495061
- 114098 string characters out of 1182621
+ 8158 strings out of 495061
+ 114104 string characters out of 1182621
  210226 words of memory out of 3000000
  11167 multiletter control sequences out of 15000+50000
  14129 words of font info for 35 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  43i,7n,43p,289b,982s stack positions out of 5000i,500n,10000p,200000b,50000s
- </home/ikarus/.
-texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/ikarus/.texmf-var/
-fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/ikarus/.texmf-var/fonts/pk/l
-jfour/jknappen/ec/ecsx1440.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jkna
-ppen/ec/ecsx1200.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ec
-sx1728.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600
-pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home
-/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx2488.600pk></usr/share/texmf
--texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-Output written on Doku.pdf (7 pages, 133044 bytes).
+ </home/ikarus/.texmf-var/fonts/pk/ljfo
+ur/jknappen/ec/ecbx1200.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappe
+n/ec/ecti1200.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1
+440.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk>
+ </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1728.600pk> </home/ik
+arus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/ikarus/.texm
+f-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/ikarus/.texmf-var/font
+s/pk/ljfour/jknappen/ec/ecsx2488.600pk></usr/share/texmf-texlive/fonts/type1/pu
+blic/amsfonts/cm/cmsy10.pfb>
+Output written on Doku.pdf (8 pages, 140313 bytes).
 PDF statistics:
- 451 PDF objects out of 1000 (max. 8388607)
- 39 named destinations out of 1000 (max. 500000)
+ 467 PDF objects out of 1000 (max. 8388607)
+ 40 named destinations out of 1000 (max. 500000)
  129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
