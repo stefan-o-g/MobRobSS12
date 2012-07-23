@@ -1,12 +1,11 @@
-This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2011.12.25)  13 JUN 2012 13:40
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009/Debian) (format=pdflatex 2012.4.27)  23 JUL 2012 13:27
 entering extended mode
  %&-line parsing enabled.
 **Doku.tex
 (./Doku.tex
 LaTeX2e <2009/09/24>
 Babel <v3.8l> and hyphenation patterns for english, usenglishmax, dumylang, noh
-yphenation, ngerman, german, german-x-2009-06-19, ngerman-x-2009-06-19, loaded.
-
+yphenation, loaded.
 (/usr/share/texmf-texlive/tex/latex/koma-script/scrartcl.cls
 Document Class: scrartcl 2009/07/24 v3.04a KOMA-Script document class (article)
 
@@ -111,10 +110,15 @@ File: babel.def 2008/07/06 v3.8l Babel common definitions
 \babel@savecnt=\count88
 \U@D=\dimen103
 )
+
+Package babel Warning: No hyphenation patterns were loaded for
+(babel)                the language `ngerman'
+(babel)                I will use the patterns loaded for \language=0 instead.
+
+\l@ngerman = a dialect from \language0
 \l@naustrian = a dialect from \language\l@ngerman 
 Package babel Info: Making " an active character on input line 92.
-))
-(/usr/share/texmf-texlive/tex/latex/base/fontenc.sty
+)) (/usr/share/texmf-texlive/tex/latex/base/fontenc.sty
 Package: fontenc 2005/09/27 v1.99g Standard LaTeX package
 
 (/usr/share/texmf-texlive/tex/latex/base/t1enc.def
@@ -434,7 +438,7 @@ Package etexcmds Info: Could not find \expanded.
 (etexcmds)             that some package has redefined \expanded.
 (etexcmds)             In the latter case, load this package earlier.
 )
-(/etc/texmf/tex/latex/config/hyperref.cfg
+(/usr/share/texmf-texlive/tex/latex/latexconfig/hyperref.cfg
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
 (/usr/share/texmf-texlive/tex/latex/oberdiek/kvoptions.sty
@@ -605,6 +609,12 @@ LaTeX Font Info:    External font `cmex10' loaded for size
 Class scrartcl Info: You've told me to use the font selection of the element
 (scrartcl)           `sectioning' that is an alias of element `disposition'
 (scrartcl)            on input line 5.
+Class scrartcl Info: You've told me to use the font selection of the element
+(scrartcl)           `sectioning' that is an alias of element `disposition'
+(scrartcl)            on input line 12.
+Class scrartcl Info: You've told me to use the font selection of the element
+(scrartcl)           `sectioning' that is an alias of element `disposition'
+(scrartcl)            on input line 17.
 )
 \tf@toc=\write4
 \openout4 = `Doku.toc'.
@@ -613,27 +623,27 @@ Class scrartcl Info: You've told me to use the font selection of the element
 (./Install.tex
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 8.
- [4] [5]) [6] (./Doku.aux) ) 
+ [4] [5]) [6] (./Motte.tex) (./Zeitplan.tex) [7] (./Doku.aux) ) 
 Here is how much of TeX's memory you used:
- 8131 strings out of 495021
- 113689 string characters out of 1181034
- 210220 words of memory out of 3000000
- 11169 multiletter control sequences out of 15000+50000
+ 8157 strings out of 495061
+ 114098 string characters out of 1182621
+ 210226 words of memory out of 3000000
+ 11167 multiletter control sequences out of 15000+50000
  14129 words of font info for 35 fonts, out of 3000000 for 9000
  28 hyphenation exceptions out of 8191
  43i,7n,43p,289b,982s stack positions out of 5000i,500n,10000p,200000b,50000s
- </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen
-/ec/ecbx1200.600pk> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecti1
-200.600pk> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1440.600pk
-> </home/andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1200.600pk> </home/
-andreas/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx1728.600pk> </home/andreas/.
-texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600pk> </home/andreas/.texmf-var
-/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home/andreas/.texmf-var/fonts/pk
-/ljfour/jknappen/ec/ecsx2488.600pk></usr/share/texmf-texlive/fonts/type1/public
-/amsfonts/cm/cmsy10.pfb>
-Output written on Doku.pdf (6 pages, 120189 bytes).
+ </home/ikarus/.
+texmf-var/fonts/pk/ljfour/jknappen/ec/ecbx1200.600pk> </home/ikarus/.texmf-var/
+fonts/pk/ljfour/jknappen/ec/ecti1200.600pk> </home/ikarus/.texmf-var/fonts/pk/l
+jfour/jknappen/ec/ecsx1440.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jkna
+ppen/ec/ecsx1200.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ec
+sx1728.600pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1200.600
+pk> </home/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecrm1728.600pk> </home
+/ikarus/.texmf-var/fonts/pk/ljfour/jknappen/ec/ecsx2488.600pk></usr/share/texmf
+-texlive/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
+Output written on Doku.pdf (7 pages, 133044 bytes).
 PDF statistics:
- 392 PDF objects out of 1000 (max. 8388607)
- 32 named destinations out of 1000 (max. 500000)
- 81 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 451 PDF objects out of 1000 (max. 8388607)
+ 39 named destinations out of 1000 (max. 500000)
+ 129 words of extra memory for PDF output out of 10000 (max. 10000000)
 
