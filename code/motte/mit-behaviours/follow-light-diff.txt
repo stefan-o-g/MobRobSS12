@@ -1,0 +1,146 @@
+Index: ct-Bot.h
+===================================================================
+--- ct-Bot.h	(Revision 1906)
++++ ct-Bot.h	(Arbeitskopie)
+@@ -53,7 +53,7 @@
+ #define DISPLAY_AVAILABLE			/*!< Display aktiv */
+ #define DISPLAY_REMOTE_AVAILABLE	/*!< Sende LCD Anzeigedaten an den Simulator */
+ 
+-#define MEASURE_MOUSE_AVAILABLE			/*!< Geschwindigkeiten werden aus den Maussensordaten berechnet */
++//#define MEASURE_MOUSE_AVAILABLE			/*!< Geschwindigkeiten werden aus den Maussensordaten berechnet */
+ //#define MEASURE_COUPLED_AVAILABLE		/*!< Geschwindigkeiten werden aus Maus- und Encoderwerten ermittelt und gekoppelt */
+ //#define MEASURE_POSITION_ERRORS_AVAILABLE	/*!< Fehlerberechnungen bei der Positionsbestimmung */
+ 
+@@ -61,7 +61,7 @@
+ 
+ #define ADC_AVAILABLE		/*!< A/D-Konverter */
+ 
+-//#define MOUSE_AVAILABLE	/*!< Maus Sensor */
++#define MOUSE_AVAILABLE	/*!< Maus Sensor */
+ 
+ #define ENA_AVAILABLE		/*!< Enable-Leitungen */
+ #define SHIFT_AVAILABLE		/*!< Shift Register */
+@@ -75,7 +75,7 @@
+ //#define MAP_AVAILABLE			/*!< Aktiviert die Kartographie */
+ #define MAP_2_SIM_AVAILABLE	/*!< Sendet die Map zur Anzeige an den Sim */
+ 
+-//#define SPEED_CONTROL_AVAILABLE /*!< Aktiviert die Motorregelung */
++#define SPEED_CONTROL_AVAILABLE /*!< Aktiviert die Motorregelung */
+ //#define ADJUST_PID_PARAMS		/*!< macht PID-Paramter zur Laufzeit per FB einstellbar */
+ //#define SPEED_LOG_AVAILABLE 	/*!< Zeichnet Debug-Infos der Motorregelung auf MMC auf */
+ 
+Index: bot-logic/bot-logic.c
+===================================================================
+--- bot-logic/bot-logic.c	(Revision 1906)
++++ bot-logic/bot-logic.c	(Arbeitskopie)
+@@ -89,6 +89,15 @@
+ 	insert_behaviour_to_list(&behaviour, new_behaviour(102, bot_prototype_behaviour, BEHAVIOUR_ACTIVE));
+ #endif
+ 
++// ### Eigene Verhalten
++#ifdef BEHAVIOUR_FOLLOW_LIGHT_AVAILABLE
++	insert_behaviour_to_list(&behaviour, new_behaviour(104, bot_follow_light_behaviour, BEHAVIOUR_INACTIVE));
++	insert_behaviour_to_list(&behaviour, new_behaviour(103, bot_run_from_light_behaviour, BEHAVIOUR_INACTIVE));
++	insert_behaviour_to_list(&behaviour, new_behaviour(105, bot_follow_light_stack_behaviour, BEHAVIOUR_ACTIVE));
++#endif
++
++
++
+ #ifdef BEHAVIOUR_REMOTECALL_AVAILABLE
+ 	// Dieses Verhalten kann andere starten
+ 	insert_behaviour_to_list(&behaviour, new_behaviour(254, bot_remotecall_behaviour, BEHAVIOUR_INACTIVE));
+@@ -139,7 +148,7 @@
+ #endif
+ 
+ #ifdef BEHAVIOUR_DRIVE_STACK_AVAILABLE
+-	insert_behaviour_to_list(&behaviour, new_behaviour(190, bot_save_waypos_behaviour, BEHAVIOUR_INACTIVE));
++	insert_behaviour_to_list(&behaviour, new_behaviour(190, bot_save_waypos_behaviour, BEHAVIOUR_ACTIVE));
+ #endif
+ 
+ #ifdef BEHAVIOUR_CANCEL_BEHAVIOUR_AVAILABLE
+
+Index: ui/available_screens.h
+===================================================================
+--- ui/available_screens.h	(Revision 1906)
++++ ui/available_screens.h	(Arbeitskopie)
+@@ -29,9 +29,10 @@
+ 
+ #ifdef DISPLAY_AVAILABLE
+ 
+-#define DISPLAY_SCREENS 10 /*!< max. Anzahl an Screens */
++#define DISPLAY_SCREENS 11 /*!< max. Anzahl an Screens */
+ 
+ #define DISPLAY_SENSOR_AVAILABLE			/*!< zeigt die Sensordaten an */
++#define DISPLAY_FOLLOW_LIGHT_AVAILABLE
+ #define DISPLAY_REMOTECALL_AVAILABLE		/*!< Steuerung der Verhalten inkl. Parametereingabe */
+ //#define DISPLAY_BEHAVIOUR_AVAILABLE		/*!< zeigt den Status aller Verhalten an */
+ #define DISPLAY_ODOMETRIC_INFO				/*!< zeigt Positions- und Geschwindigkeitsdaten an */
+Index: include/bot-logic/available_behaviours.h
+===================================================================
+--- include/bot-logic/available_behaviours.h	(Revision 1906)
++++ include/bot-logic/available_behaviours.h	(Arbeitskopie)
+@@ -29,6 +29,11 @@
+ 
+ //#define BEHAVIOUR_PROTOTYPE_AVAILABLE /**< Prototyp fuer neue Verhalten */
+ 
++// ### Eigene Verhalten
++#define BEHAVIOUR_FOLLOW_LIGHT_AVAILABLE
++
++
++
+ //#define BEHAVIOUR_HW_TEST_AVAILABLE /**< Testverhalten vorhanden? (ehemals TEST_AVAILABLE_ANALOG, _DIGITAL, _MOTOR) */
+ //#define BEHAVIOUR_SIMPLE_AVAILABLE /*!< sind die Beispielverhalten vorhanden? */
+ //#define BEHAVIOUR_DRIVE_SQUARE_AVAILABLE /*!< Demoverhalten im Quadrat fahren vorhanden? */
+@@ -38,25 +43,25 @@
+ //#define BEHAVIOUR_HANG_ON_AVAILABLE /*!< Erkennen des Haengenbleibens als Notfallverhalten? */
+ //#define BEHAVIOUR_GOTO_AVAILABLE /*!< goto vorhanden? */
+ //#define BEHAVIOUR_GOTOXY_AVAILABLE /*!< gotoxy vorhanden? */
+-#define BEHAVIOUR_GOTO_POS_AVAILABLE /*!< goto_pos vorhanden? */
++//#define BEHAVIOUR_GOTO_POS_AVAILABLE /*!< goto_pos vorhanden? */
+ //#define BEHAVIOUR_GOTO_OBSTACLE_AVAILABLE /*!< goto_obstacle vorhanden? */
+ #define BEHAVIOUR_TURN_AVAILABLE /*!< turn vorhanden? */
+ //#define BEHAVIOUR_TURN_TEST_AVAILABLE /*!< turn_test vorhanden? */
+ //#define BEHAVIOUR_TEST_ENCODER_AVAILABLE /*!< Encoder-Test Verhalten vorhanden? */
+ 
+-//#define BEHAVIOUR_DRIVE_DISTANCE_AVAILABLE /*!< Strecke fahren vorhanden ?*/
++#define BEHAVIOUR_DRIVE_DISTANCE_AVAILABLE /*!< Strecke fahren vorhanden ?*/
+ 
+-#define BEHAVIOUR_MEASURE_DISTANCE_AVAILABLE /*!< Distanzesensorasuwertung vorhanden? */
++//#define BEHAVIOUR_MEASURE_DISTANCE_AVAILABLE /*!< Distanzesensorasuwertung vorhanden? */
+ 
+-#define BEHAVIOUR_SCAN_AVAILABLE /*!< Gegend scannen vorhanden? */
+-#define BEHAVIOUR_SOLVE_MAZE_AVAILABLE /*!< Wandfolger vorhanden? */
++//#define BEHAVIOUR_SCAN_AVAILABLE /*!< Gegend scannen vorhanden? */
++//#define BEHAVIOUR_SOLVE_MAZE_AVAILABLE /*!< Wandfolger vorhanden? */
+ //#define BEHAVIOUR_FOLLOW_LINE_AVAILABLE	/*!< Linienfolger vorhanden? */
+ //#define BEHAVIOUR_FOLLOW_LINE_ENHANCED_AVAILABLE /*!< erweiterter Linienfolger, der auch mit Unterbrechungen und Hindernissen klarkommt */
+ 
+-#define BEHAVIOUR_SERVO_AVAILABLE 	/*!< Kontrollverhalten fuer die Servos */
++//#define BEHAVIOUR_SERVO_AVAILABLE 	/*!< Kontrollverhalten fuer die Servos */
+ 
+ //#define BEHAVIOUR_PATHPLANING_AVAILABLE /*!< Pfadplanungsverhalten  */
+-//#define BEHAVIOUR_DRIVE_STACK_AVAILABLE /*!< Abfahren der auf dem Stack gesicherten Koordinaten */
++#define BEHAVIOUR_DRIVE_STACK_AVAILABLE /*!< Abfahren der auf dem Stack gesicherten Koordinaten */
+ 
+ //#define BEHAVIOUR_OLYMPIC_AVAILABLE	/*!< Olympiadenverhalten vorhanden? */
+ 
+@@ -77,7 +82,7 @@
+ //#define BEHAVIOUR_CALIBRATE_PID_AVAILABLE /*!< Kalibrierungsverhalten fuer Motorregelung vorhanden? */
+ //#define BEHAVIOUR_CALIBRATE_SHARPS_AVAILABLE /*!< Kalibrierungsverhalten fuer Distanzsensoren vorhanden? */
+ 
+-#define BEHAVIOUR_DELAY_AVAILABLE /*!< Delay-Routinen als Verhalten */
++//#define BEHAVIOUR_DELAY_AVAILABLE /*!< Delay-Routinen als Verhalten */
+ 
+ //#define BEHAVIOUR_DRIVE_AREA_AVAILABLE /*!< flaechendeckendes Fahren mit Map */
+ 
+@@ -277,6 +282,10 @@
+ 
+ #include "bot-logic/behaviour_prototype.h"
+ 
++// ### Eigene Verhalten
++#include "bot-logic/behaviour_follow_light.h"
++
++
+ #include "bot-logic/behaviour_hw_test.h"
+ #include "bot-logic/behaviour_simple.h"
+ #include "bot-logic/behaviour_drive_square.h"
