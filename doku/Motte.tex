@@ -15,56 +15,10 @@ Frameworks hat einige Vorteile:
 		Verhalten.
 \end{itemize}
 Nachteil ist leider die etwas komplexe Einarbeitung, da der Einstieg nicht sehr gut
-dokumentiert ist. \\
+dokumentiert ist.
 
-In dieser Lösung wurde die Aufgabe einer Lichtquelle zu folgen (Motte), in drei
-Unteraufgabenunterteilt:Linksdrehen, Rechtsdrehen, geradeaus Fahren.
-Welche Funktion ausgeführt wird, entscheidet ein Vergelich der beiden Fotowiderstände
-(LDR - \textit{Light Dependent Resistor}). In diesen Vergleich fliesen zwei Konstanten ein:
-\verb+LDR_CORRECT+ und \verb+TOLERANCE+. Mit \verb+LDR_CORRECT+ lassen sich
-(Hardwarebedingte) Unterschiede zwischen den beiden Sensoren ausgleichen. Liefert
-der linke Widerstand Beispielsweise bei gleichmäßiger Bestrahlung immer einen
-Wert der um 20 höher ist wie der des Rechten, so kann mit \verb+LDR_CORRECT=20+ dieser
-Fehler ausgeglichen werden. Die zweite Konstante ist für das geradeaus Fahren wichtig.
-Logisch wäre die Lichtquelle direkt vor dem Bot, wenn beide Sensoren den gleichen
-Wert liefern. In der Praxis wird das aber selten der Fall sein. Deswegen kann mit
-\verb+TOLERANCE+ angegeben werden, wie viel mehr Licht auf den linken bzw. den rechten
-Widerstand strahlen darf, ohne das es als links bzw. rechts Fahren interpretiert wird.
-Bei einerm \verb+TOLERANCE+ Wert von 15 wird Beispielsweise trozdem geradeaus gefahren,
-wenn der linke Sensor einen um 10 höheren Wert wie der rechte aufweist. Jetzt kann
-der Roboter grade auf die Lichtquelle zu fahren, selbst wenn diese nicht zu 100\%
-vor ihm liegt. \\
+\subsubsection{Allgemeiner Ansatz}
 
-Das Verhalten der Kakalake (vor einer Lichtquelle fliehen) ist exakt gleich dem der 
-Motte implementiert, nur das rückwärts gefahren wird. So wird die Lichtquelle immer
-von der Roboter Vorderseite fixiert und dann davon weggefahren. \\
-
-Die modifizerte Version der Motte, die sich den gefahrenen Weg merken und diesen 
-wieder zurückfahren können soll, wurde über vorhandene Verhalten realisiert.
-Dazu wurde zuerst das Verhalten \verb+BEHAVIOUR_DRIVE_STACK_AVAILABLE+ zugeschalten \\
-(in \verb+ct-Bot/include/bot-logic/available\_behaviours.h+ und anschlißend
-auf aktiv gesetzt (\verb+bot_save_waypos_behaviour+ in
-\verb+ct-Bot/bot-logic/bot-logic.c+). Dieses Verhalten zeichnet im Folgenden
-alle Informationen auf, die für das wiederfinden der relevanten Positonen nötig sind.
-Nach einer über die Konstante \verb+MAX_WAYPOINTS+ festgelegten Anzahl Wegpunkten,
-wird das \verb+drive_stack()+ Verhlaten aufgerufen das die Punkte wieder anfährt.
-Wenn der Roboter an der Ausgangsposition angekommen ist, beginnt er wieder von vorne mit
-der Wegaufzeichnung und der Lichtquellensuche. \\
-
-Code einfügen / manipuliernen:
-\begin{itemize}
-    \item \verb+behaviour_follow_light.c+  im Verzeichnis 
-        \verb+ct-Bot/bot-logic/+ einsortieren.
-    \item \verb+behaviour_follow_light.h+ in Verzeichnis
-        \verb+ct-Bot/include/bot-logic/+ einsortieren.
-    \item Des Weiteren sind Änderungen in den Dateinen \verb+ct-Bot/ct-Bot.h+, \\
-        \verb+ct-Bot/bot-logic/bot-logic.c+,
-        \verb+ct-Bot/ui/available_screens.h+ und \\
-        \verb+ct-Bot/include/bot-logic/available_behaviours.h+ zu nötig.
-        Wie genau die Änderungen sind ist der \verb+follow-light-diff.txt+ zu entnehmen.
-\end{itemize}
-
-\subsubsection{Ansatz 2: by Kevin}
 Allgemeines Vorgehen \\
 Die Aufgabe ist an sich ziemlich simpel da man nur die beiden sensor werte vergleichen muss und angemessen darauf reagieren.
 Um die Sensorwerte einfach zu vergleichen wurde hierzu einfach die differenz der beiden werte genommen.
