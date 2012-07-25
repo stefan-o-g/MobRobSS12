@@ -72,10 +72,12 @@ void line(){
 }
 
 int display_remote(){
+	//Fernbedinungscode Lesen
 	int16 c = ir_read();
+	//störendes Bit auf 0 setzen damit der Code für die Tasten gleich bleibt
 	int16 n = c & ~(1<<11);
 
-
+	
 	if(c != 0){
 		display_clear();
 		display_cursor(1,1);
@@ -95,7 +97,7 @@ enum{
 int state = stand;
 
 void dostuff(){
-	
+	//Fernbedinungscode abfragen und zustand wechseln
 	int code = display_remote();
 	switch(code){
 	case 12289: state = stand; //1 tv
