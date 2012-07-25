@@ -2,9 +2,9 @@
 \label{motte_kakerlake}
 
 \subsubsection{Ansatz 1: Verhaltensframework}
-Dieser Ansatz versucht die Aufgabe zu lösen in dem das Verhaltensframework
-genutzt wird, dass mit dem ct-Bot Reopsitory ausgelierfert wird. Die Nutzung des 
-Frameworks hat einige Vorteile:
+Allgemeines zum Verhaltensframework \\
+In dem Reopsitory des ct-Bot wird ein Verhaltesframework mit ausgeliefert.
+Die Nutzung des Frameworks hat einige Vorteile:
 \begin{itemize}
 	\item Eigener Code leich einzusortieren und stört kein vorhandenen Code.
 	\item Eigene Verhalten können simpel auf andere Verhalten zugreifen.
@@ -15,10 +15,50 @@ Frameworks hat einige Vorteile:
 		Verhalten.
 \end{itemize}
 Nachteil ist leider die etwas komplexe Einarbeitung, da der Einstieg nicht sehr gut
-dokumentiert ist. \\
+dokumentiert ist. Nach einiger Suche wird man im \verb+ct-Bot/bot-logic/+ 
+Verzeichnis fündig. Dort gibt es eine \verb+behaviour_prototype.c+ Datei
+in die der Funktionsaufbau eines Verhaltens als grobes Grundgerüst sichtbar ist.
+Die passende Header-Datei befindet sich dann unter
+\verb+ct-Bot/include/bot-logic/behaviour_prototype.h.+. Auch diese
+zeigt wieder wie ein typischer Aufbau aussehen könnte. Wenn weiter in allen Dateien
+nach dem Schlüsselwort \textit{prototype} gesucht wird, so findet man zunächst
+die Datei \\ \verb+available_behaviours.h+. Diese bietet "`Schalter"'
+an um Verhalten verfügbar zu machen. D.h. ein hier definiertes Verhalten
+wird compiliert und kann später genutzt oder gleich zu begin aktiviert werden.
+Nicht zu vergessen ist auch das am Ende der Datei die Header-Datei des
+Verhaltens zu inkludieren. An diese Stelle wäre auch noch kurz die
+\verb+ct-Bot/ct-Bot.h+ zu erwähnen, die ebenfalls "`Schalter"' enthält.
+Der Unterschied ist, dass durch Veränderungen an der Datei sich grundlegende
+Hardware Teile abschalten/einschlaten lassen (wie z.B. das Display).
+Die letze essentiell wichtige Datei ist die \verb+ct-Bot/bot-logic/bot-logic.c+.
+Dort müssen Verhalten mit frei wählbarer Priorität in die Verhaltensliste
+eingefügt werden. Bei dem Einfügen wird auch entschieden ob das Verhlaten
+aktiv ist. Die priorität kann genutzt werden um Notfallverhalten wie
+\textit{nicht von der Tichkante falle} als wichtiger einzustufen als
+\textit{gerade aus fahren}. Damit wird verhindert, dass der Roboter von der
+Tischkante fällt, obowhl er anderen Befehl folgt, die ihn möglicherweise
+direkt auf eine solche Kante zusteuern lassen. Dammit das alles funktioniert
+ruft die \verb+main()+-Funktion in einer Endlosschleife \verb+bot_behave()+ auf,
+welche alle aktiven Verhalten der Priorität nach bearbeitet. Ein zum
+Startzeitpunkt nicht aktives Verhlaten kann zur Laufzeit durch andere Verhalten
+aktiviert werden.
 
-In dieser Lösung wurde die Aufgabe einer Lichtquelle zu folgen (Motte), in drei
-Unteraufgabenunterteilt:Linksdrehen, Rechtsdrehen, geradeaus Fahren.
+Ergänzend könnte es praktisch sein, die eigenen Verhalten auf dem Display
+Debuggingausgaben machen zu lassen. Dazu muss die Datei
+\verb+ct-Bot/ui/available_screens.h+ verändert werden. Die Anzahl
+der möglichen Screens (\verb+DISPLAY_SCREENS+) kann inkrementiert werden
+wenn nicht schon genügend vorhanden sind. Des Weiteren ist ein eigener
+"`Schalter"' eingefügen, mit dem das eigene Verhalten arbeitetn sollte.
+Im Verhlaten sind die Dateien \verb+display.h+ und \\
+\verb+ui/available_screens.h+ zu inkludieren. Jetzt kann die Variable
+\verb+display_screen+ z.B. auf 11 gesetzt werden, dammit die eigenen
+Ausgaben zu sehen sind. \\
+
+
+Dieser Ansatz löst die Aufgabe in dem das Verhaltensframework
+genutzt wird, dass mit dem ct-Bot Reopsitory ausgelierfert wird.
+Diese Lösung teilte die Aufgabe einer Lichtquelle zu folgen (Motte), in drei
+Unteraufgaben:Linksdrehen, Rechtsdrehen, geradeaus Fahren.
 Welche Funktion ausgeführt wird, entscheidet ein Vergelich der beiden Fotowiderstände
 (LDR - \textit{Light Dependent Resistor}). In diesen Vergleich fliesen zwei Konstanten ein:
 \verb+LDR_CORRECT+ und \verb+TOLERANCE+. Mit \verb+LDR_CORRECT+ lassen sich
