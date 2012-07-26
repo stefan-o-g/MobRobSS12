@@ -3,5 +3,22 @@
 
 \subsubsection{Ansatz 1: Verhaltensframework}
 
-\subsubsection{Ansatz 3: by Andy}
 ...
+
+\subsubsection{Allgemeiner Ansatz}
+\noindent \verb+void acht_nonbehav()+ \\
+
+Für diese Aufgabe wurde ein relativ einfaches Prinzip gewählt: Es gibt zwei Schleifen nacheinander, welche den Bot zunächst eine Rechtskurve und anschließend eine Linkskurve fahren lassen. Ergeben beide Kurven einen Kreis, dann fährt der Bot eine "'Acht"'. Da die Motorleistung von Bot zu Bot, von rechtem Motor zu linkem Motor oder einfach je nach Batteriestand anders sind ging das Konzept aber so nicht auf.
+Um diese Verschiedenheiten auszugleichen wurden die Variablen \verb+static int distr+ und \verb+ static int distl+ eingeführt, um zur Laufzeit Änderungen an der Kurvenfahrt vorzunehmen. Diese Variablen bestimmen wie lange der Bot die Links- (\verb+distl+) bzw. Rechtskurve (\verb+distr+) fährt. So kann die Kurvenfahrt für jede Richtung einzeln justiert werden. 
+Hierzu wird in jedem Schleifendurchlauf mit Hilfe von \verb+ir_read()+ der Wert vom Infrarotsensor ausgelesen und in einer switch-case-Anweisung überprüft. Je nach Sensorwert wird dann \verb+distr+ oder \verb+distr+ inkrementiert bzw. dekrementiert. Für die Fernbedienung \textit{TOTAL control} aus dem Labor ergibt sich dafür folgende Steuerung:
+\begin{itemize}
+	\item \textbf{Pfeil hoch}   : \verb_distr_  inkrementieren
+	\item \textbf{Pfeil runter} : \verb_distr_  dekrementieren
+	\item \textbf{Pfeil rechts} : \verb_distl_  inkrementieren
+	\item \textbf{Pfeil links}  : \verb_distl_  dekrementieren
+\end{itemize}
+
+\noindent Die aktuellen Werte von \verb+distr+ und \verb+distl+ werden auf dem Display ausgegeben.\\
+
+\textit{(Anmerkung: Für jede Kurve gibt es je zwei ineinander geschachtelte Schleifen, die beide jeweils von }\verb+0+\textit{ bis }\verb+distr+/\verb+distl+\textit{ laufen. Warum nicht nur eine Schleife verwendet wurde hat einen einfachen Grund: Erhöht man den Kurvenradius durch anpassen der Motorgeschwindigkeiten, muss }\verb+distr+/\verb+distl+\textit{ ebenfalls angepasst werden und erreicht schnell Werte, die ein Integer nicht mehr fassen kann, was zu einem Integer-Überlauf und somit Fehlverhalten führt.)}
+

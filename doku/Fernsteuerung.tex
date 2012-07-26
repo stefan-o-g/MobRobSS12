@@ -7,5 +7,3 @@
 
 Um die Fernbedienung benutzen zu können muss eigentlich nur der Sensorwert mit \verb|ir_read()| gelesen werden. Beim lesen wird der Wert gelöscht sodas man den Code nicht 2 mal liest. Die Fernbedienung setzt bei mehrmaligem drücken der selben Taste das 11 bit abwächselnd auf 1 und 0. Man muss also die Bits die zum Befehl gehören und die die Zusatzinformationen beinhalten trennen. Da das Layout des Codes nirgens Dokumentiert und der rest der Bits stabil zu sein scheint, wurde nach erhalten des Codes einfach das 11 Bit mit \verb|code & ~(1<<11)| auf 0 gesetzt. Somit unterscheiden die Codes bei mehrmaligem drücken nichtmehr. Die verwendete Fernbedienung liefert zudem unterschidliche Codes für unterschidliche Geräte (Multifunktions Fernbedienung). Für die Aufgaben wurden die TV Codes der Fernbedienung verwendet.
 
-\subsubsection{Ansatz 3: by Andy}
-...

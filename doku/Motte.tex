@@ -61,5 +61,22 @@ Ist diese Unterscheidung der Position getan muss noch im Fall von gleichmäßige
 
 
 
-\subsubsection{Ansatz 3: by Andy}
-...
+\subsubsection{Allgemeiner Ansatz 2 }
+
+\textbf{Motte - }\verb+void motte_nonbehav()+\\
+
+Die Funktion \verb+void motte_nonbehav()+ besteht hauptsächlich aus zwei Schleifen: Eine lässt den Roboter nach links drehen, solange der linke Sensor einen kleineren ( \^= helleren) Wert liefert liefert. Die andere lässt den Robotor nach rechts drehen, solange der rechte Sensor einen kleineren Wert liefert. Um zu verhindern, dass der Roboter in Bereichen mit geringem Unterschied zwischen den Sensorwerten nur kleine, ruckelnde Bewegungen macht wurde die Variable \verb+stopMotor+ eingeführt, welche in der Schleife inkrementiert wird und als zusätzliche Bedingung im Schleifenkopf dient. So haben die Bewegungen immer ein mindestmaß an Reichweite.
+Innerhalb beider Schleifen wird in jedem Durchlauf unterschieden ob der Roboter sich schnell oder langsam drehen soll. Schnell, wenn die Sensorwerte um mehr als das doppelte verschieden sind, ansonsten langsam.
+Am Ende jedes Schleifendurchlaufs werden noch Displayausgaben gemacht und die Sensorwerte werden über \verb+sensor_update()+ neu eingelesen.
+Nach Ablauf beider Schleifen, also wenn der Bot ungefähr in Richtung Lichtquelle zeigt, gibt es noch eine Schleife, welche den Roboter auf die Lichtquelle zufahren lässt. Hierzu kommen als Schleifenbedingungen wieder die Variable \verb+stopMotor+ und die Hilfsfunktion \verb+nearly_equal()+ zum Einsatz. Im Schleifenkörper werden neben der Motoransteuerung ebenfalls wieder Displayausgaben gemacht sowie Sensorwerte neu eingelesen.\\
+
+\noindent \textbf{Kakerlake - }\verb+void kakerlake_nonbehav()+\\
+
+Die Funktion \verb+void kakerlake_nonbehav()+ ist der Funktion \verb+void motte_nonbehav()+ sehr ähnlich:
+Zunächst wird überprüft welcher Sensor einen größeren (\^= dunkleren) Wert liefert und dementsprechend wird eine Schleife (rechts oder links drehen) ausgeführt. Als Bedingungen im Schleifenkopf werden wieder die Sensorwerte sowie die Variable \verb+stopMotor+ verwendet. Im Schleifenkörper wird wieder wie in der Funktion \verb+void motte_nonbehav()+ unterschieden ob schnell oder langsam gedreht werden soll.
+Anschließend gibt es wieder eine Schleife welche den Bot vom Licht wegfahren lässt. Dazu werden immer die bisherigen Sensorwerte zwischengespeichert und die neuen Werte abgerufen. Je nachdem ob die neuen Sensorwerte größer oder kleiner werden flüchtet der Roboter vorwärts bzw. rückwärts.\\
+
+\noindent \textbf{Die Hilfsfunktion }\verb+nearly_equal(int v1, int v2, int delta)+\\
+
+Die Funktion bekommt zwei Werte \verb+v1+ und \verb+v2+ und eine Delta \verb+delta+ als Parameter. Sie errechnet zunächst die absolute Differenz zwischen  \verb+v1+ und \verb+v2+ und überprüft dann, ob die errechnete Differenz größer als das angegebene Delta (\verb+delta+) ist. Falls ja wird \verb+0+ für \textit{false} zurückgegeben, ansonsten \verb+1+ für \textit{true}.
+
