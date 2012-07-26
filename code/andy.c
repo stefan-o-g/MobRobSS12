@@ -136,32 +136,91 @@ void kakerlake_nonbehav(){
 
 
 void acht_nonbehav(){
-	static int dist = 200;
+	static int distr = 18;
+	static int distl = 18;
 	int ir = ir_read();
 	int i,j;
 
 	display_clear();
 	display_printf("Acht!");
 	display_cursor(2,1);
-	display_printf("Dist=%d  IR=%d", dist, ir);
-	//hoch 8208
-	if(ir == 8208)
-		dist +=10;
-	//runter 10257
-	if(ir == 10257)
-		dist -=10;
-
+	display_printf("DistR=%d  IR=%5d", distr, ir);
 	display_cursor(3,1);
+	display_printf("DistL=%d  IR=%5d", distl, ir);
+
+	display_cursor(4,1);
 	display_printf("Rechtskurve");
-	for(i=0; i<dist; i++)
-		for(j=0; j<dist; j++)
-			motor_set(BOT_SPEED_MEDIUM, BOT_SPEED_SLOW);
+	for(i=0; i<distr; i++)
+		for(j=0; j<distr; j++){
+			motor_set(BOT_SPEED_FAST, 0); //BOT_SPEED_SLOW
 
-	display_cursor(3,1);
+			ir = ir_read();
+			switch(ir){
+				//hoch 8208 oder 10256 = pfeil hoch
+				case 8208:
+				case 10256:
+					distr++;
+					break;
+				//runter 8209 oder 10257 = pfeil runter
+				case 8209:
+				case 10257:
+					distr --;
+					break;
+				//hoch 8214 oder 10262 = pfeil rechts
+				case 8214:
+				case 10262:
+					distl++;
+					break;
+				//runter 8213 oder 10261 = pfeil links
+				case 8213:
+				case 10261:
+					distl--;
+					break;
+				default:
+					break;
+			}
+
+			display_cursor(2,1);
+			display_printf("DistR=%d", distr);
+			ir = 0;
+		}
+
+	display_cursor(4,1);
 	display_printf("Linkskurve ");
-	for(i=0; i<dist; i++)
-		for(j=0; j<dist; j++)
-			motor_set(BOT_SPEED_SLOW, BOT_SPEED_MEDIUM);
+	for(i=0; i<distl; i++)
+		for(j=0; j<distl; j++){
+			motor_set(0, BOT_SPEED_FAST); //BOT_SPEED_SLOW
+
+			ir = ir_read();
+			switch(ir){
+				//hoch 8208 oder 10256 = pfeil hoch
+				case 8208:
+				case 10256:
+					distr++;
+					break;
+				//runter 8209 oder 10257 = pfeil runter
+				case 8209:
+				case 10257:
+					distr --;
+					break;
+				//hoch 8214 oder 10262 = pfeil rechts
+				case 8214:
+				case 10262:
+					distl++;
+					break;
+				//runter 8213 oder 10261 = pfeil links
+				case 8213:
+				case 10261:
+					distl--;
+					break;
+				default:
+					break;
+			}
+
+			display_cursor(3,1);
+			display_printf("DistL=%d", distl);
+			ir = 0;
+		}
 }
 
 int nearly_equal(int v1, int v2, int delta){
