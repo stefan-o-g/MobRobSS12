@@ -39,9 +39,9 @@ Index: bot-logic/bot-logic.c
  
 +// ### Eigene Verhalten
 +#ifdef BEHAVIOUR_FOLLOW_LIGHT_AVAILABLE
-+	insert_behaviour_to_list(&behaviour, new_behaviour(104, bot_follow_light_behaviour, BEHAVIOUR_INACTIVE));
++	insert_behaviour_to_list(&behaviour, new_behaviour(104, bot_follow_light_behaviour, BEHAVIOUR_ACTIVE));
 +	insert_behaviour_to_list(&behaviour, new_behaviour(103, bot_run_from_light_behaviour, BEHAVIOUR_INACTIVE));
-+	insert_behaviour_to_list(&behaviour, new_behaviour(105, bot_follow_light_stack_behaviour, BEHAVIOUR_ACTIVE));
++	insert_behaviour_to_list(&behaviour, new_behaviour(105, bot_follow_light_stack_behaviour, BEHAVIOUR_INACTIVE));
 +#endif
 +
 +

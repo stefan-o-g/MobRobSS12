@@ -3,4 +3,29 @@ Im Rahmen der Vorlesung "'Mobile Roboter"' der Hochschule Aalen wurden die Aufga
 Genutzt wurde Eclipse zum Entwickeln der Programme sowie avrdude zum Flashen des Microcontrollers des ct-Bot.
 
 \subsection{Der ct-Bot}
-...
+"`Der c't-Bot ist ein Projekt der Fachzeitschrift c't aus dem Verlag Heinz Heise.
+Er soll möglichst vielen Lesern den Zugang zu dem spannenden Thema Robotik eröffnen.
+Daher besteht das Projekt aus zwei Teilen: Dem eigentlichen Roboter c't-Bot und dem passenden Simulator c't-Sim.
+
+Den c't-Bot gibt es nur als Bausatz. In der Grundversion besitzt er zwei Räder,
+hat eine runde Grundfläche vom Durchmesser einer CD und ist mit einer ganzen Reihe von Sensoren
+bestückt. Seine Intelligenz sitzt in einem Mikrocontroller, der in C programmiert wird. Mechanik
+und Intelligenz sind ein Tradeoff zwischen Preis, Eleganz und Stabilität. Ganz bewusst kommen keine
+SMD-Bauteile zum Einsatz, damit auch unerfahrene Löter eine Chance haben,
+sich ihren Spielgefährten aufzubauen.
+
+Der Simulator c't-Sim ist in Java geschrieben und macht ausführlichen Gebrauch von der
+3D-Bibliothek Java3D. Er läuft derzeit unter Windows und Linux. Damit man den ganzen Steuer-Code
+für den Roboter nur einmal entwicklen muss, ist dieser in C geschrieben. Er läst sich für PC und Mikrocontroller
+übersetzen. Auf dem PC nimmt er per TCP/IP Kontakt zum Simulator auf. Dieser versorgt den C-Teil dann mit Sensorwerten.
+Auf dem Mikrocontroller liest er dann die echten Sensoren aus. Der Simulator funktioniert auch
+ohne den Roboter und der Roboter auch ohne den Simulator.
+
+Das ganze Projekt lebt vom Mitmachen. Der von c't vorgestellte Quelltext liefert zwar ein recht
+vollständiges Framework für den Roboter und den Simulator, die Intelligenz des Roboters zu
+implementieren bleibt aber den Lesern überlassen. Dennoch fließen pfiffge Patches immer wieder in
+den offiziellen Code ein. Der gesamte Code steht unter der GPL."'
+\footnote{Quelle: Benjamin Benz, \url{http://wiki.ctbot.de/index.php?title=Hauptseite&oldid=3655}}
+
+
+
