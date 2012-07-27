@@ -1,3 +1,45 @@
+/**
+ * 	Zustände (Programme/Funktionen)
+ */
+enum state{
+	stand,
+	motte1,
+	karkerlake1,
+	motte2,
+	karkerlake2,
+	acht,
+	linie
+};
+/**
+ * 	Aktueller Zustand (Bestimmt das Programm das abgearbeitet wird)
+ */
+enum state state = stand;
+
+
+/**
+ * Einstigspunkt für das Programm.
+ * Diese Funktion sollte in der Hauptschleife ausgeführt werden.
+ */
+void entry_point();
+
+/**
+ * Lichtgesteuerte verhalten wie Motte und Kakerlake 
+ * @param dir gibt an in welche rechtung gefahren werden soll wenn licht gleichmäßig einstrahlt 1 = zum Licht hin 0 = vom Licht weg.
+ * 
+ */
+void light(int dir);
+
+/**
+ * 	Linie folgen.
+ */
+void line();
+
+/**
+ * 	Hilfsfunktion zum lesen des Fernbedinungscodes.
+ * 	Passt den erhaltenen Code an indem das Alternierende 11 Bit immer auf 0 gesetzt;
+ */
+int get_code();
+
 
 /**
  * Lässt den Bot einer Lichtquelle folgen bzw. auf sie zufahren.
