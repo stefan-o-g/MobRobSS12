@@ -1,7 +1,17 @@
+#ifndef ANDY_H_
+#define ANDY_H_
+
+#include "sensor.h"
+#include "motor.h"
+#include "display.h"
+#include "ir-rc5.h"
+#include "command.h"
+#include "uart.h"
+
 /**
  * 	Zustände (Programme/Funktionen)
  */
-enum state{
+enum funktion{
 	stand,
 	motte1,
 	karkerlake1,
@@ -10,17 +20,15 @@ enum state{
 	acht,
 	linie
 };
-/**
- * 	Aktueller Zustand (Bestimmt das Programm das abgearbeitet wird)
- */
-enum state state = stand;
 
+uint8_t* read_payload(command_t* cmd, uint8_t* buffer);
+command_t* read_command(void);
 
 /**
  * Einstigspunkt für das Programm.
  * Diese Funktion sollte in der Hauptschleife ausgeführt werden.
  */
-void entry_point();
+void entry_point(void);
 
 /**
  * Lichtgesteuerte verhalten wie Motte und Kakerlake 
@@ -32,13 +40,13 @@ void light(int dir);
 /**
  * 	Linie folgen.
  */
-void line();
+void line(void);
 
 /**
  * 	Hilfsfunktion zum lesen des Fernbedinungscodes.
  * 	Passt den erhaltenen Code an indem das Alternierende 11 Bit immer auf 0 gesetzt;
  */
-int get_code();
+int get_code(void);
 
 
 /**
@@ -70,3 +78,4 @@ void acht_nonbehav(void);
  * @param delta Der Wert um den sich v1 maximal +/- von v2 unterscheiden darf.
  */
 int nearly_equal(int v1, int v2, int delta);
+#endif

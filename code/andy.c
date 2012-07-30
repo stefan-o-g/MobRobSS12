@@ -5,11 +5,12 @@
  *      Author: andy
  */
 
-#include "sensor.h"
-#include "motor.h"
-#include "display.h"
-#include "ir-rc5.h"
-#include "andy.h"
+#include "include/andy.h"
+
+/**
+ * 	Aktueller funktion (Bestimmt das Programm das abgearbeitet wird)
+ */
+enum funktion funktion = stand;
 
 void motte_nonbehav(){
 	//Sensorwerte aktualliseren und Bildschirmausgabe
@@ -250,24 +251,29 @@ void light(int dir){
 	display_printf("Sum: %d",sensLDRL+sensLDRR);
 	
 	//speed variable
-	int16 speed = 5;
+	int16 speed = BOT_SPEED_NORMAL;
 
 	//grenzwert der entscheidet wann wieder zum licht hingedreht wird
-	int16 trsh = 50;
+	int16 trsh = 80;
 	
 	//wenn licht einseitig einstrahlt zum licht hindrehen
+	display_cursor(1,1);
 	if(lightpos > trsh){
+		display_printf("turn left");
 		motor_set(-speed,speed);
 	}else if(lightpos < -trsh){
+		display_printf("turn right");
 		motor_set(speed,-speed);
 	
 	//beide sensoren sind mehr oder weniger gleich
 	}else{
 			//beide sensoren werden hell betrahlt = fahren
-			if(sensLDRL+sensLDRR < 800){
+			if(sensLDRL+sensLDRR < 300){
+				display_printf("drive");
 				motor_set(speed*dir,speed*dir);
 			//beide sensoren sind dunkel = stehenbleiben
 			}else{
+				display_printf("stand still");
 				motor_set(0,0);
 			}
 	}
@@ -299,7 +305,7 @@ void line(){
 		motor_set(-4,4);
 	}else{
 		if((sensLineL + sensLineR) < 100 ){
-			motor_set(1,5);
+			motor_set(0,BOT_SPEED_NORMAL);
 		}else{
 			motor_set(2,2);
 		}
@@ -308,42 +314,66 @@ void line(){
 
 int get_code(){
 	//Fernbedinungscode Lesen
-	int16 c = ir_read();
+	//int16 c = ir_read();
 	//störendes Bit auf 0 setzen damit der Code für die Tasten gleich bleibt
-	int16 n = c & ~(1<<11);
+	//int16 n = c & ~(1<<11);
+	command_t* cmd = read_command();
+	if(cmd != ((void*)0)){
+		return cmd->request.subcommand;
+	}
+	return 0;
 }
 
 
-	motte2,
-	karkerlake2,
-	acht,
+
+
+uint8_t* read_payload(command_t* cmd, uint8_t* buffer){
+	int read = 0;
+	read += low_read(buffer,cmd->payload);
+	while(read < cmd->payload){
+		read += low_read(buffer,cmd->payload-read);
+	}
+	return buffer;
+}
+
+
+command_t* read_command(){
+	if (uart_data_available() >= sizeof(command_t)) {
+		if (command_read() == 0) {
+			return get_received_command();
+		}
+	}
+	return (void*)0;
+}
+
+
 
 
 void entry_point(){
-	//Fernbedinungscode abfragen und zustand wechseln
+	//Fernbedinungscode abfragen und funktion wechseln
 	int code = get_code();
 	switch(code){
-	case 12289: state = stand; //1 tv
+	case 1: funktion = stand; //1 tv
 	break;
-	case 12290: state = motte1; //2 tv
+	case 2: funktion = motte1; //2 tv
 	break;
-	case 12291: state = karkerlake1; //3 tv
+	case 3: funktion = karkerlake1; //3 tv
 	break;
-	case 12292:  state = motte2; //4 tv
+	case 4:  funktion = motte2; //4 tv
 	break;
-	case 12293: state = karkerlake2; //5 tv
+	case 5: funktion = karkerlake2; //5 tv
 	break;
-	case 12294: state = acht; //6 tv
+	case 6: funktion = acht; //6 tv
 	break;
-	case 12295: state = linie; //7 tv
+	case 7: funktion = linie; //7 tv
 	break;
-	case 12296: //8 tv
+	case 8: //8 tv
 	break;
-	case 12297:  //9 tv
+	case 9:  //9 tv
 	break;
 	}
 	
-	switch(state){
+	switch(funktion){
 		case motte1: light(1);
 		break;		
 		case karkerlake1: light(-1);
