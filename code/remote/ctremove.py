@@ -59,6 +59,7 @@ prompt = "ctBot-remote $ "
 
 
 def help(cmd=""):
+'''Printing help for the user.'''
 	if cmd == "":
 		print "COMMANDS:"
 		print "subcmd <subcommand>"
@@ -116,6 +117,7 @@ def help(cmd=""):
 ##################################################################
 
 def openSocket():
+'''Open a UDP-Socket to send data to the bot.'''
 	global udp_sock, udp_ip, udp_port
 
 	print "#Using bot-IP ", udp_bot_ip
@@ -127,6 +129,11 @@ def openSocket():
 ##################################################################
 
 def send_cmd(subcmd, ldata="ld", rdata="rd", payload="\x00", data=""):
+'''Builds and sends a command to the bot.
+   A command looks like this:
+   start (>) + 1byte command  + 1byte subcommand + 1byte payload 
+   + 2byte left data + 2byte right data + 2byte seq nr + end (<) + data
+   Payload is the size of the 'data' appended to the command in bytes.'''
 	#start (>) + 1byte command  + 1byte subcommand + 1byte payload 
 	#+ 2byte left data + 2byte right data + 2byte seq nr + end (<) + data
 	cmd = ">#" + subcmd + payload + ldata + rdata + "sn<"	+ data
@@ -136,8 +143,8 @@ def send_cmd(subcmd, ldata="ld", rdata="rd", payload="\x00", data=""):
 
 ##################################################################
 
-#recv will run as a thread, setting the variable "rec" when data was received
 def recv():
+'''Running in a thread, receiving the data from the bot an processing it.'''
 	global rec, rec_data, rec_size, prompt, run
 
 	sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
@@ -154,6 +161,7 @@ def recv():
 ##################################################################
 
 def user_input_eval(usrin):
+'''Parses the user input and performs correspondig actions.'''
 	cmd_list = usrin.split()
 	global udp_bot_ip
 	global udp_port
@@ -236,6 +244,7 @@ def user_input_eval(usrin):
 ##################################################################
 
 def move():
+'''Controls the bot using the 'wasd'-keys.'''
 	print "Bot controlls:"
 	#print "w -> foward		q -> stop 'move'"
 	#print "s -> backward		e -> stop Bot"
