@@ -120,6 +120,7 @@ def openSocket():
 	'''Open a UDP-Socket to send data to the bot.'''
 	global udp_sock, udp_ip, udp_port
 
+	print "#Opening socket for new connection..."
 	print "#Using bot-IP ", udp_bot_ip
 	print "#Using port ", udp_port 
 
@@ -202,6 +203,7 @@ def user_input_eval(usrin):
 						raise
 					udp_bot_ip = cmd_list[2]
 					print "#New bot-IP: " + udp_bot_ip
+					openSocket()
 				except:
 					print "#Invalid IP!"
 			elif cmd_list[1] == "port":
@@ -209,6 +211,7 @@ def user_input_eval(usrin):
 				if newport >= 0 and newport <= 65535:
 					udp_port = int(cmd_list[2])
 					print "#New port: ", udp_port
+					openSocket()
 				else:
 					print "#Invalid port!"
 			else:

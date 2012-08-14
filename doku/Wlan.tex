@@ -2,7 +2,8 @@
 \label{wlan}
 
 \subsubsection{Auf dem Bot}
-TODO: welche funktionen werden genutzt, wie sieht ein paket bzw die c-struktur aus, blablabla...
+\label{wlan_auf_bot}
+TODO: wie wird der Bot konfiguriert, welche funktionen werden genutzt, wie sieht ein paket bzw die c-struktur aus, blablabla...
 
 \subsubsection{Auf dem PC}
 TODO: einfach ins wlan verbinden und udp paket verschicken blablabla....
@@ -39,12 +40,12 @@ Nachfolgend die bisher implementierten Befehle:
 	\item move\\
 	Nach Eingabe dieses Befehls ist der Bot über die Tastatur fernsteuerbar. Die Tastenbelegung dafür ist wie folgt:
 	\begin{itemize}
-		\item W - Vorwärts fahren.
-		\item S - Rückwärts fahren.
-		\item A - Nach links drehen.
-		\item D - Nach rechts drehen.
-		\item E - Anhalten.
-		\item Q - Beendet den move-Befehl und kehrt zur Befehlseingabe zurück.
+		\item \textbf{W} Vorwärts fahren.
+		\item \textbf{S} Rückwärts fahren.
+		\item \textbf{A} Nach links drehen.
+		\item \textbf{D} Nach rechts drehen.
+		\item \textbf{E} Anhalten.
+		\item \textbf{Q} Beendet den move-Befehl und kehrt zur Befehlseingabe zurück.
 	\end{itemize}
 	\item get <what>\\
 	Zeigt einem den aktuellen Wert von <what> an. Dabei kann <what> momentan \textit{botip} (also die IP des zu steuernden Bots) oder \textit{port} (also der UDP-Port, über den kommuniziert wird) sein.
@@ -67,7 +68,30 @@ Nachfolgend die bisher implementierten Befehle:
 \end{itemize}
 Die Tastenkombination \textit{STRG+C} wird von dem Skript abgefangen und sendet dem Bot sofort den Befehl zum Anhalten, beendet das Skript jedoch nicht. Um das Skript zu beenden muss einer der oben beschrieben Befehle \textit{quit} oder \textit{exit} verwendet werden.
 
+\subsubsection{Aufbau von ctremote.py}
+Das Skript besteht intern aus folgenden Funktionen:
+
+\begin{itemize}
+	\item \verb+help(cmd="")+\\
+	Die Funktion bekommt einen optionalen Parameter \textit{cmd}. Wird kein Parameter übergeben, gibt die Funktion einen allgemeinen Hilfetext aus. Wird jedoch ein Befehl als Parameter übergeben, gibt die Funktion eine, für den übergebenen Befehl, passende Hilfe aus.
+	\item \verb+openSocket()+\\
+	Die Funktion öffnet einen neuen UDP-Socket mit IP und Port der aktuellen Konfiguration. (IP und Port entweder wie im Skript selbst hinterlegt oder mit dem \textit{set}-Befehl (siehe \ref{ctremote}) gesetzt.)
+	\item \verb+send_cmd(subcmd,ldata="ld",rdata="rd",payload="\x00",data="")+\\
+	Diese Funktion ist dafür zuständig ein Paket nach Norm des Bots (siehe \ref{wlan_auf_bot}) zusammenzubauen und schließlich an ihn zu senden.
+	Der einzig zwingend nötige Parameter ist der Subcommand \textit{subcmd} (1 Byte), welcher dem Bot die auszuführende Aktion mitteilt.
+	Optionale Parameter sind \textit{ldata} (2Byte) und \textit{rdata} (2 Byte), welche z.B. als Parameter für den Subcommand genutzt werden können, sowie \textit{payload} (1 Byte, Größe von \textit{data}) und \textit{data} (bis zu 255 Byte), welche genutzt werden können, wenn man zusätzliche Daten an den Bot senden will.
+	Die Größe der Parameter ist dabei genau einzuhalten.
+	\item \verb+recv()+\\
+	Diese Funktion läuft während der gesamten Ausführung des Skripts als Thread und ist dafür zuständig Daten vom Bot zu empfangen und zu verarbeiten.
+	\item \verb+user_input_eval(usrin)+\\
+	Diese Funktion ist dafür zuständig die Eingaben des Nutzers zu interpretieren und die entsprechenden Aktionen durchzuführen, indem sie die anderen Funktionen des Skripts aufruft.
+	Der zwingend anzugebende Paramter \textit{usrin} ist dabei die Eingabe des Nutzers.
+	\item \verb+move()+
+	In dieser Funktion läuft eine Schleife, welche dauerhaft die Tastatureingaben einliest und entsprechend der Eingabe den Bot fahren lässt (wozu sie intern \verb+send_cmd+ nutzt). Die Schleife wird erst duch drücken der Taste Q beendet.
+\end{itemize}
+
 
 \subsubsection{Programm auf dem Bot}
 \label{ctremote_bot}
+TODO: wie sieht das programm aus, welches die WLAN-pakete auswertet und aktionen auslöst etc.
 
