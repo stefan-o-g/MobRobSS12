@@ -5,6 +5,8 @@ from sys import argv, exit
 from os import system
 import socket
 import thread
+from time import sleep
+from struct import *
 
 #################################################################
 #CODE TAKEN FROM: http://code.activestate.com/recipes/134892/
@@ -72,6 +74,8 @@ def help(cmd=""):
 		print "   Set <what> to <value>."
 		print "   <what>: botip : The IP of the bot."
 		print "           port  : The port the bot is using."
+		print "tokensend <tokenfile>"
+		print "   Sending a tokenfile to the Bot."
 		print "help"
 		print "   Print this."
 		print "help <cmd>"
@@ -88,8 +92,7 @@ def help(cmd=""):
 		print "   1 or stand : The bot will just stop."
 		print "   2 or motte1 : The bot will execute 'light(1)'."
 		print "   3 or kakerlake1 : The bot will execute 'light(-1)'."
-		print "   4 or motte2 : The bot will execute 'motte_nonbehaTODO: wie sieht das programm aus, welches die WLAN-pakete auswertet und aktionen auslöst etc.
-v()'."
+		print "   4 or motte2 : The bot will execute 'motte_nonbehav()'."
 		print "   5 or kakerlake2 : The bot will execute 'kakerlake_nonbehav()'."
 		print "   6 or acht : The bot will execute 'acht_nonbehav()'."
 		print "   7 or linie : The bot will execute 'linie()'."
@@ -112,6 +115,16 @@ v()'."
 		print "   Print help for a single command."
 		print "<cmd> can be one of the following:"
 		print "   subcmd\n   set\n   get\n   help"
+	elif cmd == "tokensend":
+		print "tokensend <tokenfile>"
+		print "   <tokenfile> has to look like this:"
+		print "      token value"
+		print "   Example:"
+		print "      5 while"
+		print "      7 a"
+		print "      45 ="
+		print "      7 b"
+		print "   The bot will compile and interpret the code/tokens."
 	else:
 		print "#Sorry. No help available for this command..."
 
@@ -136,9 +149,25 @@ def send_cmd(subcmd, ldata="ld", rdata="rd", payload="\x00", data=""):
 	start (>) + 1byte command  + 1byte subcommand + 1byte payload 
 	+ 2byte left data + 2byte right data + 2byte seq nr + end (<) + data
 	Payload is the size of the 'data' appended to the command in bytes.'''
+
+	#if type(subcmd) == int:
+	#	subcmd = str(subcmd)
+	#if type(ldata) == int:
+	#	ldata = str(ldata)
+	#if type(rdata) == int:
+	#	rdata = str(rdata)
+	#if type(payload) == int:
+	#	payload = str(payload)
+	#if type(data) == int:
+	#	data = str(data)
+
 	#start (>) + 1byte command  + 1byte subcommand + 1byte payload 
 	#+ 2byte left data + 2byte right data + 2byte seq nr + end (<) + data
 	cmd = ">#" + subcmd + payload + ldata + rdata + "sn<"	+ data
+
+	#if len(cmd) != 11:
+	#	print "#Error: wrong paket length!"
+	#	return
 
 	global udp_sock, udp_bot_ip, udp_port
 	udp_sock.sendto( cmd, (udp_bot_ip, udp_port) )
@@ -226,7 +255,9 @@ def user_input_eval(usrin):
 				print "#port: ", udp_port
 			else:
 				print "#Dont know what you want to get..."
-			#EOF GET	
+			#EOF GET
+		elif cmd_list[0] == "tokensend":
+			tokensend(cmd_list[1])	
 		elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
 			send_cmd('\x01')
 			run = False
@@ -240,8 +271,8 @@ def user_input_eval(usrin):
 	except Exception, e:
 		print "\n#Command ERROR! Try 'help'..."
 		print "#Error: ", e
-		import traceback
-		print traceback.format_exc()
+		#import traceback
+		#print traceback.format_exc()
 		
 
 
@@ -277,6 +308,58 @@ def move():
 
 	send_cmd('m',"\x00\x00","\x00\x00")
 		
+
+##################################################################
+
+def tokensend(infile=""):
+	'''Sending the given "tokenfile" to the Bot.
+	The transmission ands with an l/r-data = 0xFF paket.
+	The token is transmitted in ldata and rdata to have redundacy.
+	The "tokenfile" has to look like this:
+	token value
+	Example:
+	5 while'''
+	if infile == "":
+		print "#Error: no file given!"
+		return
+
+	try:
+		fileobject = open(infile, "r")
+	except:
+		print "#Error: no such file!"
+		return
+	
+	try:
+		print "#Sending... this could take a while..."
+		send_cmd('t') #START transmission
+		for line in fileobject:
+			tmpln = line.split(" ")
+			try:
+				token = int(tmpln[0])
+				#get token as little end. unsig. short 
+				tokenpak = pack('<H', token)
+			except:
+				print "#Error: token is not a number!"
+				fileobject.close()
+				return
+			try:
+				#get payload as little end. unsig. char
+				pload = pack('<B', len(tmpln[1]))
+			except:
+				print "#Error: payload error!"
+				fileobject.close()
+				return
+			send_cmd('t', tokenpak, tokenpak, pload, tmpln[1])
+			sleep(0.1)
+		send_cmd('t', "\xff\xff", "\xff\xff") #EOF transmission
+	except:
+		print "#Error: bad file!"
+		fileobject.close()
+		return
+
+	fileobject.close()
+
+
 
 ##################################################################
 
