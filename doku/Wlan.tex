@@ -3,17 +3,34 @@
 
 \subsubsection{Auf dem Bot}
 \label{wlan_auf_bot}
-TODO: wie wird der Bot konfiguriert, welche funktionen werden genutzt, wie sieht ein paket bzw die c-struktur aus, blablabla...
+TODO: wie wird der Bot konfiguriert
+TODO:welche funktionen werden genutzt
+TODO: wie sieht ein paket bzw die c-struktur aus
 
 \subsubsection{Auf dem PC}
-TODO: einfach ins wlan verbinden und udp paket verschicken blablabla....
+Um Daten an den Bot zu senden sind lediglich zwei Schritte erforderlich:
+\begin{itemize}
+	\item Zum WLAN verbinden\\
+	Ist der Bot korrekt konfiguriert öffnet er ein Ad-Hoc-WLAN. Zu diesem muss man sich verbinden.
+	\item Paket an den Bot senden bzw. Daten empfangen\\
+	Ist man mit dem WLAN verbunden kann man einfach ein UDP-Paket mit einen speziellen Inhalt (siehe \ref{wlan_auf_bot}) an den Bot senden, so dass dieser das Paket auswerten kann.
+	Hierzu kann z.B. das Tool \textit{sendip} verwendet werden. Ein Beispiel hierzu:\\
+	\textit{\$ perl -e 'print "'>#\textbackslash x02\textbackslash x06\textbackslash x03\textbackslash x11\textbackslash x02\textbackslash x02xy<hallo\textbackslash x00"'' > test.bin\\
+	\$ sudo sendip -p ipv4 -is 192.168.0.234 -p udp -us 2000 -ud 10002 -f test.bin 192.168.0.9}\\
+	Hierzu wird zunächst mit einem PERL print-Befehl ein Paket erzeugt und in eine Datei geschrieben und anschließen wird der Dateiinhalt mit \textit{sendip} an den Bot (hier 192.168.0.9) gesendet.
+	(Die Paramter von links nach rechts: Protokoll IPv4, Quell-IP 192.168.0.234, Protokoll UDP, UDP-Quellport 2000, UDP-Zielport 10002, Datei (deren Inhalt gesendet werden soll) test.bin, die Ziel-IP 192.168.0.9)
+	Der Grund für den Umweg über die Datei ist lediglich, dass man sich dadurch "'verlorene"' Zeichen oder kaputte Eingaben erspart, was der Fall wäre wenn man die Eingabe piped oder über eine Subshell erzeugt.
+\end{itemize}
+Die wesentlich einfachere Variante Pakete an den Bot zu schicken ist das Skript \verb+ctremote.py+ bzw. dessen Funktion \verb+send_cmd(...)+. Dazu siehe \ref{ctremote}.
 
 \subsection{Zusatzaufgabe}
 
 \subsubsection{ctremote.py - Ein Skript zur Fernsteuerung des Bots}
 \label{ctremote}
-Das Skript ist ein interaktives Programm, welches dem Nutzer ermöglicht Befehle einzugeben, die Aktionen auf Seiten des Bots auslösen. Dazu muss auf dem Bot das Programm laufen, welches in Abschnitt \ref{ctremote_bot} beschrieben ist.
+Das Skript ist ein interaktives Programm, welches dem Nutzer ermöglicht Befehle einzugeben, die Aktionen auf Seiten des Bots auslösen. Dazu muss auf dem Bot das Programm laufen, welches in Abschnitt \ref{ctremote_bot} beschrieben ist.\\
+Sieht der Nutzer folgenden Prompt, kann er Befehle eingeben:
 
+\textbf{ctBot-remote \$}\\
 Nachfolgend die bisher implementierten Befehle:
 \begin{itemize}
 	\item subcmd <subcommand>\\
@@ -93,5 +110,5 @@ Das Skript besteht intern aus folgenden Funktionen:
 
 \subsubsection{Programm auf dem Bot}
 \label{ctremote_bot}
-TODO: wie sieht das programm aus, welches die WLAN-pakete auswertet und aktionen auslöst etc.
+TODO: wie sieht das programm aus, welches die WLAN-pakete auswertet und aktionen auslöst blablabla...
 

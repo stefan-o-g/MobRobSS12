@@ -88,7 +88,8 @@ def help(cmd=""):
 		print "   1 or stand : The bot will just stop."
 		print "   2 or motte1 : The bot will execute 'light(1)'."
 		print "   3 or kakerlake1 : The bot will execute 'light(-1)'."
-		print "   4 or motte2 : The bot will execute 'motte_nonbehav()'."
+		print "   4 or motte2 : The bot will execute 'motte_nonbehaTODO: wie sieht das programm aus, welches die WLAN-pakete auswertet und aktionen auslöst etc.
+v()'."
 		print "   5 or kakerlake2 : The bot will execute 'kakerlake_nonbehav()'."
 		print "   6 or acht : The bot will execute 'acht_nonbehav()'."
 		print "   7 or linie : The bot will execute 'linie()'."
@@ -112,7 +113,7 @@ def help(cmd=""):
 		print "<cmd> can be one of the following:"
 		print "   subcmd\n   set\n   get\n   help"
 	else:
-		print "#Sorry. No help available..."
+		print "#Sorry. No help available for this command..."
 
 ##################################################################
 
