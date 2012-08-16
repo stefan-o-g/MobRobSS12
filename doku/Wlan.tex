@@ -3,9 +3,21 @@
 
 \subsubsection{Auf dem Bot}
 \label{wlan_auf_bot}
-TODO: wie wird der Bot konfiguriert
-TODO:welche funktionen werden genutzt
-TODO: wie sieht ein paket bzw die c-struktur aus
+
+TODO: wie wird der Bot konfiguriert (Kevin/Gerhard: wie habt ihr das wlan-zeug am bot konfiguriert?! bitte beschreiben)\\
+
+TODO:welche funktionen werden genutzt (Kevin: du hast rausgefunden wie das ganze zeug geht, kannst du das bitte beschreiben?\\
+
+TODO: wie sieht die c-struktur aus (Andreas: schau nach, schreib auf!)\\
+
+Damit der Bot ein WLAN-Paket als \textit{command} interpretiert, muss es einen Inhalt mit folgendem Aufbau besitzen:
+\begin{figure}[H]
+	\centering
+	\includegraphics[scale=0.5]{pic/ctBotWlanAllgemein}
+	\caption{Allgemeiner Aufbau eines \textit{commands} in einem WLAN-Paket}
+	\label{ctBotWlanAllgemein}
+\end{figure}
+
 
 \subsubsection{Auf dem PC}
 Um Daten an den Bot zu senden sind lediglich zwei Schritte erforderlich:
@@ -13,7 +25,15 @@ Um Daten an den Bot zu senden sind lediglich zwei Schritte erforderlich:
 	\item Zum WLAN verbinden\\
 	Ist der Bot korrekt konfiguriert öffnet er ein Ad-Hoc-WLAN. Zu diesem muss man sich verbinden.
 	\item Paket an den Bot senden bzw. Daten empfangen\\
-	Ist man mit dem WLAN verbunden kann man einfach ein UDP-Paket mit einen speziellen Inhalt (siehe \ref{wlan_auf_bot}) an den Bot senden, so dass dieser das Paket auswerten kann.
+	Ist man mit dem WLAN verbunden kann man einfach ein UDP-Paket mit einen speziellen Inhalt (siehe \ref{wlan_auf_bot}) an den Bot senden, so dass dieser das Paket auswerten kann.\\
+	In unserem Fall sieht ein Paket folgendermaßen aus:
+	\begin{figure}[H]
+		\centering
+		\includegraphics[scale=0.5]{pic/ctBotWlanKonkret}
+		\caption{Konkreter Aufbau eines \textit{commands} für unsere Anwendung}
+		\label{ctBotWlanKonkret}
+	\end{figure}
+	
 	Hierzu kann z.B. das Tool \textit{sendip} verwendet werden. Ein Beispiel hierzu:\\
 	\textit{\$ perl -e 'print "'>#\textbackslash x02\textbackslash x06\textbackslash x03\textbackslash x11\textbackslash x02\textbackslash x02xy<hallo\textbackslash x00"'' > test.bin\\
 	\$ sudo sendip -p ipv4 -is 192.168.0.234 -p udp -us 2000 -ud 10002 -f test.bin 192.168.0.9}\\
