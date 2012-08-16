@@ -4,13 +4,13 @@
 \subsubsection{Auf dem Bot}
 \label{wlan_auf_bot}
 
-TODO: wie wird der Bot konfiguriert (Kevin/Gerhard: wie habt ihr das wlan-zeug am bot konfiguriert?! bitte beschreiben)\\
-
-\subsubsection{Wlan Daten senden/empfangen}
-\label{wlan_funktionen}
-
-Für genauere Infos zu bereits existierenden Funktionen sollte in der CT-Bot nachgeschaut werden.
-
+TODO: wie wird der Bot konfiguriert (Kevin/Gerhard: wie habt ihr das wlan-zeug am bot konfiguriert?! bitte beschreiben)
+\\
+\\
+\textbf{Wlan Daten Senden/Empfangen:} \\
+\\
+Für genauere Infos zu bereits existierenden Funktionen sollte in der CT-Bot nachgeschaut werden.\\
+\\
 \textbf{Senden:} Das Schreiben/Senden von Daten ist relativ einfach da hierfür schon Funktionen zur Verfügung stehen die genau das für einen erledigen.\\
 Mit \verb|command_write(...)| können Kommandos gesendet werden an die Optional auch Daten angehängt werden. Dabei gibt der Payload an wie viel Bytes angehängt werden. 
 \\
@@ -27,7 +27,7 @@ Zuletzt wird mit der von uns zu command.c hinzugefügten Funktion \verb|get_reci
 \\
 \textbf{Payload Daten Auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
 \\
-\verb|uint8_t* read_payload(command_t* cmd, uint8_t* buffer)| Liest die angehängten Daten des übergebenen Kommandos in den übergebenen buffer.\\ Hierfür wird auf die vorhandene Funktion \verb|low_read| zurückgegriffen.
+\verb|uint8_t* read_payload(command_t* cmd, uint8_t* buffer)| liest die angehängten Daten des übergebenen Kommandos in den übergebenen buffer.\\ Hierfür wird auf die vorhandene Funktion \verb|low_read| zurückgegriffen.
 \\
 
 
