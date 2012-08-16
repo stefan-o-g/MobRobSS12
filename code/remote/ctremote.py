@@ -114,7 +114,7 @@ def help(cmd=""):
 		print "help <cmd>"
 		print "   Print help for a single command."
 		print "<cmd> can be one of the following:"
-		print "   subcmd\n   set\n   get\n   help"
+		print "   subcmd\n   set\n   get\n   tokensend\n   help"
 	elif cmd == "tokensend":
 		print "tokensend <tokenfile>"
 		print "   <tokenfile> has to look like this:"
