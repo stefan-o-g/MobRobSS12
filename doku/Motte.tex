@@ -27,18 +27,6 @@ Das Verhalten der Kakalake (vor einer Lichtquelle fliehen) ist exakt gleich dem 
 Motte implementiert, nur das rückwärts gefahren wird. So wird die Lichtquelle immer
 von der Roboter Vorderseite fixiert und dann davon weggefahren. \\
 
-Die modifizerte Version der Motte, die sich den gefahrenen Weg merken und diesen 
-wieder zurückfahren können soll, wurde über vorhandene Verhalten realisiert.
-Dazu wurde zuerst das Verhalten \verb+BEHAVIOUR_DRIVE_STACK_AVAILABLE+ zugeschalten \\
-(in \verb+ct-Bot/include/bot-logic/available\_behaviours.h+ und anschlißend
-auf aktiv gesetzt (\verb+bot_save_waypos_behaviour+ in
-\verb+ct-Bot/bot-logic/bot-logic.c+). Dieses Verhalten zeichnet im Folgenden
-alle Informationen auf, die für das wiederfinden der relevanten Positonen nötig sind.
-Nach einer über die Konstante \verb+MAX_WAYPOINTS+ festgelegten Anzahl Wegpunkten,
-wird das \verb+drive_stack()+ Verhlaten aufgerufen das die Punkte wieder anfährt.
-Wenn der Roboter an der Ausgangsposition angekommen ist, beginnt er wieder von vorne mit
-der Wegaufzeichnung und der Lichtquellensuche. \\
-
 Code einfügen / manipuliernen:
 \begin{itemize}
     \item \verb+behaviour_follow_light.c+  im Verzeichnis 
