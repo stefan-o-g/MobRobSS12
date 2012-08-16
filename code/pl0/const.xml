@@ -1,0 +1,24 @@
+<List>
+ <Vardec name="a" modifier="READONLY" declared_type="INVALID_DATATYPE">
+  <Literal type="INT" value="1" />
+ </Vardec>
+ <Vardec name="blub" modifier="READONLY" declared_type="INVALID_DATATYPE">
+  <Literal type="DOUBLE" value="0.300000" />
+ </Vardec>
+ <Vardec name="c" modifier="NO_MODIFIER" declared_type="INT">
+  <Literal type="INT" value="0" />
+ </Vardec>
+ <Vardec name="d" modifier="NO_MODIFIER" declared_type="DOUBLE">
+  <Literal type="DOUBLE" value="0.000000" />
+ </Vardec>
+ <Vardec name="e" modifier="NO_MODIFIER" declared_type="INVALID_DATATYPE">
+  <Binary op="ADD">
+   <lhs>
+    <Literal type="INT" value="3" />
+   </lhs>
+   <rhs>
+    <Literal type="INT" value="2" />
+   </rhs>
+  </Binary>
+ </Vardec>
+</List>

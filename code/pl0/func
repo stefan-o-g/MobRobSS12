@@ -1,0 +1,20 @@
+func main(): None =
+	consts b = 1, c = 3.3;
+	vars d:Int;
+	
+	func debug(): None = native
+
+	func min(a:Int, b:Int): Int = if a < b then a else b
+
+
+	func outer(): None =
+		consts a = 1, f = 3;	
+		func inner(): None = native
+		
+		1+1
+	
+
+	func max(a:Int, b:Int): Int = if a > b then a else b
+{
+
+}

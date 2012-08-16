@@ -18,7 +18,8 @@ enum funktion{
 	motte2,
 	karkerlake2,
 	acht,
-	linie
+	linie,
+	move
 };
 
 uint8_t* read_payload(command_t* cmd, uint8_t* buffer);

@@ -6,6 +6,11 @@
  */
 
 #include "include/andy.h"
+#include "pl0/parser.h"
+#include "pl0/ast.h"
+#include "pl0/interpreter.h"
+
+
 
 /**
  * 	Aktueller funktion (Bestimmt das Programm das abgearbeitet wird)
@@ -251,7 +256,7 @@ void light(int dir){
 	display_printf("Sum: %d",sensLDRL+sensLDRR);
 	
 	//speed variable
-	int16 speed = BOT_SPEED_NORMAL;
+	int16 speed = BOT_SPEED_FAST;
 
 	//grenzwert der entscheidet wann wieder zum licht hingedreht wird
 	int16 trsh = 80;
@@ -300,14 +305,14 @@ void line(){
 
 
 	if(delta < -300){
-		motor_set(4,-4);	
+		motor_set(200,-200);
 	}else if(delta > 300){
-		motor_set(-4,4);
+		motor_set(-200,200);
 	}else{
 		if((sensLineL + sensLineR) < 100 ){
-			motor_set(0,BOT_SPEED_NORMAL);
+			motor_set(0,200);
 		}else{
-			motor_set(2,2);
+			motor_set(200,200);
 		}
 	}	
 }
@@ -351,26 +356,39 @@ command_t* read_command(){
 
 void entry_point(){
 	//Fernbedinungscode abfragen und funktion wechseln
-	int code = get_code();
-	switch(code){
-	case 1: funktion = stand; //1 tv
-	break;
-	case 2: funktion = motte1; //2 tv
-	break;
-	case 3: funktion = karkerlake1; //3 tv
-	break;
-	case 4:  funktion = motte2; //4 tv
-	break;
-	case 5: funktion = karkerlake2; //5 tv
-	break;
-	case 6: funktion = acht; //6 tv
-	break;
-	case 7: funktion = linie; //7 tv
-	break;
-	case 8: //8 tv
-	break;
-	case 9:  //9 tv
-	break;
+	//int code = get_code();
+	command_t* cmd = read_command();
+	if(cmd != (void*)0 || cmd->request.command == '#'){
+		switch(cmd->request.subcommand){
+			case 1: funktion = stand; //1 tv
+			break;
+			case 2: funktion = motte1; //2 tv
+			break;
+			case 3: funktion = karkerlake1; //3 tv
+			break;
+			case 4:  funktion = motte2; //4 tv
+			break;
+			case 5: funktion = karkerlake2; //5 tv
+			break;
+			case 6: funktion = acht; //6 tv
+			break;
+			case 7: funktion = linie; //7 tv
+			break;
+			case 8: //8 tv
+			break;
+			case 9:  //9 tv
+			break;
+			case 'm': funktion = move; motor_set(cmd->data_l, cmd->data_r);
+			case 't':
+			{
+				display_clear();
+				display_cursor(1,1);
+				display_printf("hello world!");
+				struct ast* ast = parse_all();
+				run(ast,16,100);
+			}
+			break;
+		}
 	}
 	
 	switch(funktion){
@@ -387,6 +405,8 @@ void entry_point(){
 		case karkerlake2: kakerlake_nonbehav();;
 		break;
 		case acht: acht_nonbehav();
+		break;
+		case move:
 		break;
 	}
 }

@@ -1,0 +1,6 @@
+if a
+	then a
+	else if b 
+		then b
+		else while c < b
+			do sin(d)

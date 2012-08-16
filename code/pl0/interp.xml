@@ -1,0 +1,170 @@
+<Funcdec name="main" parent="" declared_type="INT">
+ <Variables>
+  <List>
+   <Vardec name="a" modifier="READONLY" declared_type="INVALID_DATATYPE">
+    <Binary op="ADD">
+     <lhs>
+      <Literal type="INT" value="3" />
+     </lhs>
+     <rhs>
+      <Literal type="INT" value="5" />
+     </rhs>
+    </Binary>
+   </Vardec>
+  </List>
+ </Variables>
+ <Functions>
+  <List>
+   <Funcdec name="debug" parent="main" declared_type="NONE">
+    <Variables>
+    </Variables>
+    <Functions>
+    </Functions>
+    <Body>
+     native
+    </Body>
+   </Funcdec>
+   <Funcdec name="min" parent="main" declared_type="INT">
+    <List>
+     <Param name="a" type="INT"/>
+     <Param name="b" type="INT"/>
+    </List>
+    <Variables>
+    </Variables>
+    <Functions>
+    </Functions>
+    <Body>
+     <If>
+      <condition>
+       <Binary op="LT">
+        <lhs>
+         <Ident name="a" />
+        </lhs>
+        <rhs>
+         <Ident name="b" />
+        </rhs>
+       </Binary>
+      </condition>
+      <than>
+       <Ident name="a" />
+      </than>
+      <else>
+       <Ident name="b" />
+      </else>
+     </If>
+    </Body>
+   </Funcdec>
+   <Funcdec name="max" parent="main" declared_type="INT">
+    <List>
+     <Param name="a" type="INT"/>
+     <Param name="b" type="INT"/>
+    </List>
+    <Variables>
+    </Variables>
+    <Functions>
+    </Functions>
+    <Body>
+     <If>
+      <condition>
+       <Binary op="GT">
+        <lhs>
+         <Ident name="a" />
+        </lhs>
+        <rhs>
+         <Ident name="b" />
+        </rhs>
+       </Binary>
+      </condition>
+      <than>
+       <Ident name="a" />
+      </than>
+      <else>
+       <Ident name="b" />
+      </else>
+     </If>
+    </Body>
+   </Funcdec>
+   <Funcdec name="fac" parent="main" declared_type="INT">
+    <List>
+     <Param name="n" type="INT"/>
+    </List>
+    <Variables>
+    </Variables>
+    <Functions>
+    </Functions>
+    <Body>
+     <If>
+      <condition>
+       <Binary op="EQ">
+        <lhs>
+         <Ident name="n" />
+        </lhs>
+        <rhs>
+         <Literal type="INT" value="0" />
+        </rhs>
+       </Binary>
+      </condition>
+      <than>
+       <Literal type="INT" value="1" />
+      </than>
+      <else>
+       <Binary op="MUL">
+        <lhs>
+         <Ident name="n" />
+        </lhs>
+        <rhs>
+         <Call name="fac">
+          <param>
+           <Binary op="SUB">
+            <lhs>
+             <Ident name="n" />
+            </lhs>
+            <rhs>
+             <Literal type="INT" value="1" />
+            </rhs>
+           </Binary>
+          </param>
+         </Call>
+        </rhs>
+       </Binary>
+      </else>
+     </If>
+    </Body>
+   </Funcdec>
+  </List>
+ </Functions>
+ <Body>
+  <List>
+   <Call name="max">
+    <param>
+     <Literal type="INT" value="1" />
+    </param>
+    <param>
+     <Literal type="INT" value="2" />
+    </param>
+   </Call>
+   <Call name="debug">
+   </Call>
+   <Call name="max">
+    <param>
+     <Literal type="INT" value="5" />
+    </param>
+    <param>
+     <Call name="min">
+      <param>
+       <Ident name="a" />
+      </param>
+      <param>
+       <Literal type="INT" value="15" />
+      </param>
+     </Call>
+    </param>
+   </Call>
+   <Call name="fac">
+    <param>
+     <Literal type="INT" value="3" />
+    </param>
+   </Call>
+  </List>
+ </Body>
+</Funcdec>
