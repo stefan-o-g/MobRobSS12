@@ -81,7 +81,7 @@ def help(cmd=""):
 		print "help <cmd>"
 		print "   Print help for a single command."
 		print "exit"
-		print "quit"
+		print "(q)uit"
 		print "   Exit this script."
 		print "Strg+c"
 		print "   Stops the bot."
@@ -262,7 +262,7 @@ def user_input_eval(usrin):
 			#EOF GET
 		elif cmd_list[0] == "tokensend":
 			tokensend(cmd_list[1])	
-		elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
+		elif cmd_list[0] == "exit" or cmd_list[0] == "quit" or cmd_list[0] == "q":
 			send_cmd('\x01')
 			run = False
 		elif cmd_list[0] == "help":
@@ -392,7 +392,7 @@ while run:
 
 	except KeyboardInterrupt:
 		print "\n#Panic, STRG+C! Stopping Bot..."
-		print "(To exit ctremote.py use 'exit' or 'quit')"
+		print "(To exit ctremote.py use 'exit' or '(q)uit')"
 		send_cmd('\x01')
 
 udp_sock.close()
