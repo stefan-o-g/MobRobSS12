@@ -388,7 +388,7 @@ def tokensend(infile=""):
 				return
 			send_cmd('t', tokenpak, tokenpak, pload, tmpln[1])
 			sleep(1)
-		send_cmd('t', "\xff\xff", "\xff\xff") #EOF transmission
+		#send_cmd('t', "\xff\xff", "\xff\xff") #EOF transmission
 	except:
 		print "#Error: bad file!"
 		fileobject.close()
