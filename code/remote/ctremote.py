@@ -73,9 +73,9 @@ class _GetchWindows:
 rec_data = ""		#buffer for data received from the bot
 rec_size = 1024		#max size of buffer (rec_data)
 
-udp_sock = 0 				#socket for sending data
-udp_bot_ip = "192.168.0.9"	#ip of the bot
-udp_port = 10002			#port
+udp_sock = 0 					#socket for sending data
+udp_bot_ip = "192.168.0.255"	#ip of the bot
+udp_port = 10002				#port
 
 prompt = "ctBot-remote $ "
 
@@ -162,7 +162,7 @@ def openSocket():
 	udp_sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
 	split_ip = udp_bot_ip.split(".")
 	if split_ip[3] == "255":
-		print "Using broadcast..."
+		print "#Using broadcast..."
 		udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 	udp_sock.sendto( "Hello ctBot!", (udp_bot_ip, udp_port) )
 
@@ -381,7 +381,8 @@ def tokensend(infile=""):
 				return
 			try:
 				#get payload as little end. unsig. char
-				pload = pack('<B', len(tmpln[1]))
+				value = tmpln[1].strip()
+				pload = pack('<B', len(value))
 			except:
 				print "#Error: payload error!"
 				fileobject.close()
@@ -389,6 +390,7 @@ def tokensend(infile=""):
 			send_cmd('t', tokenpak, tokenpak, pload, tmpln[1])
 			sleep(1)
 		#send_cmd('t', "\xff\xff", "\xff\xff") #EOF transmission
+
 	except:
 		print "#Error: bad file!"
 		fileobject.close()
@@ -414,6 +416,8 @@ while run:
 	except KeyboardInterrupt:
 		print "\n#Panic, STRG+C! Stopping Bot..."
 		print "(To exit ctremote.py use 'exit' or '(q)uit')"
+		send_cmd('\x01')
+		send_cmd('\x01')
 		send_cmd('\x01')
 
 udp_sock.close()

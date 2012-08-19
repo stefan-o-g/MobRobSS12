@@ -1,5 +1,7 @@
-\subsection{Einarbeitung}
-\label{einarbeitung}
+\subsection{Benutzung des geschriebenen Codes}
+
+\subsubsection{Benutzung des Verhaltensframeworks}
+\label{benutzung_verhaltensframework}
 In dem Repository des ct-Bot wird ein Verhaltesframework mit ausgeliefert.
 Die Nutzung des Frameworks hat einige Vorteile:
 \begin{itemize}
@@ -50,3 +52,11 @@ Im Verhlaten sind die Dateien \verb+display.h+ und \\
 \verb+ui/available_screens.h+ zu inkludieren. Jetzt kann die Variable
 \verb+display_screen+ z.B. auf 11 gesetzt werden, dammit die eigenen
 Ausgaben zu sehen sind. \\
+
+\subsubsection{Benutzung "'Allgemeiner Ansatz"'}
+\label{benutzung_allgemein}
+Alternativ zum Verhaltensframework kann man den Bot natürlich auch ganz normal programmieren und über die mitgelieferten Funktionen etwa Sensorwerte auslesen oder beispielsweise die Motoren ansteuern. Diese Programme, die ohne Verhaltensframework geschrieben wurden, werden nachfolgend als "'Allgemeiner Ansatz"' bezeichnet.
+
+Die nachfolgend unter "'Allgemeiner Ansatz"' beschriebenen Programme befinden sich in den Dateien \textit{mr2012.h} bzw. \textit{mr2012.c}. Um sie zu nutzen müssen die Dateien einfach ins Quellcodeverzeichnis (bezogen auf die Installationsanleitung also \textit{\~{}/ctbot/stable/ct-Bot}) des ct-Bot kopiert werden. Die C-Datei direkt in dieses Verzeichnis, die H-Datei ins Unterverzeichnis \textit{include/}.
+Nun können die einzelnen Funktionen daraus einfach in der Hauptschleife des Bots (zu finden in \textit{ct-Bot.c} aufgerufen werden. 
+Z.B. die Funktion \verb+kakerlake_nonbehav()+ um das Kakerlakenverhalten zu starten oder die Funktion \verb+entry_point()+ um den Bot [...]
