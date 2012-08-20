@@ -247,6 +247,20 @@ Nachfolgend die bisher implementierten Befehle:
 		\item \textbf{E} Anhalten.
 		\item \textbf{Q} Beendet den move-Befehl und kehrt zur Befehlseingabe zurück.
 	\end{itemize}
+	\item tokensend <tokenfile>\\
+	Dieser Befehl sendet ein sogenanntes Tokenfile an den Bot. So ein Tokenfile ist eine Textdatei mit folgendem Aufbau:
+	\begin{verbatim}
+	Token Value
+	\end{verbatim}
+	Z.B.:
+	\begin{verbatim}
+		5 while
+		7 a
+		45 =
+		7 b
+	\end{verbatim}
+	Dabei handelt es sich um Tokens (samt zugehöriger Werte), die ein Scanner für die Programmiersprache PL0 erzeugt hat. Ein Ziel war es auf den Bot einen PL0-Compiler bzw. Interpreter zu portieren, der im Rahmen der Vorlesung Compilerbau erstellt wurde. Die Trennung erfolgte zwischen Scanner (läuft auf dem PC) und Parser/Codegenerierung/Interpretierung (läuft auf dem Bot) und die kleinst mögliche Menge an Daten übertragen zu müssen. Das angestrebte Ziel war, den Bot über WLAN mit PL0-Code zu steuern. So müsste man den Bot nicht immer neu flashen sondern könnte ihn in PL0 programmieren und die Programme einfach per WLAN übertragen.
+	Da die erzeugte hex-Datei mit allen Komponenten des Compilers/Interpreters (ohne Scanner) leider zu groß für den Bot war und wir ihn nicht flashen konnten wurde an diesem Feature leider nicht weitergearbeitet. Versuche, die hex-Datei klein genug zu bekommen, waren nicht erfolgreich.
 	\item get <what>\\
 	Zeigt einem den aktuellen Wert von <what> an. Dabei kann <what> momentan \textit{botip} (also die IP des zu steuernden Bots) oder \textit{port} (also der UDP-Port, über den kommuniziert wird) sein.
 	
@@ -288,6 +302,8 @@ Das Skript besteht intern aus folgenden Funktionen:
 	Der zwingend anzugebende Paramter \textit{usrin} ist dabei die Eingabe des Nutzers.
 	\item \verb+move()+
 	In dieser Funktion läuft eine Schleife, welche dauerhaft die Tastatureingaben einliest und entsprechend der Eingabe den Bot fahren lässt (wozu sie intern \verb+send_cmd+ nutzt). Die Schleife wird erst duch drücken der Taste Q beendet.
+	\item \verb+tokensend(infile="")+\\
+	Diese Funktion liest ein sog. Tokenfile zeilenweise ein und baut aus jeder Zeile ein WLAN-Paket bzw. \textit{command} zusammen, welches an den Bot geschickt wird. Jedes Paket enthält den jeweiligen Token in \textit{ldata} und \textit{rdata} (zweimal aus Redundanzgründen, also zu Überprüfung der korrekten Übertragung) sowie den Value des Tokens in \textit{data}. Um den Beginn einer Tokenfile-Übertragung zu signalisieren, wird zunächst ein Paket geschickt, welchen lediglich den \textit{subcommand} "'\textit{t}"' (und sonst nur Standardwerte) enthält, versendet. Das Ende einer Übertragung wird durch ein Paket signalisiert, in dem \textit{ldata} und \textit{rdata} beide auf \verb+0xffff+ gesetzt sind.
 \end{itemize}
 
 
