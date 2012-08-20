@@ -166,43 +166,67 @@ Zuletzt wird mit der von uns zu command.c hinzugefügten Funktion \verb|get_reci
 \textbf{Payload Daten Auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
 \\
 \verb|uint8_t* read_payload(command_t* cmd, uint8_t* buffer)| liest die angehängten Daten des übergebenen Kommandos in den übergebenen buffer.\\ Hierfür wird auf die vorhandene Funktion \verb|low_read| zurückgegriffen.
-\\
 
+\newpage
 
-TODO:welche funktionen werden genutzt (Kevin: du hast rausgefunden wie das ganze zeug geht, kannst du das bitte beschreiben?\\
+\begin{verbatim}
+typedef struct {
+    uint8_t startCode;  /*!< Markiert den Beginn eines Commands */
+    request_t request;  /*!< Command-ID */
+    uint8_t  payload;   /*!< Bytes, die dem Kommando noch folgen */
+    int16_t data_l;     /*!< Daten zum Kommando link s*/
+    int16_t data_r;     /*!< Daten zum Kommando rechts */
+    uint8_t seq;        /*!< Paket-Sequenznummer */
+    uint8_t from;       /*!< Absender-Adresse */
+    uint8_t to;         /*!< Empfaenger-Adresse */
+    uint8_t CRC;        /*!< Markiert das Ende des Commands */
+} PACKED command_t;
 
-TODO: wie sieht die c-struktur aus (Andreas: schau nach, schreib auf!)\\
+typedef struct {
+#if (defined PC) && (BYTE_ORDER == BIG_ENDIAN)
+    /* Bitfeld im big-endian-Fall umdrehen */
+    uint8_t command;        /*!< Kommando */
+    unsigned direction:1;   /*!< 0 ist Anfrage, 1 ist Antwort */
+    unsigned subcommand:7;  /*!< Subkommando */
+#else
+    uint8_t command;        /*!< Kommando */
+    unsigned subcommand:7;  /*!< Subkommando */
+    unsigned direction:1;   /*!< 0 ist Anfrage, 1 ist Antwort */
+#endif
+} PACKED request_t;
+\end{verbatim}
 
-Damit der Bot ein WLAN-Paket als \textit{command} interpretiert, muss es einen Inhalt mit folgendem Aufbau besitzen:
+Damit der Bot ein WLAN-Paket als \textit{command} interpretiert, muss es einen Inhalt mit folgendem Aufbau besitzen,
+wobei das\verb|direction|-Element der Struktur nicht im WLAN-Paket auftaucht:
 \begin{figure}[H]
-	\centering
-	\includegraphics[scale=0.5]{pic/ctBotWlanAllgemein}
-	\caption{Allgemeiner Aufbau eines \textit{commands} in einem WLAN-Paket}
-	\label{ctBotWlanAllgemein}
+    \centering
+    \includegraphics[scale=0.5]{pic/ctBotWlanAllgemein}
+    \caption{Allgemeiner Aufbau eines \textit{commands} in einem WLAN-Paket}
+    \label{ctBotWlanAllgemein}
 \end{figure}
 
 
 \subsubsection{Auf dem PC}
 Um Daten an den Bot zu senden sind lediglich zwei Schritte erforderlich:
 \begin{itemize}
-	\item Zum WLAN verbinden\\
-	Ist der Bot korrekt konfiguriert öffnet er ein Ad-Hoc-WLAN. Zu diesem muss man sich verbinden.
-	\item Paket an den Bot senden bzw. Daten empfangen\\
-	Ist man mit dem WLAN verbunden kann man einfach ein UDP-Paket mit einen speziellen Inhalt (siehe \ref{wlan_auf_bot}) an den Bot senden, so dass dieser das Paket auswerten kann.\\
-	In unserem Fall sieht ein Paket folgendermaßen aus:
-	\begin{figure}[H]
-		\centering
-		\includegraphics[scale=0.5]{pic/ctBotWlanKonkret}
-		\caption{Konkreter Aufbau eines \textit{commands} für unsere Anwendung}
-		\label{ctBotWlanKonkret}
-	\end{figure}
-	
-	Hierzu kann z.B. das Tool \textit{sendip} verwendet werden. Ein Beispiel hierzu:\\
-	\textit{\$ perl -e 'print "'\textgreater\#\textbackslash x02\textbackslash x06\textbackslash x03\textbackslash x11\textbackslash x02\textbackslash x02xy\textless hallo\textbackslash x00"'' \textgreater test.bin\\
-	\$ sudo sendip -p ipv4 -is 192.168.0.234 -p udp -us 2000 -ud 10002 -f test.bin 192.168.0.9}\\
-	Hierzu wird zunächst mit einem PERL print-Befehl ein Paket erzeugt und in eine Datei geschrieben und anschließen wird der Dateiinhalt mit \textit{sendip} an den Bot (hier 192.168.0.9) gesendet.
-	(Die Paramter von links nach rechts: Protokoll IPv4, Quell-IP 192.168.0.234, Protokoll UDP, UDP-Quellport 2000, UDP-Zielport 10002, Datei (deren Inhalt gesendet werden soll) test.bin, die Ziel-IP 192.168.0.9)
-	Der Grund für den Umweg über die Datei ist lediglich, dass man sich dadurch "'verlorene"' Zeichen oder kaputte Eingaben erspart, was der Fall wäre wenn man die Eingabe piped oder über eine Subshell erzeugt.
+    \item Zum WLAN verbinden\\
+    Ist der Bot korrekt konfiguriert öffnet er ein Ad-Hoc-WLAN. Zu diesem muss man sich verbinden.
+    \item Paket an den Bot senden bzw. Daten empfangen\\
+    Ist man mit dem WLAN verbunden kann man einfach ein UDP-Paket mit einen speziellen Inhalt (siehe \ref{wlan_auf_bot}) an den Bot senden, so dass dieser das Paket auswerten kann.\\
+    In unserem Fall sieht ein Paket folgendermaßen aus:
+    \begin{figure}[H]
+        \centering
+        \includegraphics[scale=0.5]{pic/ctBotWlanKonkret}
+        \caption{Konkreter Aufbau eines \textit{commands} für unsere Anwendung}
+        \label{ctBotWlanKonkret}
+    \end{figure}
+    
+    Hierzu kann z.B. das Tool \textit{sendip} verwendet werden. Ein Beispiel hierzu:\\
+    \textit{\$ perl -e 'print "'\textgreater\#\textbackslash x02\textbackslash x06\textbackslash x03\textbackslash x11\textbackslash x02\textbackslash x02xy\textless hallo\textbackslash x00"'' \textgreater test.bin\\
+    \$ sudo sendip -p ipv4 -is 192.168.0.234 -p udp -us 2000 -ud 10002 -f test.bin 192.168.0.9}\\
+    Hierzu wird zunächst mit einem PERL print-Befehl ein Paket erzeugt und in eine Datei geschrieben und anschließen wird der Dateiinhalt mit \textit{sendip} an den Bot (hier 192.168.0.9) gesendet.
+    (Die Paramter von links nach rechts: Protokoll IPv4, Quell-IP 192.168.0.234, Protokoll UDP, UDP-Quellport 2000, UDP-Zielport 10002, Datei (deren Inhalt gesendet werden soll) test.bin, die Ziel-IP 192.168.0.9)
+    Der Grund für den Umweg über die Datei ist lediglich, dass man sich dadurch "'verlorene"' Zeichen oder kaputte Eingaben erspart, was der Fall wäre wenn man die Eingabe piped oder über eine Subshell erzeugt.
 \end{itemize}
 Die wesentlich einfachere Variante Pakete an den Bot zu schicken ist das Skript \verb+ctremote.py+ bzw. dessen Funktion \verb+send_cmd(...)+. Dazu siehe \ref{ctremote}.
 
@@ -216,69 +240,69 @@ Sieht der Nutzer folgenden Prompt, kann er Befehle eingeben:
 \textbf{ctBot-remote \$}\\
 Nachfolgend die bisher implementierten Befehle:
 \begin{itemize}
-	\item subcmd <subcommand>\\
-	Sendet den angegebenen Subcommand <subcommand> an den Bot. Es sind bisher folgende Subcommands implementiert:
-	\begin{itemize}
-		\item 1 oder stand\\
-		Lässt den Bot anhalten.
-   		\item 2 oder motte1\\
-   		Lässt den Bot die erste Implementierung von "'Motte"' ausführen.
-   		\item 3 oder kakerlake1\\
-   		Lässt den Bot die erste Implementierung von "'Kakerlake"' ausführen.
-   		\item 4 oder motte2\\
-   		Lässt den Bot die zweite Implementierung von "'Motte"' ausführen.
-   		\item 5 oder kakerlake2\\
-   		Lässt den Bot die zweite Implementierung von "'Kakerlake"' ausführen.
-   		\item 6 oder acht\\
-   		Lässt den Bot eine Acht fahren.
-   		\item 7 oder linie\\
-   		Lässt den Bot eine Linie entlang fahren.
-	\end{itemize}
-	Beispiel: \textit{subcmd motte1}
-	
-	Beispiel 2 : \textit{subcmd 6}
-	\item move\\
-	Nach Eingabe dieses Befehls ist der Bot über die Tastatur fernsteuerbar. Die Tastenbelegung dafür ist wie folgt:
-	\begin{itemize}
-		\item \textbf{W} Vorwärts fahren.
-		\item \textbf{S} Rückwärts fahren.
-		\item \textbf{A} Nach links drehen.
-		\item \textbf{D} Nach rechts drehen.
-		\item \textbf{E} Anhalten.
-		\item \textbf{Q} Beendet den move-Befehl und kehrt zur Befehlseingabe zurück.
-	\end{itemize}
-	\item tokensend <tokenfile>\\
-	Dieser Befehl sendet ein sogenanntes Tokenfile an den Bot. So ein Tokenfile ist eine Textdatei mit folgendem Aufbau:
-	\begin{verbatim}
-	Token Value
-	\end{verbatim}
-	Z.B.:
-	\begin{verbatim}
-		5 while
-		7 a
-		45 =
-		7 b
-	\end{verbatim}
-	Dabei handelt es sich um Tokens (samt zugehöriger Werte), die ein Scanner für die Programmiersprache PL0 erzeugt hat. Ein Ziel war es auf den Bot einen PL0-Compiler bzw. Interpreter zu portieren, der im Rahmen der Vorlesung Compilerbau erstellt wurde. Die Trennung erfolgte zwischen Scanner (läuft auf dem PC) und Parser/Codegenerierung/Interpretierung (läuft auf dem Bot) und die kleinst mögliche Menge an Daten übertragen zu müssen. Das angestrebte Ziel war, den Bot über WLAN mit PL0-Code zu steuern. So müsste man den Bot nicht immer neu flashen sondern könnte ihn in PL0 programmieren und die Programme einfach per WLAN übertragen.
-	Da die erzeugte hex-Datei mit allen Komponenten des Compilers/Interpreters (ohne Scanner) leider zu groß für den Bot war und wir ihn nicht flashen konnten wurde an diesem Feature leider nicht weitergearbeitet. Versuche, die hex-Datei klein genug zu bekommen, waren nicht erfolgreich.
-	\item get <what>\\
-	Zeigt einem den aktuellen Wert von <what> an. Dabei kann <what> momentan \textit{botip} (also die IP des zu steuernden Bots) oder \textit{port} (also der UDP-Port, über den kommuniziert wird) sein.
-	
-	Beispiel: \textit{get botip}
-	\item set <what> <value>\\
-	Setzt den Wert von <what> auf <value>. Hierbei kann <what> wieder \textit{botip} oder \textit{port} sein.
-	
-	Beispiel: \textit{set botip 192.168.0.9}
-	\item help\\
-	Gibt einen kurze Übersicht aller Befehle mit einer kurzen Beschreibung aus.
-	\item help <cmd>\\
-	Gibt einen detaillierten Hilfetext zum angegebenen Befehl <cmd> aus.
-	
-	Beispiel: \textit{help subcmd}
-	\item exit\\
-	Beendet das Skript.
-	\item quit\\
-	Beendet das Skript.
+    \item subcmd <subcommand>\\
+    Sendet den angegebenen Subcommand <subcommand> an den Bot. Es sind bisher folgende Subcommands implementiert:
+    \begin{itemize}
+        \item 1 oder stand\\
+        Lässt den Bot anhalten.
+        \item 2 oder motte1\\
+        Lässt den Bot die erste Implementierung von "'Motte"' ausführen.
+        \item 3 oder kakerlake1\\
+        Lässt den Bot die erste Implementierung von "'Kakerlake"' ausführen.
+        \item 4 oder motte2\\
+        Lässt den Bot die zweite Implementierung von "'Motte"' ausführen.
+        \item 5 oder kakerlake2\\
+        Lässt den Bot die zweite Implementierung von "'Kakerlake"' ausführen.
+        \item 6 oder acht\\
+        Lässt den Bot eine Acht fahren.
+        \item 7 oder linie\\
+        Lässt den Bot eine Linie entlang fahren.
+    \end{itemize}
+    Beispiel: \textit{subcmd motte1}
+    
+    Beispiel 2 : \textit{subcmd 6}
+    \item move\\
+    Nach Eingabe dieses Befehls ist der Bot über die Tastatur fernsteuerbar. Die Tastenbelegung dafür ist wie folgt:
+    \begin{itemize}
+        \item \textbf{W} Vorwärts fahren.
+        \item \textbf{S} Rückwärts fahren.
+        \item \textbf{A} Nach links drehen.
+        \item \textbf{D} Nach rechts drehen.
+        \item \textbf{E} Anhalten.
+        \item \textbf{Q} Beendet den move-Befehl und kehrt zur Befehlseingabe zurück.
+    \end{itemize}
+    \item tokensend <tokenfile>\\
+    Dieser Befehl sendet ein sogenanntes Tokenfile an den Bot. So ein Tokenfile ist eine Textdatei mit folgendem Aufbau:
+    \begin{verbatim}
+    Token Value
+    \end{verbatim}
+    Z.B.:
+    \begin{verbatim}
+        5 while
+        7 a
+        45 =
+        7 b
+    \end{verbatim}
+    Dabei handelt es sich um Tokens (samt zugehöriger Werte), die ein Scanner für die Programmiersprache PL0 erzeugt hat. Ein Ziel war es auf den Bot einen PL0-Compiler bzw. Interpreter zu portieren, der im Rahmen der Vorlesung Compilerbau erstellt wurde. Die Trennung erfolgte zwischen Scanner (läuft auf dem PC) und Parser/Codegenerierung/Interpretierung (läuft auf dem Bot) und die kleinst mögliche Menge an Daten übertragen zu müssen. Das angestrebte Ziel war, den Bot über WLAN mit PL0-Code zu steuern. So müsste man den Bot nicht immer neu flashen sondern könnte ihn in PL0 programmieren und die Programme einfach per WLAN übertragen.
+    Da die erzeugte hex-Datei mit allen Komponenten des Compilers/Interpreters (ohne Scanner) leider zu groß für den Bot war und wir ihn nicht flashen konnten wurde an diesem Feature leider nicht weitergearbeitet. Versuche, die hex-Datei klein genug zu bekommen, waren nicht erfolgreich.
+    \item get <what>\\
+    Zeigt einem den aktuellen Wert von <what> an. Dabei kann <what> momentan \textit{botip} (also die IP des zu steuernden Bots) oder \textit{port} (also der UDP-Port, über den kommuniziert wird) sein.
+    
+    Beispiel: \textit{get botip}
+    \item set <what> <value>\\
+    Setzt den Wert von <what> auf <value>. Hierbei kann <what> wieder \textit{botip} oder \textit{port} sein.
+    
+    Beispiel: \textit{set botip 192.168.0.9}
+    \item help\\
+    Gibt einen kurze Übersicht aller Befehle mit einer kurzen Beschreibung aus.
+    \item help <cmd>\\
+    Gibt einen detaillierten Hilfetext zum angegebenen Befehl <cmd> aus.
+    
+    Beispiel: \textit{help subcmd}
+    \item exit\\
+    Beendet das Skript.
+    \item quit\\
+    Beendet das Skript.
 \end{itemize}
 Die Tastenkombination \textit{STRG+C} wird von dem Skript abgefangen und sendet dem Bot sofort den Befehl zum Anhalten, beendet das Skript jedoch nicht. Um das Skript zu beenden muss einer der oben beschrieben Befehle \textit{quit} oder \textit{exit} verwendet werden.
 
@@ -286,24 +310,24 @@ Die Tastenkombination \textit{STRG+C} wird von dem Skript abgefangen und sendet 
 Das Skript besteht intern aus folgenden Funktionen:
 
 \begin{itemize}
-	\item \verb+help(cmd="")+\\
-	Die Funktion bekommt einen optionalen Parameter \textit{cmd}. Wird kein Parameter übergeben, gibt die Funktion einen allgemeinen Hilfetext aus. Wird jedoch ein Befehl als Parameter übergeben, gibt die Funktion eine, für den übergebenen Befehl, passende Hilfe aus.
-	\item \verb+openSocket()+\\
-	Die Funktion öffnet einen neuen UDP-Socket mit IP und Port der aktuellen Konfiguration. (IP und Port entweder wie im Skript selbst hinterlegt oder mit dem \textit{set}-Befehl (siehe \ref{ctremote}) gesetzt.)
-	\item \verb+send_cmd(subcmd,ldata="ld",rdata="rd",payload="\x00",data="")+\\
-	Diese Funktion ist dafür zuständig ein Paket nach Norm des Bots (siehe \ref{wlan_auf_bot}) zusammenzubauen und schließlich an ihn zu senden.
-	Der einzig zwingend nötige Parameter ist der Subcommand \textit{subcmd} (1 Byte), welcher dem Bot die auszuführende Aktion mitteilt.
-	Optionale Parameter sind \textit{ldata} (2Byte) und \textit{rdata} (2 Byte), welche z.B. als Parameter für den Subcommand genutzt werden können, sowie \textit{payload} (1 Byte, Größe von \textit{data}) und \textit{data} (bis zu 255 Byte), welche genutzt werden können, wenn man zusätzliche Daten an den Bot senden will.
-	Die Größe der Parameter ist dabei genau einzuhalten.
-	\item \verb+recv()+\\
-	Diese Funktion läuft während der gesamten Ausführung des Skripts als Thread und ist dafür zuständig Daten vom Bot zu empfangen und zu verarbeiten.
-	\item \verb+user_input_eval(usrin)+\\
-	Diese Funktion ist dafür zuständig die Eingaben des Nutzers zu interpretieren und die entsprechenden Aktionen durchzuführen, indem sie die anderen Funktionen des Skripts aufruft.
-	Der zwingend anzugebende Paramter \textit{usrin} ist dabei die Eingabe des Nutzers.
-	\item \verb+move()+
-	In dieser Funktion läuft eine Schleife, welche dauerhaft die Tastatureingaben einliest und entsprechend der Eingabe den Bot fahren lässt (wozu sie intern \verb+send_cmd+ nutzt). Die Schleife wird erst duch drücken der Taste Q beendet.
-	\item \verb+tokensend(infile="")+\\
-	Diese Funktion liest ein sog. Tokenfile zeilenweise ein und baut aus jeder Zeile ein WLAN-Paket bzw. \textit{command} zusammen, welches an den Bot geschickt wird. Jedes Paket enthält den jeweiligen Token in \textit{ldata} und \textit{rdata} (zweimal aus Redundanzgründen, also zu Überprüfung der korrekten Übertragung) sowie den Value des Tokens in \textit{data}. Um den Beginn einer Tokenfile-Übertragung zu signalisieren, wird zunächst ein Paket geschickt, welchen lediglich den \textit{subcommand} "'\textit{t}"' (und sonst nur Standardwerte) enthält, versendet. Das Ende einer Übertragung wird durch ein Paket signalisiert, in dem \textit{ldata} und \textit{rdata} beide auf \verb+0xffff+ gesetzt sind.
+    \item \verb+help(cmd="")+\\
+    Die Funktion bekommt einen optionalen Parameter \textit{cmd}. Wird kein Parameter übergeben, gibt die Funktion einen allgemeinen Hilfetext aus. Wird jedoch ein Befehl als Parameter übergeben, gibt die Funktion eine, für den übergebenen Befehl, passende Hilfe aus.
+    \item \verb+openSocket()+\\
+    Die Funktion öffnet einen neuen UDP-Socket mit IP und Port der aktuellen Konfiguration. (IP und Port entweder wie im Skript selbst hinterlegt oder mit dem \textit{set}-Befehl (siehe \ref{ctremote}) gesetzt.)
+    \item \verb+send_cmd(subcmd,ldata="ld",rdata="rd",payload="\x00",data="")+\\
+    Diese Funktion ist dafür zuständig ein Paket nach Norm des Bots (siehe \ref{wlan_auf_bot}) zusammenzubauen und schließlich an ihn zu senden.
+    Der einzig zwingend nötige Parameter ist der Subcommand \textit{subcmd} (1 Byte), welcher dem Bot die auszuführende Aktion mitteilt.
+    Optionale Parameter sind \textit{ldata} (2Byte) und \textit{rdata} (2 Byte), welche z.B. als Parameter für den Subcommand genutzt werden können, sowie \textit{payload} (1 Byte, Größe von \textit{data}) und \textit{data} (bis zu 255 Byte), welche genutzt werden können, wenn man zusätzliche Daten an den Bot senden will.
+    Die Größe der Parameter ist dabei genau einzuhalten.
+    \item \verb+recv()+\\
+    Diese Funktion läuft während der gesamten Ausführung des Skripts als Thread und ist dafür zuständig Daten vom Bot zu empfangen und zu verarbeiten.
+    \item \verb+user_input_eval(usrin)+\\
+    Diese Funktion ist dafür zuständig die Eingaben des Nutzers zu interpretieren und die entsprechenden Aktionen durchzuführen, indem sie die anderen Funktionen des Skripts aufruft.
+    Der zwingend anzugebende Paramter \textit{usrin} ist dabei die Eingabe des Nutzers.
+    \item \verb+move()+
+    In dieser Funktion läuft eine Schleife, welche dauerhaft die Tastatureingaben einliest und entsprechend der Eingabe den Bot fahren lässt (wozu sie intern \verb+send_cmd+ nutzt). Die Schleife wird erst duch drücken der Taste Q beendet.
+    \item \verb+tokensend(infile="")+\\
+    Diese Funktion liest ein sog. Tokenfile zeilenweise ein und baut aus jeder Zeile ein WLAN-Paket bzw. \textit{command} zusammen, welches an den Bot geschickt wird. Jedes Paket enthält den jeweiligen Token in \textit{ldata} und \textit{rdata} (zweimal aus Redundanzgründen, also zu Überprüfung der korrekten Übertragung) sowie den Value des Tokens in \textit{data}. Um den Beginn einer Tokenfile-Übertragung zu signalisieren, wird zunächst ein Paket geschickt, welchen lediglich den \textit{subcommand} "'\textit{t}"' (und sonst nur Standardwerte) enthält, versendet. Das Ende einer Übertragung wird durch ein Paket signalisiert, in dem \textit{ldata} und \textit{rdata} beide auf \verb+0xffff+ gesetzt sind.
 \end{itemize}
 
 
