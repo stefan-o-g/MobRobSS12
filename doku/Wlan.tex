@@ -197,7 +197,7 @@ typedef struct {
 \end{verbatim}
 
 Damit der Bot ein WLAN-Paket als \textit{command} interpretiert, muss es einen Inhalt mit folgendem Aufbau besitzen,
-wobei das\verb|direction|-Element der Struktur nicht im WLAN-Paket auftaucht:
+wobei das \verb|direction|-Element der Struktur nicht im WLAN-Paket auftaucht:
 \begin{figure}[H]
     \centering
     \includegraphics[scale=0.5]{pic/ctBotWlanAllgemein}
@@ -324,7 +324,7 @@ Das Skript besteht intern aus folgenden Funktionen:
     \item \verb+user_input_eval(usrin)+\\
     Diese Funktion ist dafür zuständig die Eingaben des Nutzers zu interpretieren und die entsprechenden Aktionen durchzuführen, indem sie die anderen Funktionen des Skripts aufruft.
     Der zwingend anzugebende Paramter \textit{usrin} ist dabei die Eingabe des Nutzers.
-    \item \verb+move()+
+    \item \verb+move()+\\
     In dieser Funktion läuft eine Schleife, welche dauerhaft die Tastatureingaben einliest und entsprechend der Eingabe den Bot fahren lässt (wozu sie intern \verb+send_cmd+ nutzt). Die Schleife wird erst duch drücken der Taste Q beendet.
     \item \verb+tokensend(infile="")+\\
     Diese Funktion liest ein sog. Tokenfile zeilenweise ein und baut aus jeder Zeile ein WLAN-Paket bzw. \textit{command} zusammen, welches an den Bot geschickt wird. Jedes Paket enthält den jeweiligen Token in \textit{ldata} und \textit{rdata} (zweimal aus Redundanzgründen, also zu Überprüfung der korrekten Übertragung) sowie den Value des Tokens in \textit{data}. Um den Beginn einer Tokenfile-Übertragung zu signalisieren, wird zunächst ein Paket geschickt, welchen lediglich den \textit{subcommand} "'\textit{t}"' (und sonst nur Standardwerte) enthält, versendet. Das Ende einer Übertragung wird durch ein Paket signalisiert, in dem \textit{ldata} und \textit{rdata} beide auf \verb+0xffff+ gesetzt sind.
