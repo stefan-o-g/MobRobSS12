@@ -144,6 +144,28 @@ Mit Menüpunkt 2 muss nun der Channel 2 eingestellt werden.
 
 
 TODO:welche funktionen werden genutzt (Kevin: du hast rausgefunden wie das ganze zeug geht, kannst du das bitte beschreiben?\\
+\subsubsection{Wlan Daten senden/empfangen}
+\label{wlan_funktionen}
+
+
+\textbf{Senden:} Das Schreiben/Senden von Daten ist relativ einfach da hierfür schon Funktionen zur Verfügung stehen die genau das für einen erledigen.\\
+\\
+\textbf{Empfangen:} Für das Empfangen gibt es die möglichkeit die in command.c definirte Funktion \verb|command_evaluate| zu erweitern. Das hat den Vorteil das jedes gültige Kommando das gelesen wird auch verarbeitet wird, solange dafür Code in \verb|command_evaluate| vorhanden ist.
+Da wir aber nur unsere Kommandos verarbeiten mussten und zudem das Ziel hatten so wenig wie möglich in schon vorhandenen Dateien zu verändern, haben wir uns Hilfsfunktionen geschrieben.\\
+\\
+\verb|command_t* read_command()| liest ein Kommando in die schon vorhandene variable \verb|recived_command| in command.c ein und gibt einen Zeiger darauf zurück.\\
+\\
+Zum Lesen wird mit der schon vorhandenen Funktion \verb|uart_data_available| geschaut wieviel Bytes an Daten zum Lesen verfügbar sind.\\
+\\
+Wenn mindestens genug Daten für ein Kommando \verb|sizeof(command_t)| vorhanden sind, wird mit einer weiteren schon vorhandenen Funktion \verb|command_read| ein Kommando in die Puffervariable \verb|recived_command| eingelesen.\\
+\\
+Zuletzt wird mit der von uns zu command.c hinzugefügten Funktion \verb|get_recieved_command| ein Zeiger auf \verb|recived_command| zurückgegeben.\\
+\\
+\textbf{Payload Daten Auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
+\\
+\verb|uint8_t* read_payload(command_t* cmd, uint8_t* buffer)| Liest die angehängten Daten des übergebenen Kommandos in den übergebenen buffer.\\ Hierfür wird auf die vorhandene Funktion \verb|low_read| zurückgegriffen.
+\\
+
 
 TODO: wie sieht die c-struktur aus (Andreas: schau nach, schreib auf!)\\
 
