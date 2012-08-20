@@ -3,8 +3,145 @@
 
 \subsubsection{Auf dem Bot}
 \label{wlan_auf_bot}
+Als erstes muss das WLAN-Modul (WiPort) des ct-Bots konfiguriert werden.
+Dazu verbintet man sich am besten mit diesem Modul über die serielle Schnitstelle.
+(Ein spezieller USB-Adapter wird benötigt. Das rote Kabel muss rechts sein beim 
+einstecken in den Roboter.) Um in das Konfigurationsmenü zu gelangen,
+muss beim Start des Bots sofort x (mehrmals, um den Zeitpunkt nicht zu verpassen)
+gedrück werden. Es erscheint folgende Ausgabe:
+\begin{verbatim}
+    MAC address 00204A96578C
+    Software version V6.6.0.0 (080107) 
+    Press Enter for Setup Mode
+\end{verbatim}
+Die Versionsnummer sollte übereinstimmen. Ältere Versionen haben andere
+Konfigurationsmenüs. Nach dem betätigen der Enter-Taste wird der aktuelle
+Konfigurationsstatus ausgegeben gefolgt von einem Menü.
+Mit 7 können die Einstellungen zurückgesetzt werden.
+Im Menüpunkt 0 (Server) sollte drauf geachtet werden das Wireless verwendet wird
+und dem Bot die IP 192.168.0.Bot-Nummer zugeweisen wird.
+Mit Menüpunkt 2 muss nun der Channel 2 eingestellt werden.
+\begin{verbatim}
+    Baudrate (9600) ? 57600
+    I/F Mode (4C) ? 
+    Flow (00) ? 
+    Port No (10002) ? 
+    ConnectMode (C0) ? CC
+    Datagram Type (00) ? 01
+    Send as Broadcast (N) ? 
+    Remote IP Address : (000) 192.(000) 168.(000) 000.(000) 255
+    Remote Port  (0) ? 10002
+    Pack Cntrl  (00) ? 
+    SendChar 1  (00) ? 
+    SendChar 2  (00) ? 
+\end{verbatim}
 
-TODO: wie wird der Bot konfiguriert (Kevin/Gerhard: wie habt ihr das wlan-zeug am bot konfiguriert?! bitte beschreiben)\\
+\noindent{Eine gültige Konfiguration könnte dann wie folgend aussehen:}
+\begin{verbatim}
+    *** basic parameters 
+    Hardware: Ethernet TPI, WLAN 802.11bg
+    Network mode: Wireless Only
+    IP addr 192.168.0.9, no gateway set
+    DNS Server not set
+
+    *** Security
+    SNMP is              enabled
+    SNMP Community Name: public
+    Telnet Setup is      enabled
+    TFTP Download is     enabled
+    Port 77FEh is        enabled
+    Web Server is        enabled
+    Web Setup is         enabled
+    ECHO is              disabled
+    Enhanced Password is disabled
+    Port 77F0h is        enabled
+
+    *** Channel 1
+    Baudrate 9600, I/F Mode 4C, Flow 00
+    Port 10001
+    Connect Mode : C0
+    Send '+++' in Modem Mode enabled
+    Show IP addr after 'RING' enabled
+    Auto increment source port disabled
+    Remote IP Adr: --- none ---, Port 00000
+    Disconn Mode : 00
+    Flush   Mode : 00
+
+    *** Channel 2
+    Baudrate 57600, I/F Mode 4C, Flow 00
+    Port 10002
+    Connect Mode : CC
+    Datagram Type 01
+    Pack Cntrl:   00
+    Remote IP Adr: 192.0.0.255, Port 10002
+
+
+    *** Expert
+    TCP Keepalive    : 45s
+    ARP cache timeout: 600s
+    CPU performance: Regular
+    Monitor Mode @ bootup : enabled
+    HTTP Port Number : 80
+    SMTP Port Number : 25
+    MTU Size: 1400
+    Alternate MAC: disabled
+    Ethernet connection type: auto-negotiate
+
+    *** E-mail
+    Mail server: 0.0.0.0
+    Unit       : 
+    Domain     : 
+    Recipient 1: 
+    Recipient 2: 
+
+    - Trigger 1 
+    Serial trigger input: disabled
+      Channel: 1
+      Match: 00,00
+    Trigger input1: X
+    Trigger input2: X
+    Trigger input3: X
+    Message : 
+    Priority: L
+    Min. notification interval: 1 s
+    Re-notification interval  : 0 s
+
+    - Trigger 2 
+    Serial trigger input: disabled
+      Channel: 1
+      Match: 00,00
+    Trigger input1: X
+    Trigger input2: X
+    Trigger input3: X
+    Message : 
+    Priority: L
+    Min. notification interval: 1 s
+    Re-notification interval  : 0 s
+
+    - Trigger 3 
+    Serial trigger input: disabled
+      Channel: 1
+      Match: 00,00
+    Trigger input1: X
+    Trigger input2: X
+    Trigger input3: X
+    Message : 
+    Priority: L
+    Min. notification interval: 1 s
+    Re-notification interval  : 0 s
+
+    *** WLAN 
+    WLAN: enabled
+    Topology: Ad-Hoc
+    Network name: ctbot
+    Country: US
+    Channel: 11
+    Security suite: none
+    TX Data rate: 11 Mbps auto fallback
+    Power management: not supported in adhoc mode
+    Soft AP Roaming: N/A
+\end{verbatim}
+
 
 TODO:welche funktionen werden genutzt (Kevin: du hast rausgefunden wie das ganze zeug geht, kannst du das bitte beschreiben?\\
 
