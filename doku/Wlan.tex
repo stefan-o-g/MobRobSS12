@@ -6,30 +6,7 @@
 
 TODO: wie wird der Bot konfiguriert (Kevin/Gerhard: wie habt ihr das wlan-zeug am bot konfiguriert?! bitte beschreiben)\\
 
-\subsubsection{Wlan Daten senden/empfangen}
-\label{wlan_funktionen}
-
-Für genauere Infos zu bereits existierenden Funktionen sollte in der CT-Bot nachgeschaut werden.
-
-\textbf{Senden:} Das Schreiben/Senden von Daten ist relativ einfach da hierfür schon Funktionen zur Verfügung stehen die genau das für einen erledigen.\\
-Mit \verb|command_write(...)| können Kommandos gesendet werden an die Optional auch Daten angehängt werden. Dabei gibt der Payload an wie viel Bytes angehängt werden. 
-\\
-\textbf{Empfangen:} Für das Empfangen gibt es die möglichkeit die in command.c definirte Funktion \verb|command_evaluate| zu erweitern. Das hat den Vorteil das jedes gültige Kommando das gelesen wird auch verarbeitet wird, solange dafür Code in \verb|command_evaluate| vorhanden ist.
-Da wir aber nur unsere Kommandos verarbeiten mussten und zudem das Ziel hatten so wenig wie möglich in schon vorhandenen Dateien zu verändern, haben wir uns Hilfsfunktionen geschrieben.\\
-\\
-\verb|command_t* read_command()| liest ein Kommando in die schon vorhandene variable \verb|recived_command| in command.c ein und gibt einen Zeiger darauf zurück.\\
-\\
-Zum Lesen wird mit der schon vorhandenen Funktion \verb|uart_data_available| geschaut wieviel Bytes an Daten zum Lesen verfügbar sind.\\
-\\
-Wenn mindestens genug Daten für ein Kommando \verb|sizeof(command_t)| vorhanden sind, wird mit einer weiteren schon vorhandenen Funktion \verb|command_read| ein Kommando in die Puffervariable \verb|recived_command| eingelesen.\\
-\\
-Zuletzt wird mit der von uns zu command.c hinzugefügten Funktion \verb|get_recieved_command| ein Zeiger auf \verb|recived_command| zurückgegeben.\\
-\\
-\textbf{Payload Daten Auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
-\\
-\verb|uint8_t* read_payload(command_t* cmd, uint8_t* buffer)| Liest die angehängten Daten des übergebenen Kommandos in den übergebenen buffer.\\ Hierfür wird auf die vorhandene Funktion \verb|low_read| zurückgegriffen.
-\\
-
+TODO:welche funktionen werden genutzt (Kevin: du hast rausgefunden wie das ganze zeug geht, kannst du das bitte beschreiben?\\
 
 TODO: wie sieht die c-struktur aus (Andreas: schau nach, schreib auf!)\\
 
@@ -58,10 +35,9 @@ Um Daten an den Bot zu senden sind lediglich zwei Schritte erforderlich:
 	\end{figure}
 	
 	Hierzu kann z.B. das Tool \textit{sendip} verwendet werden. Ein Beispiel hierzu:\\
-	\textit{\$ perl -e 'print "'\textgreater\#\textbackslash x02\textbackslash x06\textbackslash x03\textbackslash x11\textbackslash
-    x02\textbackslash x02xy\textless hallo\textbackslash x00"'' \textgreater test.bin\\
-    \$ sudo sendip -p ipv4 -is 192.168.0.234 -p udp -us 2000 -ud 10002 -f test.bin 192.168.0.9}\\
-    Hierzu wird zunächst mit einem PERL print-Befehl ein Paket erzeugt und in eine Datei geschrieben und anschließen wird der Dateiinhalt mit \textit{sendip} an den Bot (hier 192.168.0.9) gesendet.
+	\textit{\$ perl -e 'print "'>#\textbackslash x02\textbackslash x06\textbackslash x03\textbackslash x11\textbackslash x02\textbackslash x02xy<hallo\textbackslash x00"'' > test.bin\\
+	\$ sudo sendip -p ipv4 -is 192.168.0.234 -p udp -us 2000 -ud 10002 -f test.bin 192.168.0.9}\\
+	Hierzu wird zunächst mit einem PERL print-Befehl ein Paket erzeugt und in eine Datei geschrieben und anschließen wird der Dateiinhalt mit \textit{sendip} an den Bot (hier 192.168.0.9) gesendet.
 	(Die Paramter von links nach rechts: Protokoll IPv4, Quell-IP 192.168.0.234, Protokoll UDP, UDP-Quellport 2000, UDP-Zielport 10002, Datei (deren Inhalt gesendet werden soll) test.bin, die Ziel-IP 192.168.0.9)
 	Der Grund für den Umweg über die Datei ist lediglich, dass man sich dadurch "'verlorene"' Zeichen oder kaputte Eingaben erspart, was der Fall wäre wenn man die Eingabe piped oder über eine Subshell erzeugt.
 \end{itemize}
