@@ -394,6 +394,8 @@ while run:
 		print "\n#Panic, STRG+C! Stopping Bot..."
 		print "(To exit ctremote.py use 'exit' or 'quit')"
 		send_cmd('\x01')
+		send_cmd('\x01')
+		send_cmd('\x01')
 
 udp_sock.close()
 
