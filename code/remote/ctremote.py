@@ -300,16 +300,28 @@ def move():
 	while foo != 'q':
 		if foo == 'w':
 			send_cmd('m',"\xff\x00","\xff\x00")
+			send_cmd('m',"\xff\x00","\xff\x00")
+			send_cmd('m',"\xff\x00","\xff\x00")
 		elif foo == 's':
+			send_cmd('m',"\x10\x80","\x10\x80")
+			send_cmd('m',"\x10\x80","\x10\x80")
 			send_cmd('m',"\x10\x80","\x10\x80")
 		elif foo == 'a':
 			send_cmd('m',"\x10\x80","\x10\x00")
+			send_cmd('m',"\x10\x80","\x10\x00")
+			send_cmd('m',"\x10\x80","\x10\x00")
 		elif foo == 'd':
+			send_cmd('m',"\x10\x00","\x10\x80")
+			send_cmd('m',"\x10\x00","\x10\x80")
 			send_cmd('m',"\x10\x00","\x10\x80")
 		elif foo == 'e':
 			send_cmd('m',"\x00\x00","\x00\x00")
+			send_cmd('m',"\x00\x00","\x00\x00")
+			send_cmd('m',"\x00\x00","\x00\x00")
 		foo = getch()
 
+	send_cmd('m',"\x00\x00","\x00\x00")
+	send_cmd('m',"\x00\x00","\x00\x00")
 	send_cmd('m',"\x00\x00","\x00\x00")
 		
 
