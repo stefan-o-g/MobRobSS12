@@ -139,7 +139,7 @@ def openSocket():
 	print "#Using port ", udp_port 
 
 	udp_sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
-	print split_ip
+	split_ip = udp_bot_ip.split(".")
 	if split_ip[3] == "255":
 		print "Using broadcast..."
 		udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
