@@ -73,9 +73,9 @@ class _GetchWindows:
 rec_data = ""		#buffer for data received from the bot
 rec_size = 1024		#max size of buffer (rec_data)
 
-udp_sock = 0 				#socket for sending data
-udp_bot_ip = "192.168.0.9"	#ip of the bot
-udp_port = 10002			#port
+udp_sock = 0 					#socket for sending data
+udp_bot_ip = "192.168.0.255"	#ip of the bot
+udp_port = 10002				#port
 
 prompt = "ctBot-remote $ "
 
@@ -162,7 +162,7 @@ def openSocket():
 	udp_sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
 	split_ip = udp_bot_ip.split(".")
 	if split_ip[3] == "255":
-		print "Using broadcast..."
+		print "#Using broadcast..."
 		udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 	udp_sock.sendto( "Hello ctBot!", (udp_bot_ip, udp_port) )
 
@@ -387,7 +387,7 @@ def tokensend(infile=""):
 				fileobject.close()
 				return
 			send_cmd('t', tokenpak, tokenpak, pload, tmpln[1])
-			sleep(1)
+			sleep(0.1)
 		send_cmd('t', "\xff\xff", "\xff\xff") #EOF transmission
 	except:
 		print "#Error: bad file!"
