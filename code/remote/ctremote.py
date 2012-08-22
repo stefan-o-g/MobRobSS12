@@ -1,5 +1,26 @@
-#!/usr/bin/python
-'''ctremote.py  - Skript um den ctBot per WLAN fernzusteuern...'''
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+#
+#  ctremote.py  - Skript um den ctBot per WLAN fernzusteuern...
+#  
+#  Copyright 2012
+#  
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#  
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#  
+#
 
 from sys import argv, exit
 from os import system
@@ -81,7 +102,7 @@ def help(cmd=""):
 		print "help <cmd>"
 		print "   Print help for a single command."
 		print "exit"
-		print "quit"
+		print "(q)uit"
 		print "   Exit this script."
 		print "Strg+c"
 		print "   Stops the bot."
@@ -262,7 +283,7 @@ def user_input_eval(usrin):
 			#EOF GET
 		elif cmd_list[0] == "tokensend":
 			tokensend(cmd_list[1])	
-		elif cmd_list[0] == "exit" or cmd_list[0] == "quit":
+		elif cmd_list[0] == "exit" or cmd_list[0] == "quit" or cmd_list[0] == "q":
 			send_cmd('\x01')
 			run = False
 		elif cmd_list[0] == "help":
@@ -392,7 +413,7 @@ while run:
 
 	except KeyboardInterrupt:
 		print "\n#Panic, STRG+C! Stopping Bot..."
-		print "(To exit ctremote.py use 'exit' or 'quit')"
+		print "(To exit ctremote.py use 'exit' or '(q)uit')"
 		send_cmd('\x01')
 		send_cmd('\x01')
 		send_cmd('\x01')
