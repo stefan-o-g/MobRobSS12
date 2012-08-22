@@ -139,6 +139,10 @@ def openSocket():
 	print "#Using port ", udp_port 
 
 	udp_sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
+	print split_ip
+	if split_ip[3] == "255":
+		print "Using broadcast..."
+		udp_sock.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 	udp_sock.sendto( "Hello ctBot!", (udp_bot_ip, udp_port) )
 
 ##################################################################
@@ -350,7 +354,7 @@ def tokensend(infile=""):
 				fileobject.close()
 				return
 			send_cmd('t', tokenpak, tokenpak, pload, tmpln[1])
-			sleep(0.1)
+			sleep(1)
 		send_cmd('t', "\xff\xff", "\xff\xff") #EOF transmission
 	except:
 		print "#Error: bad file!"
