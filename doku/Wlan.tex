@@ -14,8 +14,11 @@ gedrück werden. Es erscheint folgende Ausgabe:
     Software version V6.6.0.0 (080107) 
     Press Enter for Setup Mode
 \end{verbatim}
-Die Versionsnummer sollte übereinstimmen. Ältere Versionen haben andere
-Konfigurationsmenüs. Nach dem betätigen der Enter-Taste wird der aktuelle
+Ältere Versionen haben möglicherweise andere Konfigurationsmenüs und Funktionen.
+Das stellt aber im Allgemeinen kein Probelm dar. Getestet wurde auch die Version
+6.3.0.0.\\
+
+Nach dem betätigen der Enter-Taste wird der aktuelle
 Konfigurationsstatus ausgegeben gefolgt von einem Menü.
 Mit 7 können die Einstellungen zurückgesetzt werden.
 Im Menüpunkt 0 (Server) sollte drauf geachtet werden das Wireless verwendet wird
@@ -333,5 +336,21 @@ Das Skript besteht intern aus folgenden Funktionen:
 
 \subsubsection{Programm auf dem Bot}
 \label{ctremote_bot}
-TODO: wie sieht das programm aus, welches die WLAN-pakete auswertet und aktionen auslöst blablabla...
+Die Auswertung der Befehle die per WLAN empfangen werden, geschiet im wesentlichen
+in einem \textit{swicht-case} Block. Die einzelnen Fälle werden durch das Byte 
+\verb+cmd->request.subcommand+ auseinander gehlaten. Folgende Fälle wurden
+implementiert:
+\begin{itemize}
+    \item Funktion Stand: Der Bot bleibt stehen.
+    \item Funktion Motte 1: Die erste Implementierung des Motte-Verhlatens.
+    \item Funktion Motte 2: Die zweite Implementierung des Motte-Verhaltens. 
+    \item Funktion Kakerlake 1: Die erste Implementierung des Kakerlake-Verhaltens.
+    \item Funktion Kakerlake 2: Die zweite Implementierung des Kakerlanke-Verhaltens.
+    \item Funktion Acht: Der Bot fährt eine Acht (8). Diese kann mit der Fernbedieung getrimmt werden.
+    \item Funktion Linie: Der Bot folgt einer schwarzen Linie.
+    \item Funktion Freie fahrt: Der Bot kann von dem Computer aus ferngesteuert werden.
+        Die Geschwindigkeit für das linke bzw. rechte Rad werden in dem WLAN-Paket mit
+        übertragen.
+\end{itemize}
+
 
