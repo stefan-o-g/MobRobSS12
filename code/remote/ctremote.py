@@ -381,7 +381,8 @@ def tokensend(infile=""):
 				return
 			try:
 				#get payload as little end. unsig. char
-				pload = pack('<B', len(tmpln[1]))
+				value = tmpln[1].strip()
+				pload = pack('<B', len(value))
 			except:
 				print "#Error: payload error!"
 				fileobject.close()
