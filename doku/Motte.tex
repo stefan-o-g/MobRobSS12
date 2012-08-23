@@ -3,11 +3,11 @@
 
 \subsubsection{Ansatz Verhaltensframework}
 
-Dieser Ansatz löst die Aufgabe in dem das Verhaltensframework
-genutzt wird, dass mit dem ct-Bot Reopsitory ausgelierfert wird.
-Diese Lösung teilte die Aufgabe einer Lichtquelle zu folgen (Motte), in drei
-Unteraufgaben:Linksdrehen, Rechtsdrehen, geradeaus Fahren.
-Welche Funktion ausgeführt wird, entscheidet ein Vergelich der beiden Fotowiderstände
+Dieser Ansatz löst die Aufgabe, in dem das Verhaltensframework
+genutzt wird, das mit dem ct-Bot Repository ausgeliefert wird.
+Diese Lösung teilte die Aufgabe einer Lichtquelle zu folgen (Motte) in drei
+Unteraufgaben: Linksdrehen, Rechtsdrehen, geradeaus Fahren.
+Welche Funktion ausgeführt wird, entscheidet ein Vergleich der beiden Fotowiderstände
 (LDR - \textit{Light Dependent Resistor}). In diesen Vergleich fliesen zwei Konstanten ein:
 \verb+LDR_CORRECT+ und \verb+TOLERANCE+. Mit \verb+LDR_CORRECT+ lassen sich
 (Hardwarebedingte) Unterschiede zwischen den beiden Sensoren ausgleichen. Liefert
@@ -18,12 +18,12 @@ Logisch wäre die Lichtquelle direkt vor dem Bot, wenn beide Sensoren den gleich
 Wert liefern. In der Praxis wird das aber selten der Fall sein. Deswegen kann mit
 \verb+TOLERANCE+ angegeben werden, wie viel mehr Licht auf den linken bzw. den rechten
 Widerstand strahlen darf, ohne das es als links bzw. rechts Fahren interpretiert wird.
-Bei einerm \verb+TOLERANCE+ Wert von 15 wird Beispielsweise trozdem geradeaus gefahren,
+Bei einem \verb+TOLERANCE+ Wert von 15 wird Beispielsweise trozdem geradeaus gefahren,
 wenn der linke Sensor einen um 10 höheren Wert wie der rechte aufweist. Jetzt kann
-der Roboter grade auf die Lichtquelle zu fahren, selbst wenn diese nicht zu 100\%
+der Roboter gerade auf die Lichtquelle zufahren, selbst wenn diese nicht zu 100\%
 vor ihm liegt. \\
 
-Das Verhalten der Kakalake (vor einer Lichtquelle fliehen) ist exakt gleich dem der 
+Das Verhalten der Kakerlake (vor einer Lichtquelle fliehen) ist exakt gleich dem der 
 Motte implementiert, nur das rückwärts gefahren wird. So wird die Lichtquelle immer
 von der Roboter Vorderseite fixiert und dann davon weggefahren. \\
 
@@ -31,21 +31,23 @@ Code einfügen / manipuliernen:
 \begin{itemize}
     \item \verb+behaviour_follow_light.c+  im Verzeichnis 
         \verb+ct-Bot/bot-logic/+ einsortieren.
-    \item \verb+behaviour_follow_light.h+ in Verzeichnis
+    \item \verb+behaviour_follow_light.h+ im Verzeichnis
         \verb+ct-Bot/include/bot-logic/+ einsortieren.
     \item Des Weiteren sind Änderungen in den Dateinen \verb+ct-Bot/ct-Bot.h+, \\
         \verb+ct-Bot/bot-logic/bot-logic.c+,
         \verb+ct-Bot/ui/available_screens.h+ und \\
-        \verb+ct-Bot/include/bot-logic/available_behaviours.h+ zu nötig.
+        \verb+ct-Bot/include/bot-logic/available_behaviours.h+ nötig.
         Wie genau die Änderungen sind ist der \verb+follow-light-diff.txt+ zu entnehmen.
 \end{itemize}
 
 \subsubsection{Allgemeiner Ansatz}
 
-Die Aufgabe ist an sich ziemlich simpel da man nur die beiden sensor werte vergleichen muss und angemessen darauf reagieren.
-Um die Sensorwerte einfach zu vergleichen wurde hierzu einfach die differenz der beiden werte genommen.
-Anhand der Differenz kann mann dann einfach überprüfen ob das Licht mehr von Rechts oder von Links kommmt, oder ob das Licht gleichmäßig verteilt auftrifft.
-Ist diese Unterscheidung der Position getan muss noch im Fall von gleichmäßigem auftreffen des Lichts überprüft werden ob es gleichmäßig hell oder gleichmäßig dunkel ist.
+\noindent \textbf{Motte/Kakerlake - }\verb+void light(int)+\\
+
+Die Aufgabe ist an sich ziemlich simpel, da man nur die beiden Sensorwerte vergleichen und angemessen darauf reagieren muss.
+Um die Sensorwerte einfach zu vergleichen wurde hierzu die Differenz der beiden Werte genommen.
+Anhand der Differenz kann man dann überprüfen ob das Licht mehr von Rechts oder von Links kommt, oder ob das Licht gleichmäßig verteilt auftrifft.
+Ist diese Unterscheidung der Position getan muss noch im Fall von gleichmäßigem Auftreffen des Lichts überprüft werden ob es gleichmäßig hell oder gleichmäßig dunkel ist.
 
 
 
@@ -53,7 +55,7 @@ Ist diese Unterscheidung der Position getan muss noch im Fall von gleichmäßige
 
 \textbf{Motte - }\verb+void motte_nonbehav()+\\
 
-Die Funktion \verb+void motte_nonbehav()+ besteht hauptsächlich aus zwei Schleifen: Eine lässt den Roboter nach links drehen, solange der linke Sensor einen kleineren ( \^= helleren) Wert liefert liefert. Die andere lässt den Robotor nach rechts drehen, solange der rechte Sensor einen kleineren Wert liefert. Um zu verhindern, dass der Roboter in Bereichen mit geringem Unterschied zwischen den Sensorwerten nur kleine, ruckelnde Bewegungen macht wurde die Variable \verb+stopMotor+ eingeführt, welche in der Schleife inkrementiert wird und als zusätzliche Bedingung im Schleifenkopf dient. So haben die Bewegungen immer ein mindestmaß an Reichweite.
+Die Funktion \verb+void motte_nonbehav()+ besteht hauptsächlich aus zwei Schleifen: Eine lässt den Roboter nach links drehen, solange der linke Sensor einen kleineren ( \^= helleren) Wert liefert. Die andere Schleife lässt den Robotor nach rechts drehen, solange der rechte Sensor einen kleineren Wert liefert. Um zu verhindern, dass der Roboter in Bereichen mit geringem Unterschied zwischen den Sensorwerten nur kleine, ruckelnde Bewegungen macht wurde die Variable \verb+stopMotor+ eingeführt, welche in der Schleife inkrementiert wird und als zusätzliche Bedingung im Schleifenkopf dient. So haben die Bewegungen immer ein mindestmaß an Reichweite.
 Innerhalb beider Schleifen wird in jedem Durchlauf unterschieden ob der Roboter sich schnell oder langsam drehen soll. Schnell, wenn die Sensorwerte um mehr als das doppelte verschieden sind, ansonsten langsam.
 Am Ende jedes Schleifendurchlaufs werden noch Displayausgaben gemacht und die Sensorwerte werden über \verb+sensor_update()+ neu eingelesen.
 Nach Ablauf beider Schleifen, also wenn der Bot ungefähr in Richtung Lichtquelle zeigt, gibt es noch eine Schleife, welche den Roboter auf die Lichtquelle zufahren lässt. Hierzu kommen als Schleifenbedingungen wieder die Variable \verb+stopMotor+ und die Hilfsfunktion \verb+nearly_equal()+ zum Einsatz. Im Schleifenkörper werden neben der Motoransteuerung ebenfalls wieder Displayausgaben gemacht sowie Sensorwerte neu eingelesen.\\
@@ -62,9 +64,9 @@ Nach Ablauf beider Schleifen, also wenn der Bot ungefähr in Richtung Lichtquell
 
 Die Funktion \verb+void kakerlake_nonbehav()+ ist der Funktion \verb+void motte_nonbehav()+ sehr ähnlich:
 Zunächst wird überprüft welcher Sensor einen größeren (\^= dunkleren) Wert liefert und dementsprechend wird eine Schleife (rechts oder links drehen) ausgeführt. Als Bedingungen im Schleifenkopf werden wieder die Sensorwerte sowie die Variable \verb+stopMotor+ verwendet. Im Schleifenkörper wird wieder wie in der Funktion \verb+void motte_nonbehav()+ unterschieden ob schnell oder langsam gedreht werden soll.
-Anschließend gibt es wieder eine Schleife welche den Bot vom Licht wegfahren lässt. Dazu werden immer die bisherigen Sensorwerte zwischengespeichert und die neuen Werte abgerufen. Je nachdem ob die neuen Sensorwerte größer oder kleiner werden flüchtet der Roboter vorwärts bzw. rückwärts.\\
+Anschließend gibt es wieder eine Schleife, welche den Bot vom Licht wegfahren lässt. Dazu werden immer die bisherigen Sensorwerte zwischengespeichert und die neuen Werte abgerufen. Je nachdem ob die neuen Sensorwerte größer oder kleiner werden flüchtet der Roboter vorwärts bzw. rückwärts.\\
 
 \noindent \textbf{Die Hilfsfunktion }\verb+nearly_equal(int v1, int v2, int delta)+\\
 
-Die Funktion bekommt zwei Werte \verb+v1+ und \verb+v2+ und eine Delta \verb+delta+ als Parameter. Sie errechnet zunächst die absolute Differenz zwischen  \verb+v1+ und \verb+v2+ und überprüft dann, ob die errechnete Differenz größer als das angegebene Delta (\verb+delta+) ist. Falls ja wird \verb+0+ für \textit{false} zurückgegeben, ansonsten \verb+1+ für \textit{true}.
+Die Funktion bekommt zwei Werte \verb+v1+ und \verb+v2+ und ein Delta \verb+delta+ als Parameter. Sie errechnet zunächst die absolute Differenz zwischen  \verb+v1+ und \verb+v2+ und überprüft dann, ob die errechnete Differenz größer als das angegebene Delta (\verb+delta+) ist. Falls ja wird \verb+0+ für \textit{false} zurückgegeben, ansonsten \verb+1+ für \textit{true}.
 

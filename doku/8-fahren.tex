@@ -2,7 +2,8 @@
 \label{8-fahren}
 
 \subsubsection{Allgemeiner Ansatz}
-\noindent \verb+void acht_nonbehav()+ \\
+
+\verb+void acht_nonbehav()+ \\
 
 Für diese Aufgabe wurde ein relativ einfaches Prinzip gewählt: Es gibt zwei Schleifen nacheinander, welche den Bot zunächst eine Rechtskurve und anschließend eine Linkskurve fahren lassen. Ergeben beide Kurven einen Kreis, dann fährt der Bot eine "'Acht"'. Da die Motorleistung von Bot zu Bot, von rechtem Motor zu linkem Motor oder einfach je nach Batteriestand anders sind ging das Konzept aber so nicht auf.
 Um diese Verschiedenheiten auszugleichen wurden die Variablen \verb+static int distr+ und \verb+ static int distl+ eingeführt, um zur Laufzeit Änderungen an der Kurvenfahrt vorzunehmen. Diese Variablen bestimmen wie lange der Bot die Links- (\verb+distl+) bzw. Rechtskurve (\verb+distr+) fährt. So kann die Kurvenfahrt für jede Richtung einzeln justiert werden. 

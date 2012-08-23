@@ -4,11 +4,11 @@
 \subsubsection{Auf dem Bot}
 \label{wlan_auf_bot}
 Als erstes muss das WLAN-Modul (WiPort) des ct-Bots konfiguriert werden.
-Dazu verbintet man sich am besten mit diesem Modul über die serielle Schnitstelle.
-(Ein spezieller USB-Adapter wird benötigt. Das rote Kabel muss rechts sein beim 
-einstecken in den Roboter.) Um in das Konfigurationsmenü zu gelangen,
+Dazu verbindet man sich am Besten über die serielle Schnittstelle mit dem Modul.
+(Ein spezieller USB-Adapter wird benötigt. Das rote Kabel muss beim 
+Einstecken in den Roboter rechts sein.) Um in das Konfigurationsmenü zu gelangen,
 muss beim Start des Bots sofort x (mehrmals, um den Zeitpunkt nicht zu verpassen)
-gedrück werden. Es erscheint folgende Ausgabe:
+gedrückt werden. Es erscheint folgende Ausgabe:
 \begin{verbatim}
     MAC address 00204A96578C
     Software version V6.6.0.0 (080107) 
@@ -18,11 +18,11 @@ gedrück werden. Es erscheint folgende Ausgabe:
 Das stellt aber im Allgemeinen kein Probelm dar. Getestet wurde auch die Version
 6.3.0.0.\\
 
-Nach dem betätigen der Enter-Taste wird der aktuelle
-Konfigurationsstatus ausgegeben gefolgt von einem Menü.
+Nach dem Bestätigen der Enter-Taste wird der aktuelle
+Konfigurationsstatus ausgegeben, gefolgt von einem Menü.
 Mit 7 können die Einstellungen zurückgesetzt werden.
-Im Menüpunkt 0 (Server) sollte drauf geachtet werden das Wireless verwendet wird
-und dem Bot die IP 192.168.0.Bot-Nummer zugeweisen wird.
+Im Menüpunkt 0 (Server) sollte darauf geachtet werden, dass Wireless verwendet wird
+und dem Bot die IP 192.168.0.\textit{"'Bot-Nummer"'} zugewiesen wird.
 Mit Menüpunkt 2 muss nun der Channel 2 eingestellt werden.
 \begin{verbatim}
     Baudrate (9600) ? 57600
@@ -39,7 +39,7 @@ Mit Menüpunkt 2 muss nun der Channel 2 eingestellt werden.
     SendChar 2  (00) ? 
 \end{verbatim}
 
-\noindent{Eine gültige Konfiguration könnte dann wie folgend aussehen:}
+\noindent{Eine gültige Konfiguration könnte dann wie folgt aussehen:}
 \begin{verbatim}
     *** basic parameters 
     Hardware: Ethernet TPI, WLAN 802.11bg
@@ -150,24 +150,23 @@ Mit Menüpunkt 2 muss nun der Channel 2 eingestellt werden.
 
 \noindent{\textbf{WLAN Daten Senden/Empfangen:}} \\
 \\
-Für genauere Infos zu bereits existierenden Funktionen sollte in der CT-Bot nachgeschaut werden.\\
+Für genauere Infos zu bereits existierenden Funktionen sollte in der CT-Bot-Dokumentation nachgeschaut werden.\\
 \\
-\textbf{Senden:} Das Schreiben/Senden von Daten ist relativ einfach da hierfür schon Funktionen zur Verfügung stehen die genau das für einen erledigen.\\
-Mit \verb|command_write(...)| können Kommandos gesendet werden an die Optional auch Daten angehängt werden. Dabei gibt der Payload an wie viel Bytes angehängt werden. 
+\textbf{Senden:} Das Schreiben/Senden von Daten ist relativ einfach, da hierfür schon Funktionen zur Verfügung stehen, die genau das für einen erledigen.\\
+Mit \verb|command_write(...)| können Kommandos gesendet werden, an die Optional auch Daten angehängt werden können. Dabei gibt der Payload an wie viele Bytes angehängt wurden. 
 \\
-\textbf{Empfangen:} Für das Empfangen gibt es die möglichkeit die in command.c definirte Funktion \verb|command_evaluate| zu erweitern. Das hat den Vorteil das jedes gültige Kommando das gelesen wird auch verarbeitet wird, solange dafür Code in \verb|command_evaluate| vorhanden ist.
+\textbf{Empfangen:} Für das Empfangen gibt es die Möglichkeit, die in \textit{command.c} definierte, Funktion \verb|command_evaluate| zu erweitern. Das hat den Vorteil, dass jedes gültige Kommando, das gelesen wird, auch verarbeitet wird, solange dafür Code in \verb|command_evaluate| vorhanden ist.
 Da wir aber nur unsere Kommandos verarbeiten mussten und zudem das Ziel hatten so wenig wie möglich in schon vorhandenen Dateien zu verändern, haben wir uns Hilfsfunktionen geschrieben.\\
 \\
-\verb|command_t* read_command()| liest ein Kommando in die schon vorhandene variable \verb|recived_command| in command.c ein und gibt einen Zeiger darauf zurück.\\
+\verb|command_t* read_command()| liest ein Kommando in die schon vorhandene Variable \verb|received_command| in \textit{command.c} ein und gibt einen Zeiger darauf zurück.\\
 \\
-Zum Lesen wird mit der schon vorhandenen Funktion \verb|uart_data_available| geschaut wieviel Bytes an Daten zum Lesen verfügbar sind.\\
+Zum Lesen wird mit der schon vorhandenen Funktion \verb|uart_data_available| geschaut, wie viele Bytes an Daten zum Lesen verfügbar sind.\\
 \\
-Wenn mindestens genug Daten für ein Kommando \verb|sizeof(command_t)| vorhanden sind, wird mit einer weiteren schon vorhandenen Funktion \verb|command_read| ein Kommando in die Puffervariable \verb|recived_command| eingelesen.\\
+Wenn mindestens genug Daten für ein Kommando (\verb|sizeof(command_t)|) vorhanden sind, wird mit einer weiteren schon vorhandenen Funktion \verb|command_read| ein Kommando in die Puffervariable \verb|received_command| eingelesen.\\
 \\
-Zuletzt wird mit der von uns zu command.c hinzugefügten Funktion \\
-\verb|get_recieved_command| ein Zeiger auf \verb|recived_command| zurückgegeben.\\
+Zuletzt wird mit der von uns zu \textit{command.c} hinzugefügten Funktion \verb|get_received_command| ein Zeiger auf \verb|received_command| zurückgegeben.\\
 \\
-\textbf{Payload Daten Auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
+\textbf{Payload-Daten auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
 \\
 \verb|uint8_t* read_payload(command_t* cmd, uint8_t* buffer)| liest die angehängten Daten des übergebenen Kommandos in den übergebenen buffer.\\ Hierfür wird auf die vorhandene Funktion \verb|low_read| zurückgegriffen.
 
@@ -339,19 +338,18 @@ Das Skript besteht intern aus folgenden Funktionen:
 \label{ctremote_bot}
 Die Auswertung der Befehle die per WLAN empfangen werden, geschiet im wesentlichen
 in einem \textit{swicht-case} Block. Die einzelnen Fälle werden durch das Byte 
-\verb+cmd->request.subcommand+ auseinander gehlaten. Folgende Fälle wurden
+\verb+cmd->request.subcommand+ auseinander gehalten. Folgende Fälle wurden
 implementiert:
 \begin{itemize}
     \item Funktion Stand: Der Bot bleibt stehen.
-    \item Funktion Motte 1: Die erste Implementierung des Motte-Verhlatens.
+    \item Funktion Motte 1: Die erste Implementierung des Motte-Verhaltens.
     \item Funktion Motte 2: Die zweite Implementierung des Motte-Verhaltens. 
     \item Funktion Kakerlake 1: Die erste Implementierung des Kakerlake-Verhaltens.
     \item Funktion Kakerlake 2: Die zweite Implementierung des Kakerlanke-Verhaltens.
-    \item Funktion Acht: Der Bot fährt eine Acht (8). Diese kann mit der Fernbedieung getrimmt werden.
+    \item Funktion Acht: Der Bot fährt eine Acht. Diese kann mit der Fernbedieung justiert werden.
     \item Funktion Linie: Der Bot folgt einer schwarzen Linie.
-    \item Funktion Freie fahrt: Der Bot kann von dem Computer aus ferngesteuert werden.
-        Die Geschwindigkeit für das linke bzw. rechte Rad werden in dem WLAN-Paket mit
-        übertragen.
+    \item Funktion Move: Der Bot kann vom Computer aus ferngesteuert werden.
+        Die Geschwindigkeit für das linke bzw. rechte Rad werden in dem WLAN-Paket übertragen.
 \end{itemize}
 
 

@@ -1,5 +1,6 @@
 \subsection{Installation}
-Für die Entwicklung wurde ein aktuelles Ubuntu Linux verwendet. In diesem Abschnitt ist beschrieben was für vorbereitende Schritte auf dem System durcheführt werden müssen um entwickeln und den ct-Bot flashen zu können.
+Für die Entwicklung wurden ein aktuelles Ubuntu Linux sowie ein Arch Linux verwendet. In diesem Abschnitt ist beschrieben was für vorbereitende Schritte auf dem System durchgeführt werden müssen um entwickeln und den ct-Bot flashen zu können.
+(Die nachfolgenden Anweisungen gelten für Ubuntu.)
 
 
 \subsubsection{System vorbereiten}
@@ -10,7 +11,7 @@ Die Eclipse-Variante zur C/C++-Entwicklung. (Der ct-Bot wird in C programmiert.)
 \item binutils-avr, gcc-avr, avr-libc\\
 Werden zum Kompilieren für den Microcontrollers des ct-Bot benötigt. (Cross-Compiler)
 \item avrdude\\
-Wird zum Flashen des Microcontrollers des ct-Bot benötigt.
+Wird zum Flashen des Microcontroller des ct-Bot benötigt.
 \item subversion\\
 Wird zum Holen des aktuellen Quellcodes für den ct-Bot aus dem heise-Repository benötigt.
 \end{itemize}
@@ -77,7 +78,7 @@ Um unsere hex-Datei nun auf den ct-Bot zu bekommen, müssen wir \textit{avrdude}
 	\item \textit{i} gibt (optional) das Format der Datei an. (Hier \textit{i} für \textit{Intel Hex}.)
 	\end{itemize}
 \end{itemize}
-Zu beachten ist, dass \textit{avrude} als root oder über \textit{sudo} aufgerufen werden muss.
+Zu beachten ist, dass \textit{avrdude} als root oder über \textit{sudo} aufgerufen werden muss.
 Der konkrete Aufruf würde also folgendermaßen aussehen:
 \begin{lstlisting}
 sudo avrdude -c avrispmkII -P usb -p m32 -U \

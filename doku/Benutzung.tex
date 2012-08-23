@@ -1,45 +1,45 @@
 \subsection{Benutzung des geschriebenen Codes}
-
+\label{benutzung}
 \subsubsection{Benutzung des Verhaltensframeworks}
 \label{benutzung_verhaltensframework}
-In dem Repository des ct-Bot wird ein Verhaltesframework mit ausgeliefert.
+In dem Repository des ct-Bot wird ein Verhaltensframework mit ausgeliefert.
 Die Nutzung des Frameworks hat einige Vorteile:
 \begin{itemize}
-	\item Eigener Code leich einzusortieren und stört kein vorhandenen Code.
+	\item Eigener Code ist leicht einzusortieren und stört keinen vorhandenen Code.
 	\item Eigene Verhalten können simpel auf andere Verhalten zugreifen.
-	\item Durch die Priorisierung der können mehrere Verhalten zusammen Arbeiten.
-		(z.B. Bot soll eine Distnaz von 30cm fahren. Wenn er dabei aber an eine
-		Tischkannte kommt wird abgebrochen damit der Bot nicht vom Tisch fällt.)
-	\item Der ausgelieferte Verhlatenssatz bietet eine vielzahl von nützlichen
+	\item Durch Priorisierung können mehrere Verhalten zusammenarbeiten.
+		(Z.B. soll der Bot eine Distanz von 30cm fahren. Wenn er dabei aber an eine
+		Tischkannte kommt wird abgebrochen, damit der Bot nicht vom Tisch fällt.)
+	\item Der ausgelieferte Verhaltenssatz bietet eine Vielzahl von nützlichen
 		Verhalten.
 \end{itemize}
 Nachteil ist leider die etwas komplexe Einarbeitung, da der Einstieg nicht sehr gut
 dokumentiert ist. Nach einiger Suche wird man im \verb+ct-Bot/bot-logic/+ 
-Verzeichnis fündig. Dort gibt es eine \verb+behaviour_prototype.c+ Datei
-in die der Funktionsaufbau eines Verhaltens als grobes Grundgerüst sichtbar ist.
+Verzeichnis fündig. Dort gibt es eine \verb+behaviour_prototype.c+ Datei,
+in der der Funktionsaufbau eines Verhaltens als grobes Grundgerüst sichtbar ist.
 Die passende Header-Datei befindet sich dann unter
 \verb+ct-Bot/include/bot-logic/behaviour_prototype.h.+. Auch diese
-zeigt wieder wie ein typischer Aufbau aussehen könnte. Wenn weiter in allen Dateien
+zeigt wieder, wie ein typischer Aufbau aussehen könnte. Wenn weiter in allen Dateien
 nach dem Schlüsselwort \textit{prototype} gesucht wird, so findet man zunächst
-die Datei \\ \verb+available_behaviours.h+. Diese bietet "`Schalter"'
-an um Verhalten verfügbar zu machen. D.h. ein hier definiertes Verhalten
+die Datei \\ \verb+available_behaviours.h+. Diese bietet "'Schalter"'
+an, um Verhalten verfügbar zu machen. D.h. ein hier definiertes Verhalten
 wird compiliert und kann später genutzt oder gleich zu begin aktiviert werden.
-Nicht zu vergessen ist auch das am Ende der Datei die Header-Datei des
-Verhaltens zu inkludieren. An diese Stelle wäre auch noch kurz die
-\verb+ct-Bot/ct-Bot.h+ zu erwähnen, die ebenfalls "`Schalter"' enthält.
+Nicht zu vergessen ist auch, dass am Ende der Datei die Header-Datei des
+Verhaltens inkludiert werden muss. An dieser Stelle wäre auch noch kurz die
+\verb+ct-Bot/ct-Bot.h+ zu erwähnen, die ebenfalls "'Schalter"' enthält.
 Der Unterschied ist, dass durch Veränderungen an der Datei sich grundlegende
-Hardware Teile abschalten/einschlaten lassen (wie z.B. das Display).
-Die letze essentiell wichtige Datei ist die \verb+ct-Bot/bot-logic/bot-logic.c+.
+Hardware-Teile abschalten/einschalten lassen (wie z.B. das Display).
+Die letzte essentiell wichtige Datei ist die \verb+ct-Bot/bot-logic/bot-logic.c+.
 Dort müssen Verhalten mit frei wählbarer Priorität in die Verhaltensliste
-eingefügt werden. Bei dem Einfügen wird auch entschieden ob das Verhlaten
-aktiv ist. Die priorität kann genutzt werden um Notfallverhalten wie
-\textit{nicht von der Tichkante falle} als wichtiger einzustufen als
-\textit{gerade aus fahren}. Damit wird verhindert, dass der Roboter von der
-Tischkante fällt, obowhl er anderen Befehl folgt, die ihn möglicherweise
-direkt auf eine solche Kante zusteuern lassen. Dammit das alles funktioniert
+eingefügt werden. Beim Einfügen wird auch entschieden, ob das Verhalten
+aktiv ist. Die Priorität kann genutzt werden, um Notfallverhalten wie
+\textit{nicht von der Tischkante fallen} als wichtiger einzustufen als
+\textit{geradeaus fahren}. Damit wird verhindert, dass der Roboter von der
+Tischkante fällt, obowhl er anderen Befehlen folgt, die ihn möglicherweise
+direkt auf eine solche Kante zusteuern lassen. Damit das alles funktioniert
 ruft die \verb+main()+-Funktion in einer Endlosschleife \verb+bot_behave()+ auf,
 welche alle aktiven Verhalten der Priorität nach bearbeitet. Ein zum
-Startzeitpunkt nicht aktives Verhlaten kann zur Laufzeit durch andere Verhalten
+Startzeitpunkt nicht aktives Verhalten kann zur Laufzeit durch andere Verhalten
 aktiviert werden.
 
 Ergänzend könnte es praktisch sein, die eigenen Verhalten auf dem Display
@@ -47,16 +47,17 @@ Debuggingausgaben machen zu lassen. Dazu muss die Datei
 \verb+ct-Bot/ui/available_screens.h+ verändert werden. Die Anzahl
 der möglichen Screens (\verb+DISPLAY_SCREENS+) kann inkrementiert werden
 wenn nicht schon genügend vorhanden sind. Des Weiteren ist ein eigener
-"`Schalter"' eingefügen, mit dem das eigene Verhalten arbeitetn sollte.
-Im Verhlaten sind die Dateien \verb+display.h+ und \\
+"'Schalter"' einzufügen, mit dem das eigene Verhalten arbeiten sollte.
+Im Verhalten sind die Dateien \verb+display.h+ und \\
 \verb+ui/available_screens.h+ zu inkludieren. Jetzt kann die Variable
-\verb+display_screen+ z.B. auf 11 gesetzt werden, dammit die eigenen
+\verb+display_screen+ z.B. auf 11 gesetzt werden, damit die eigenen
 Ausgaben zu sehen sind. \\
 
 \subsubsection{Benutzung "'Allgemeiner Ansatz"'}
 \label{benutzung_allgemein}
 Alternativ zum Verhaltensframework kann man den Bot natürlich auch ganz normal programmieren und über die mitgelieferten Funktionen etwa Sensorwerte auslesen oder beispielsweise die Motoren ansteuern. Diese Programme, die ohne Verhaltensframework geschrieben wurden, werden nachfolgend als "'Allgemeiner Ansatz"' bezeichnet.
 
-Die nachfolgend unter "'Allgemeiner Ansatz"' beschriebenen Programme befinden sich in den Dateien \textit{mr2012.h} bzw. \textit{mr2012.c}. Um sie zu nutzen müssen die Dateien einfach ins Quellcodeverzeichnis (bezogen auf die Installationsanleitung also \textit{\~{}/ctbot/stable/ct-Bot}) des ct-Bot kopiert werden. Die C-Datei direkt in dieses Verzeichnis, die H-Datei ins Unterverzeichnis \textit{include/}.
-Nun können die einzelnen Funktionen daraus einfach in der Hauptschleife des Bots (zu finden in \textit{ct-Bot.c} aufgerufen werden. 
-Z.B. die Funktion \verb+kakerlake_nonbehav()+ um das Kakerlakenverhalten zu starten oder die Funktion \verb+entry_point()+ um den Bot [...]
+Diese Programme befinden sich in den Dateien \textit{mr2012.h} bzw. \textit{mr2012.c}. Um sie zu nutzen müssen die Dateien einfach ins Quellcodeverzeichnis (bezogen auf die Installationsanleitung also \textit{\~{}/ctbot/stable/ct-Bot}) des ct-Bot kopiert werden. Die C-Datei direkt in dieses Verzeichnis, die H-Datei ins Unterverzeichnis \textit{include/}.
+
+Nun können die einzelnen Funktionen daraus einfach in der Hauptschleife des Bots (zu finden in \textit{ct-Bot.c}) aufgerufen werden. 
+Beispielsweise die Funktion \verb+kakerlake_nonbehav()+ um das Kakerlakenverhalten zu starten oder die Funktion \verb+entry_point()+ um den Bot, wie in Abschnitt \ref{zusatzaufgabe} beschrieben, per WLAN fernzusteuern.
