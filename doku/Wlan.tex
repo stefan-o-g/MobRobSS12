@@ -164,7 +164,8 @@ Zum Lesen wird mit der schon vorhandenen Funktion \verb|uart_data_available| ges
 \\
 Wenn mindestens genug Daten für ein Kommando \verb|sizeof(command_t)| vorhanden sind, wird mit einer weiteren schon vorhandenen Funktion \verb|command_read| ein Kommando in die Puffervariable \verb|recived_command| eingelesen.\\
 \\
-Zuletzt wird mit der von uns zu command.c hinzugefügten Funktion \verb|get_recieved_command| ein Zeiger auf \verb|recived_command| zurückgegeben.\\
+Zuletzt wird mit der von uns zu command.c hinzugefügten Funktion \\
+\verb|get_recieved_command| ein Zeiger auf \verb|recived_command| zurückgegeben.\\
 \\
 \textbf{Payload Daten Auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
 \\
