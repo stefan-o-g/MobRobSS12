@@ -2,18 +2,17 @@
 \label{weg-aufzeichnen}
 
 \subsubsection{Ansatz Verhaltensframework}
-Die modifizerte Version der Motte, die sich den gefahrenen Weg merken und diesen
-wieder zurückfahren können soll, wurde über das Motte/Kakerlake Verhalten und
+Die modifizierte Version der Motte, die sich den gefahrenen Weg merken und diesen
+wieder zurückfahren können sollte, wurde über das Motte/Kakerlake Verhalten und
 vorhandene Verhalten realisiert.
-Dazu wurde zuerst das Verhalten \verb+BEHAVIOUR_DRIVE_STACK_AVAILABLE+ zugeschalten \\
-(in \verb+ct-Bot/include/bot-logic/available\_behaviours.h+ und anschlißend
+Dazu wurde zuerst das Verhalten \verb+BEHAVIOUR_DRIVE_STACK_AVAILABLE+ (in \verb+ct-Bot/include/bot-logic/available\_behaviours.h+) zugeschaltet und anschließend
 auf aktiv gesetzt (\verb+bot_save_waypos_behaviour+ in
 \verb+ct-Bot/bot-logic/bot-logic.c+). Dieses Verhalten zeichnet im Folgenden
-alle Informationen auf, die für das wiederfinden der relevanten Positonen nötig sind.
-Nach einer über die Konstante \verb+MAX_WAYPOINTS+ festgelegten Anzahl Wegpunkten,
-wird das \verb+drive_stack()+ Verhlaten aufgerufen das die Punkte wieder anfährt.
+alle Informationen auf, die für das Wiederfinden der relevanten Positionen nötig sind.
+Nach einer über die Konstante \verb+MAX_WAYPOINTS+ festgelegten Anzahl an Wegpunkten,
+wird das \verb+drive_stack()+ Verhalten aufgerufen, das die Punkte wieder anfährt.
 Wenn der Roboter an der Ausgangsposition angekommen ist, beginnt er wieder von vorne mit
 der Wegaufzeichnung und der Lichtquellensuche. Die eigentliche Änderung im
 Motte/Kakerlake Verhalten liegt also nur darin, nach jeder Aktion den Waypoint-Counter
-hoch zu zählen und nach der definierten Anzahl Waypoints (\verb+MAX_WAYPOINTS+) das
-\verb+drive_stack()+ Verhlaten aufzurufen.
+zu inkrementieren und nach der definierten Anzahl Waypoints (\verb+MAX_WAYPOINTS+) das
+\verb+drive_stack()+ Verhalten aufzurufen.
