@@ -164,7 +164,7 @@ Zum Lesen wird mit der schon vorhandenen Funktion \verb|uart_data_available| ges
 \\
 Wenn mindestens genug Daten für ein Kommando (\verb|sizeof(command_t)|) vorhanden sind, wird mit einer weiteren schon vorhandenen Funktion \verb|command_read| ein Kommando in die Puffervariable \verb|received_command| eingelesen.\\
 \\
-Zuletzt wird mit der von uns zu \textit{command.c} hinzugefügten Funktion \verb|get_received_command| ein Zeiger auf \verb|received_command| zurückgegeben.\\
+Zuletzt wird mit der von uns zu \textit{command.c} hinzugefügten Funktion \\ \verb|get_received_command| ein Zeiger auf \verb|received_command| zurückgegeben.\\
 \\
 \textbf{Payload-Daten auslesen:} Da nach einem Kommando noch zusätzlich Daten angehängt werden können, haben wir auch hierfür eine Funktion geschrieben.\\
 \\
@@ -337,7 +337,7 @@ Das Skript besteht intern aus folgenden Funktionen:
 \subsubsection{Programm auf dem Bot}
 \label{ctremote_bot}
 Die Auswertung der Befehle die per WLAN empfangen werden, geschiet im wesentlichen
-in einem \textit{swicht-case} Block. Die einzelnen Fälle werden durch das Byte 
+in einem \textit{swicht-case} Block. Die einzelnen Fälle werden durch das Byte \\
 \verb+cmd->request.subcommand+ auseinander gehalten. Folgende Fälle wurden
 implementiert:
 \begin{itemize}
