@@ -4,7 +4,6 @@
 #include "utils.h"
 #include "ast.h"
 #include "interpreter.h"
-#include "semcheck.h"
 
 
 void parser_error();

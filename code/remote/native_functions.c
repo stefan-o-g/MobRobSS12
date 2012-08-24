@@ -1,50 +1,26 @@
 #include "native_functions.h"
+#include "sensor.h"
 
 
-void nmem_dump(struct stack* evalstack, struct memory* mem){
-	mem_dump(mem, stdout);
-}
-
-void nstack_dump(struct stack* evalstack, struct memory* mem){
-	stack_dump(evalstack, stdout);
-}
-
-void nprint_double(struct stack* evalstack, struct memory* mem){
-	printf("%f\n",read(mem,0,0)._double);
-}
 
 void nprint_int(struct stack* evalstack, struct memory* mem){
-	printf("%d\n",read(mem,0,0)._int);
-}
-
-void nread_int(struct stack* evalstack, struct memory* mem){
-	int i;
-	do{
-		printf("Enter a valid integer: ");
-	}while(scanf("%d",&i) == EOF);
-	push(evalstack,int_entry(i));
-}
-
-void nread_double(struct stack* evalstack, struct memory* mem){
-	double d;
-	do{
-		printf("Enter a valid double: ");
-	}while(scanf("%lf",&d) == EOF);
-	push(evalstack,double_entry(d));
+	display_clear();
+	display_cursor(1,1);
+	display_printf("%d",read(mem,0,0)._int);
 }
 
 
-void nrandom(struct stack* evalstack, struct memory* mem){
-	static int first = 1;
-	if(first){
-		srand ( time(NULL) );
-		first = 0;
-	}
-	push(evalstack, int_entry(rand()));
+void nmotor_set(struct stack* evalstack, struct memory* mem){
+	motor_set(read(mem,0,0)._int,read(mem,0,1)._int);
 }
 
-void nsin(struct stack* evalstack, struct memory* mem){
-	double param = read(mem,0,0)._double;
-	double result = sin(param);
-	push(evalstack, double_entry(result));
+
+void nsens_LDRL(struct stack* evalstack, struct memory* mem){
+	bot_sens_isr();
+	push(evalstack,int_entry(sensLDRL));
+}
+
+void nsens_LDRR(struct stack* evalstack, struct memory* mem){
+	bot_sens_isr();
+	push(evalstack,int_entry(sensLDRR));
 }
