@@ -387,8 +387,8 @@ def tokensend(infile=""):
 				print "#Error: payload error!"
 				fileobject.close()
 				return
-			send_cmd('t', tokenpak, tokenpak, pload, tmpln[1])
-			sleep(1)
+			send_cmd('t', tokenpak, tokenpak, pload, value)
+			sleep(0.05)
 		#send_cmd('t', "\xff\xff", "\xff\xff") #EOF transmission
 
 	except:
