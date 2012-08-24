@@ -352,27 +352,27 @@ implementiert:
         Die Geschwindigkeit für das linke bzw. rechte Rad werden in dem WLAN-Paket übertragen.
     \item Funktion Token empfangen: Liest Token über Wlan und baut einen AST für den Interpreter daraus.
 \end{itemize}
-
-\subsubsection{WLAN Flashen}
-\label{wlan-flash}
+\newpage
+\subsubsection{Compiler/Interpreter auf dem Bot}
+\label{wlan-interpreter}
 
 \noindent{\textbf{Idee}}
 \\
 \\
-Die Idee den Bot über Wlan flashen  zu können kam uns weil es einfach zu lange dauert schnell mal was zu probieren oder Parameter im Programm anzupassen.
+Die Idee den Bot über Wlan mit Programmcode versorgen zu können, kam uns, weil es einfach zu lange dauert schnell mal etwas zu probieren oder Parameter im Programm anzupassen.
 \\
 \\
 \noindent{\textbf{Implementierung}}
 \\
 \\
-Die Aktuelle Implementierung ist mehr ein "proof of concept" da es viel Zeit gekostet hat bis zum ersten funktionierenden Beispiel auf dem Bot. 
+Die aktuelle Implementierung ist mehr ein "proof of concept", da es viel Zeit gekostet hat bis zum ersten funktionierenden Beispiel auf dem Bot. 
 Da wir parallel zu Mobile Roboter auch Compilerbau besucht haben, war es nur logisch den dort entworfenen Compiler/Interpreter auf den Bot zu portieren.
-Hier ist eine List der Probleme die dabei auftraten und die >Aktuelle< Lösung.
+Hier ist eine Liste der Probleme, die dabei auftraten, und die >aktuelle< Lösung.
 Langfristige Lösungen werden danach aufgeführt.
 \\
 \begin{itemize}
 	\item 	\textbf{Problem:} Lex ist nicht portierbar ohne den generierten Code anzupassen. \\
-		\textbf{Lösung:} Trennung von Scanner(PC) und Parser/Interpreter(BOT).
+		\textbf{Lösung:} Trennung von Scanner(PC) und Parser/Interpreter(Bot).
 
 	\item 	\textbf{Problem:} Begrenzter Speicher auf den Bot. \\
 		\textbf{Lösung:} Löschen von unnötigen Dateien von Vorgängergruppen.
@@ -386,7 +386,7 @@ Langfristige Lösungen werden danach aufgeführt.
 \\
 \\
 Die Idee kann natürlich in alle Richtungen ausgebaut und optimiert werden.
-Angefangen damit das als Grundlage eine verlässliche Übertragung für den Bot implementiert werden muss.
-Zum Punkt Speicherplatz und Effizienz auf dem Bot wäre es Sinnvoll nur einen minimalen Interpreter/VM
- auf dem Bot zu haben und stat Tokens Bytecode/Instructions zu übertragen.
-  Die Programmiersprache sollte auch angepasst und erweitert werden um die volle funktionallität des Bots nutzen zu können und flexibler zu sein.
+Angefangen damit, dass als Grundlage eine verlässliche Übertragung für den Bot implementiert werden muss.
+Zum Punkt Speicherplatz und Effizienz auf dem Bot wäre es sinnvoll nur einen minimalen Interpreter/VM
+ auf dem Bot zu haben und statt Tokens Bytecode/Instructions zu übertragen.
+  Die Programmiersprache sollte auch angepasst und erweitert werden um die volle Funktionalität des Bots nutzen zu können und flexibler zu sein.
