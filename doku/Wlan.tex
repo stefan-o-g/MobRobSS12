@@ -350,6 +350,43 @@ implementiert:
     \item Funktion Linie: Der Bot folgt einer schwarzen Linie.
     \item Funktion Move: Der Bot kann vom Computer aus ferngesteuert werden.
         Die Geschwindigkeit für das linke bzw. rechte Rad werden in dem WLAN-Paket übertragen.
+    \item Funktion Token empfangen: Liest Token über Wlan und baut einen AST für den Interpreter daraus.
+\end{itemize}
+
+\subsubsection{Wlan Flashen}
+\label{wlan-flash}
+
+\noindent{\textbf{Idee}}
+\\
+\\
+Die Idee den Bot über Wlan flashen  zu können kam uns weil es einfach zu lange dauert schnell mal was zu probieren oder Parameter im Programm anzupassen.
+\\
+\\
+\noindent{\textbf{Implementierung}}
+\\
+\\
+Die Aktuelle Implementierung ist mehr ein "proof of concept" da es viel Zeit gekostet hat bis zum ersten funktionierenden Beispiel auf dem Bot. 
+Da wir parallel zu Mobile Roboter auch Compilerbau besucht haben, war es nur logisch den dort entworfenen Compiler/Interpreter auf den Bot zu portieren.
+Hier ist eine List der Probleme die dabei auftraten und die >Aktuelle< Lösung.
+Langfristige Lösungen werden danach aufgeführt.
+\\
+\begin{itemize}
+	\item 	\textbf{Problem:} Lex ist nicht portierbar ohne den generierten Code anzupassen. \\
+		\textbf{Lösung:} Trennung von Scanner(PC) und Parser/Interpreter(BOT).
+
+	\item 	\textbf{Problem:} Begrenzter Speicher auf den Bot. \\
+		\textbf{Lösung:} Löschen von unnötigen Dateien von Vorgängergruppen.
+	
+	\item 	\textbf{Problem:} Übertragungsfehler im WLAN. \\
+		\textbf{Lösung:} Erneutes senden der Tokens.
 \end{itemize}
 
 
+\noindent{\textbf{Zukunft}}
+\\
+\\
+Die Idee kann natürlich in alle Richtungen ausgebaut und optimiert werden.
+Angefangen damit das als Grundlage eine verlässliche Übertragung für den Bot implementiert werden muss.
+Zum Punkt Speicherplatz und Effizienz auf dem Bot wäre es Sinnvoll nur einen minimalen Interpreter/VM
+ auf dem Bot zu haben und stat Tokens Bytecode/Instructions zu übertragen.
+  Die Programmiersprache sollte auch angepasst und erweitert werden um die volle funktionallität des Bots nutzen zu können und flexibler zu sein.
