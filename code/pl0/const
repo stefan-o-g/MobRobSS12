@@ -1,2 +1,0 @@
-consts a = 1, blub = 0.3;
-vars c:Int,d:Double,e = 3+2;

@@ -4,14 +4,8 @@
 #include "utils.h"
 #include "ast.h"
 #include "interpreter.h"
+#include "semcheck.h"
 
-struct info{
-    enum info_level{
-      INFO_LOG, INFO_WARNING, INFO_ERROR
-    } type;
-    char* message;
-    struct info* next;
-} parser_info;
 
 void parser_error();
 

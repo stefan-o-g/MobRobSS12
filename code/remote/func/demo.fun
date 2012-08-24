@@ -51,6 +51,6 @@ func main(): None =
 		print_int(trys);
 	}	
 
-{
-	guess(0,100);
+while 1 do {
+	guess(1,100);
 }

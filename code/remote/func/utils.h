@@ -11,7 +11,7 @@
 
 
 
-
+void print_indent(FILE* file, int indent);
 
 char* new_strcpy(char* text);
 

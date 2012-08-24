@@ -55,4 +55,12 @@ struct token{
 };
 
 
+void free_token(struct token* t);
+
+
+void print_token(FILE* file, struct token* t);
+void print_token_bot(FILE* file, struct token* t);
+
+char* token_name(enum token_type t);
+
 #endif

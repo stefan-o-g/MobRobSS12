@@ -23,25 +23,95 @@ struct native_function* new_native_function(char* name, void (func)(struct stack
 
 
 
+void cast(struct stack* evalstack,enum datatype source, enum datatype destination){
+	switch(source){
+		case DOUBLE:
+			switch(destination){
+				case DOUBLE: break;
+				case INT: push(evalstack,int_entry(pop(evalstack)._double)); break;
+				case NONE: pop(evalstack); break;
+				default: fprintf(stdout,"cast error\n"); exit(-1); break;
+			}
+		break;
+		case INT:
+			switch(destination){
+				case DOUBLE: push(evalstack,double_entry(pop(evalstack)._int)); break;
+				case INT: break;
+				case NONE: pop(evalstack); break;
+				default: fprintf(stdout,"cast error\n"); exit(-1); break;
+			}
+		break;
+		case NONE:
+			if(destination != NONE){
+				fprintf(stdout,"cast error\n"); exit(-1);
+			}
+		break;
+		default: fprintf(stdout,"cast error\n"); exit(-1); break;
+		break;
+	}
+}
 
 
 
-
-union entry run(struct ast* function, int stacksize, int memorysize){
+void run(struct ast* function, int stacksize, int memorysize){
 	struct memory* mem = new_memory(memorysize);
 	struct stack* evalstack = new_stack(stacksize);
 
-	struct native_function* pint = new_native_function("print_int",print_int,NULL);
-	struct native_function* pdouble = new_native_function("print_double",print_double,pint);
-	struct native_function* native_functions = new_native_function("debug",debug,pdouble);
+	struct native_function* sinus = new_native_function("sin",nsin,NULL);
+	struct native_function* random = new_native_function("random",nrandom,sinus);
+	struct native_function* pint = new_native_function("print_int",nprint_int,random);
+	struct native_function* pdouble = new_native_function("print_double",nprint_double,pint);
+	struct native_function* readint = new_native_function("read_int",nread_int,pdouble);
+	struct native_function* readdouble = new_native_function("read_double",nread_double,readint);
+	struct native_function* s_dump = new_native_function("stack_dump",nstack_dump,readdouble);
+	struct native_function* native_functions = new_native_function("mem_dump",nmem_dump,s_dump);
+
+	struct ast* call_params = NULL;
+	struct ast* last_call_param = call_params;
+
+	struct ast* params_list = function->_funcdec.params;
+	while(params_list != NULL){
+		char* param_name = params_list->_list.item->_param.name;
+		enum datatype type = params_list->_list.item->_param.type;
+
+		if(type == INT){
+			int i;
+			do{
+				printf("Set paramerter %s:Int of function %s: ",param_name,function->_funcdec.name);
+			}while(scanf("%d",&i) == EOF);
+
+			if(last_call_param == NULL){
+				call_params = last_call_param = new_list(new_int_literal(i),NULL);
+			}else{
+				last_call_param = last_call_param->_list.next = new_list(new_int_literal(i),NULL);
+			}
+
+		}else if(type == DOUBLE){
+
+			double d;
+			do{
+				printf("Set paramerter %s:Double of function %s: ",param_name,function->_funcdec.name);
+			}while(scanf("%lf",&d) == EOF);
+
+			if(last_call_param == NULL){
+				call_params = last_call_param = new_list(new_double_literal(d),NULL);
+			}else{
+				last_call_param = last_call_param->_list.next = new_list(new_double_literal(d),NULL);
+			}
+		}
+
+		params_list = params_list->_list.next;
+	}
 
 
-	struct ast* call = new_call("main",NULL);
-	struct ast* bootstrap_function = new_funcdec(NULL,"environment",NULL,NULL,new_list(function,NULL),NONE,0,NULL);
-	function->_funcdec.parent = bootstrap_function;
+	struct ast* call = new_call(function->_funcdec.name,call_params);
 
-	interpret(call , bootstrap_function, evalstack, mem, native_functions);
-	return pop(evalstack);
+	//ast2xml(stdout,call,0);
+
+	struct ast* runtime_env = new_funcdec(NULL,"runtime_env",NULL,NULL,new_list(function,NULL),NONE,0,NULL);
+	function->_funcdec.parent = runtime_env;
+
+	interpret(call , runtime_env, evalstack, mem, native_functions);
 }
 
 void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, struct memory* mem, struct native_function* native_functions){
@@ -54,15 +124,21 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 			int paramcount = list_length(loc.ast->_funcdec.params);
 			int varcount = list_length(loc.ast->_funcdec.variables);
 
-
+			struct ast* param_decs = loc.ast->_funcdec.params;
 			struct ast* params = ast->_call.params;
 			while(params != NULL){
 				interpret(params->_list.item,context,evalstack,mem, native_functions);
+				enum datatype type = resolve_datatype(params->_list.item,context);
+				if(type != param_decs->_list.item->_param.type){
+					//fprintf(stdout,"implicit cast from %s to %s\n", type_name(type), type_name(param_decs->_list.item->_param.type));
+					cast(evalstack, type, param_decs->_list.item->_param.type);
+				}
 				params = params->_list.next;
+				param_decs = param_decs->_list.next;
 			}
 
 			push_stack_frame(mem,varcount + paramcount,loc.level);
-			//printf("%s push_stack_frame delta %d var_count %d paramcount %d tos %d\n", loc.ast->_funcdec.name , loc.level, varcount, paramcount,mem->tos);
+			//fprintf(stdout,"%s push_stack_frame delta %d var_count %d paramcount %d tos %d\n", loc.ast->_funcdec.name , loc.level, varcount, paramcount,mem->tos);
 
 
 			int i;
@@ -92,8 +168,8 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 				if(f != NULL){
 					f->func(evalstack,mem);
 				}else{
-					//printf("native function %s not found.\n", ast->_call.name);
-					//exit(-1);
+					printf("native function %s not found.\n", ast->_call.name);
+					exit(-1);
 				}
 			}
 			pop_stack_frame(mem);
@@ -155,8 +231,13 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 			union entry rhs = pop(evalstack);
 			union entry lhs = pop(evalstack);
 
-			enum datatype rhs_type = resolve_datatype(ast->_binary.lhs, context);
-			enum datatype lhs_type = resolve_datatype(ast->_binary.rhs, context);
+
+			enum datatype rhs_type = resolve_datatype(ast->_binary.rhs, context);
+			enum datatype lhs_type = resolve_datatype(ast->_binary.lhs, context);
+
+			//printf("lhs double %f int %d type %s\n",lhs._double,lhs._int, type_name(lhs_type));
+			//printf("rhs double %f int %d type %s\n",rhs._double,rhs._int, type_name(rhs_type));
+
 			switch(ast->_binary.op){
 				case ADD:
 					switch(lhs_type){
@@ -380,7 +461,6 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 			int size = stack_size(evalstack);
 			while(last->_list.next != NULL){
 				interpret(last->_list.item,context,evalstack,mem, native_functions);
-				//clean stack since we only use the last value of the list
 				if(stack_size(evalstack) > size){
 					pop(evalstack);
 				}
@@ -396,7 +476,9 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 			if(cond){
 				interpret(ast->_if.thenstmt , context, evalstack, mem, native_functions);
 			}else{
-				interpret(ast->_if.elsestmt , context, evalstack, mem, native_functions);
+				if(ast->_if.elsestmt != NULL){
+					interpret(ast->_if.elsestmt , context, evalstack, mem, native_functions);
+				}
 			}
 		}
 		break;
@@ -404,15 +486,34 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 		{
 			interpret(ast->_while.condition , context, evalstack, mem, native_functions);
 			int cond = pop(evalstack)._int;
+			enum datatype type = resolve_datatype(ast->_while.statement,context);
 			while(cond){
 				interpret(ast->_while.statement,context,evalstack,mem, native_functions);
+				if(type != NONE){
+					pop(evalstack);
+				}
 				interpret(ast->_while.condition , context, evalstack, mem, native_functions);
 				cond = pop(evalstack)._int;
 			}
+
 		}
 		break;
 		case ASSIGN:
+			interpret(ast->_assign.expr, context, evalstack, mem, native_functions);
+			struct lookup_result loc = lookup_id(context,ast->_assign.name);
 
+			enum datatype exprtype = resolve_datatype(ast->_assign.expr,context);
+			enum datatype vartype = resolve_decalaration_type(loc.ast,context);
+
+
+			if(exprtype != vartype){
+				printf("implicit cast from %s to %s\n", type_name(exprtype), type_name(vartype));
+				cast(evalstack, exprtype, vartype);
+			}
+
+			union entry e = pop(evalstack);
+			write(mem,loc.level,loc.offset,e);
+			push(evalstack,e);
 		break;
 	}
 }

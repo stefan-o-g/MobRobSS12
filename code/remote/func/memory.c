@@ -63,9 +63,23 @@ struct frame* jump_sl(struct memory* memory,struct frame* start, int steps){
 }
 
 
+void mem_dump(struct memory* memory, FILE* out){
 
+	fprintf(out,"Memory Dump tos=%d\n[address][index][double][int]\n", memory->tos);
+	fflush(out);
+	int i;
+	for(i = memory->size-1; i >= 0 ; i--){
+		fprintf(out,"[%d][%d][%f][%d]\n",memory->entries+i, i, memory->entries[i]._double, memory->entries[i]._int);
+		fflush(out);
+	}
+}
 
 void mem_dump_frames(struct memory* memory, FILE* out){
+	struct frame* frame = get_frame(memory, memory->tos);
+
+}
+
+int varcount(struct frame* frame){
 
 }
 

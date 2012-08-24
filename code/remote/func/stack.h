@@ -17,4 +17,6 @@ int is_empty(struct stack* s);
 int is_full(struct stack* s);
 int stack_size(struct stack* s);
 
+void stack_dump(struct stack* s, FILE* out);
+
 #endif

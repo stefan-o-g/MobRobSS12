@@ -119,7 +119,7 @@ struct ast* new_vardec(char* name, enum datatype type, enum modifier mod, struct
 struct ast* new_funcdec(struct ast* parent, char* name, struct ast* params, struct ast* variables, struct ast* functions, enum datatype type, int native, struct ast* body);
 struct ast* new_param(char* name, enum datatype type);
 
-
+void ast2xml(FILE* file, struct ast* ast, int indent);
 
 char* modifier_name(enum modifier m);
 

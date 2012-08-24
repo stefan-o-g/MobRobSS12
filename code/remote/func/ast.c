@@ -189,7 +189,206 @@ char* modifier_name(enum modifier m){
 	}
 }
 
+void ast2xml(FILE* file, struct ast* ast, int indent){
+	if(ast == NULL){
+		//print_indent(file,indent);
+		//fprintf(file,"<NULL/>\n");
+		return;
+	}
+	switch(ast->type){
+		case UNARY:
+			print_indent(file,indent);
+			fprintf(file,"<Unary op=\"%s\">\n",unop_name(ast->_unary.op));
+			ast2xml(file,ast->_unary.operand, indent+1);
+			print_indent(file,indent);
+			fprintf(file,"</Unary>\n");
+		break;
+		case BINARY:
+			print_indent(file,indent);
+			fprintf(file,"<Binary op=\"%s\">\n",binop_name(ast->_binary.op));
+				print_indent(file,indent+1);
+				fprintf(file,"<lhs>\n");
+					ast2xml(file,ast->_binary.lhs, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</lhs>\n");
 
+				print_indent(file,indent+1);
+				fprintf(file,"<rhs>\n");
+					ast2xml(file,ast->_binary.rhs, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</rhs>\n");
+			print_indent(file,indent);
+			fprintf(file,"</Binary>\n");
+		break;
+		case IDENT:
+			print_indent(file,indent);
+			fprintf(file,"<Ident name=\"%s\" />\n",ast->_ident.name);
+		break;
+		case LITERAL:
+			switch(ast->_literal.type){
+				case DOUBLE:
+					print_indent(file,indent);
+					fprintf(file,"<Literal type=\"DOUBLE\" value=\"%lf\" />\n",ast->_literal._double);
+				break;
+				case INT:
+					print_indent(file,indent);
+					fprintf(file,"<Literal type=\"INT\" value=\"%d\" />\n",ast->_literal._int);
+				break;
+				default:
+					print_indent(file,indent);
+					fprintf(file,"<Literal type=\"UNKNOWN\" />\n");
+				break;
+			}
+		break;
+		case ASSIGN:
+			print_indent(file,indent);
+			fprintf(file,"<Assign ident=\"%s\">\n",ast->_assign.name);
+				print_indent(file,indent+1);
+				fprintf(file,"<rhs>\n");
+					ast2xml(file, ast->_assign.expr, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</rhs>\n");
+			print_indent(file,indent);
+			fprintf(file,"</Assign>\n");
+		break;
+		case CALL:
+			print_indent(file,indent);
+			fprintf(file,"<Call name=\"%s\">\n",ast->_call.name);
+
+			struct ast* param =  ast->_call.params;
+			while(param != NULL){
+				print_indent(file,indent+1);
+				fprintf(file,"<param>\n");
+
+				ast2xml(file,param->_list.item,indent+2);
+
+				print_indent(file,indent+1);
+				fprintf(file,"</param>\n");
+				param = param->_list.next;
+			}
+
+			print_indent(file,indent);
+			fprintf(file,"</Call>\n");
+		break;
+		case IF:
+			print_indent(file,indent);
+			fprintf(file,"<If>\n");
+
+				print_indent(file,indent+1);
+				fprintf(file,"<condition>\n");
+				ast2xml(file, ast->_if.condition, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</condition>\n");
+
+
+				print_indent(file,indent+1);
+				fprintf(file,"<than>\n");
+				ast2xml(file, ast->_if.thenstmt, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</than>\n");
+
+
+				print_indent(file,indent+1);
+				fprintf(file,"<else>\n");
+				ast2xml(file, ast->_if.elsestmt, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</else>\n");
+
+
+			print_indent(file,indent);
+			fprintf(file,"</If>\n");
+		break;
+		case WHILE:
+			print_indent(file,indent);
+			fprintf(file,"<While>\n");
+
+				print_indent(file,indent+1);
+				fprintf(file,"<condition>\n");
+				ast2xml(file, ast->_while.condition, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</condition>\n");
+
+
+				print_indent(file,indent+1);
+				fprintf(file,"<do>\n");
+				ast2xml(file, ast->_while.statement, indent+2);
+				print_indent(file,indent+1);
+				fprintf(file,"</do>\n");
+
+
+
+			print_indent(file,indent);
+			fprintf(file,"</While>\n");
+		break;
+		case LIST:
+			print_indent(file,indent);
+			fprintf(file,"<List>\n");
+
+			struct ast* list =  ast;
+			while(list != NULL){
+				ast2xml(file,list->_list.item,indent+1);
+				list = list->_list.next;
+			}
+
+			print_indent(file,indent);
+			fprintf(file,"</List>\n");
+		break;
+		case VARDEC:
+			print_indent(file,indent);
+			fprintf(file,"<Vardec name=\"%s\" modifier=\"%s\" declared_type=\"%s\">\n",ast->_vardec.name, modifier_name(ast->_vardec.modifier), type_name(ast->_vardec.declared_type));
+
+			ast2xml(file, ast->_vardec.init, indent+1);
+
+			print_indent(file,indent);
+			fprintf(file,"</Vardec>\n");
+		break;
+		case FUNCDEC:
+			print_indent(file,indent);
+			char*  parent_name = ast->_funcdec.parent==NULL?"":ast->_funcdec.parent->_funcdec.name;
+			fprintf(file,"<Funcdec name=\"%s\" parent=\"%s\" declared_type=\"%s\">\n",ast->_funcdec.name,parent_name , type_name(ast->_funcdec.declared_type));
+
+			ast2xml(file,ast->_funcdec.params,indent+1);
+
+
+			print_indent(file,indent+1);
+			fprintf(file,"<Variables>\n");
+			ast2xml(file, ast->_funcdec.variables, indent+2);
+			print_indent(file,indent+1);
+			fprintf(file,"</Variables>\n");
+
+
+
+			print_indent(file,indent+1);
+			fprintf(file,"<Functions>\n");
+			ast2xml(file, ast->_funcdec.functions, indent+2);
+			print_indent(file,indent+1);
+			fprintf(file,"</Functions>\n");
+
+
+
+			print_indent(file,indent+1);
+			fprintf(file,"<Body>\n");
+
+			if(!ast->_funcdec.is_native){
+				ast2xml(file, ast->_funcdec.body, indent+2);
+			}else{
+				print_indent(file,indent+2);
+				fprintf(file,"native\n");
+			}
+			print_indent(file,indent+1);
+			fprintf(file,"</Body>\n");
+
+			print_indent(file,indent);
+			fprintf(file,"</Funcdec>\n");
+		break;
+		case PARAM:
+			print_indent(file,indent);
+			fprintf(file,"<Param name=\"%s\" type=\"%s\"/>\n",ast->_param.name, type_name(ast->_param.type));
+		break;
+		default:
+		break;
+	}
+}
 
 enum datatype resolve_decalaration_type(struct ast* declaration, struct ast* function){
 	switch(declaration->type){
@@ -217,6 +416,9 @@ enum datatype resolve_datatype(struct ast* expr, struct ast* function){
 		return NONE;
 	}
 	switch(expr->type){
+		case ASSIGN:
+			return resolve_datatype(expr->_assign.expr, function);
+		break;
 		case LITERAL:
 			return expr->_literal.type;
 		break;
@@ -350,7 +552,10 @@ enum datatype resolve_datatype(struct ast* expr, struct ast* function){
 		case IF:
 		{
 			enum datatype then_type = resolve_datatype(expr->_if.thenstmt, function);
-			enum datatype else_type = resolve_datatype(expr->_if.elsestmt, function);
+			enum datatype else_type = then_type; 
+			if(expr->_if.elsestmt != NULL){
+				else_type = resolve_datatype(expr->_if.elsestmt, function);
+			}
 			switch(then_type){
 				case DOUBLE:
 					switch(else_type){

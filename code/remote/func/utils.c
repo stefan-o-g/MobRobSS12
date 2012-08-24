@@ -5,4 +5,6 @@ char* new_strcpy(char* text){
 	return strcpy(copy,text);
 }
 
-
+void print_indent(FILE* file, int indent){
+	fprintf(file,"%*s",indent,"");
+}
