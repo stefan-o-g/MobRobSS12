@@ -14,17 +14,15 @@ int expect(enum token_type expected) {
 	if (token_is(expected)) {
 		return 1;
 	} else {
-		printf("Expected %s but found %s on line %d column %d.\n",
-				token_name(expected), token_name(t->type), t->line, t->column);
-		exit(-1);
+		display_clear();
+		display_cursor(1,1);
+		display_printf("expect");
+		delay(10000);
 		return 0;
 	}
 }
 
-void parser_error() {
-	struct token* t = get_token();
-	fprintf(stderr, "error in line %d on column %d.\n", t->line, t->column);
-}
+
 
 struct ast* parse_all() {
 	next_token();
@@ -48,9 +46,10 @@ struct ast* constdec() {
 			type = typename2type(next_token()->text);
 			if (type == INVALID_DATATYPE) {
 				struct token* t = get_token();
-				fprintf(stdout,
-						"Error: %s on line %d column %d is not a valid datatype.\n",
-						t->text, t->line, t->column);
+				display_clear();
+				display_cursor(1,1);
+				display_printf("invalid type");
+				delay(10000);
 			}
 			next_token();
 		}
@@ -81,9 +80,10 @@ struct ast* vardec() {
 			type = typename2type(next_token()->text);
 			if (type == INVALID_DATATYPE) {
 				struct token* t = get_token();
-				fprintf(stdout,
-						"%s on line %d column %d is not a valid datatype.\n",
-						t->text, t->line, t->column);
+				display_clear();
+				display_cursor(1,1);
+				display_printf("invalid type");
+				delay(10000);
 			}
 			next_token();
 		}
@@ -97,9 +97,10 @@ struct ast* vardec() {
 				expr = new_vardec(ident, type, NO_MODIFIER,
 						default_value_for(type));
 			} else {
-				fprintf(stdout,
-						"You need to either supply a datatype or an initial value for variable %s on line %d column %d.\n",
-						ident, line, column);
+				display_clear();
+				display_cursor(1,1);
+				display_printf("type or value");
+				delay(10000);
 			}
 		}
 	}
@@ -384,46 +385,15 @@ struct ast* factor_expr() {
 		}
 		expr = list;
 	}else{
-		printf("error empty expression on line %d column %d token %s.\n",get_token()->line,get_token()->column,get_token()->text);
-		exit(-1);
+		display_clear();
+		display_cursor(1,1);
+		display_printf("empty expr");
+		delay(10000);
 	}
 
 	return expr;
 }
 
-void print_tokens(FILE* file) {
-	do {
-		print_token_bot(file, next_token());
-	} while (get_token()->type != T_EOF);
-}
 
 
-/*
-int main(int argc, char* argv[]) {
-	FILE *in = fopen(argv[1], "r");
-	set_scanner_input(in);
 
-	//print_tokens(stdout);
-	//print_bot(stdout);
-
-	struct ast* ast = parse_all();
-	ast2xml(stdout,ast,0);
-
-
-	semcheck(ast,ast);
-
-
-	run(ast, 16, 512);
-
-	struct lookup_result a;
-	 a = lookup_id(ast,argv[2]);
-	 printf("%s: level %d offset %d\n",argv[2],a.level,a.offset);
-	 if(a.ast->type == FUNCDEC){
-	 struct lookup_result b;
-	 b = lookup_id(a.ast,argv[3]);
-	 printf("%s: from %s level %d offset %d\n",argv[3],a.ast->_funcdec.name,b.level,b.offset);
-	 }
-
-	//printf("%s\n",type_name(resolve_datatype(ast)));
-	return 0;
-}*/

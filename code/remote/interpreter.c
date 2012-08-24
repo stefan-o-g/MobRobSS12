@@ -30,7 +30,7 @@ void cast(struct stack* evalstack,enum datatype source, enum datatype destinatio
 				case DOUBLE: break;
 				case INT: push(evalstack,int_entry(pop(evalstack)._double)); break;
 				case NONE: pop(evalstack); break;
-				default: fprintf(stdout,"cast error\n"); exit(-1); break;
+				default:  break;
 			}
 		break;
 		case INT:
@@ -38,15 +38,15 @@ void cast(struct stack* evalstack,enum datatype source, enum datatype destinatio
 				case DOUBLE: push(evalstack,double_entry(pop(evalstack)._int)); break;
 				case INT: break;
 				case NONE: pop(evalstack); break;
-				default: fprintf(stdout,"cast error\n"); exit(-1); break;
+				default:  break;
 			}
 		break;
 		case NONE:
 			if(destination != NONE){
-				fprintf(stdout,"cast error\n"); exit(-1);
+
 			}
 		break;
-		default: fprintf(stdout,"cast error\n"); exit(-1); break;
+		default:  break;
 		break;
 	}
 }
@@ -57,51 +57,14 @@ void run(struct ast* function, int stacksize, int memorysize){
 	struct memory* mem = new_memory(memorysize);
 	struct stack* evalstack = new_stack(stacksize);
 
-	struct native_function* sinus = new_native_function("sin",nsin,NULL);
-	struct native_function* random = new_native_function("random",nrandom,sinus);
-	struct native_function* pint = new_native_function("print_int",nprint_int,random);
-	struct native_function* pdouble = new_native_function("print_double",nprint_double,pint);
-	struct native_function* readint = new_native_function("read_int",nread_int,pdouble);
-	struct native_function* readdouble = new_native_function("read_double",nread_double,readint);
-	struct native_function* s_dump = new_native_function("stack_dump",nstack_dump,readdouble);
-	struct native_function* native_functions = new_native_function("mem_dump",nmem_dump,s_dump);
+
+	struct native_function* motor = new_native_function("motor_set",nmotor_set,NULL);
+	struct native_function* LDRL = new_native_function("sens_LDRL",nsens_LDRL,motor);
+	struct native_function* LDRR = new_native_function("sens_LDRR",nsens_LDRR,LDRL);
+	struct native_function* native_functions = new_native_function("print_int",nprint_int,LDRR);
 
 	struct ast* call_params = NULL;
-	struct ast* last_call_param = call_params;
 
-	struct ast* params_list = function->_funcdec.params;
-	while(params_list != NULL){
-		char* param_name = params_list->_list.item->_param.name;
-		enum datatype type = params_list->_list.item->_param.type;
-
-		if(type == INT){
-			int i;
-			do{
-				printf("Set paramerter %s:Int of function %s: ",param_name,function->_funcdec.name);
-			}while(scanf("%d",&i) == EOF);
-
-			if(last_call_param == NULL){
-				call_params = last_call_param = new_list(new_int_literal(i),NULL);
-			}else{
-				last_call_param = last_call_param->_list.next = new_list(new_int_literal(i),NULL);
-			}
-
-		}else if(type == DOUBLE){
-
-			double d;
-			do{
-				printf("Set paramerter %s:Double of function %s: ",param_name,function->_funcdec.name);
-			}while(scanf("%lf",&d) == EOF);
-
-			if(last_call_param == NULL){
-				call_params = last_call_param = new_list(new_double_literal(d),NULL);
-			}else{
-				last_call_param = last_call_param->_list.next = new_list(new_double_literal(d),NULL);
-			}
-		}
-
-		params_list = params_list->_list.next;
-	}
 
 
 	struct ast* call = new_call(function->_funcdec.name,call_params);
@@ -119,10 +82,23 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 		case CALL:
 		{
 
+
+
 			struct lookup_result loc = lookup_id(context,ast->_call.name);
 
 			int paramcount = list_length(loc.ast->_funcdec.params);
 			int varcount = list_length(loc.ast->_funcdec.variables);
+
+
+			/*
+			delay(2000);
+			display_clear();
+			display_cursor(1,1);
+			display_printf("call %s", ast->_call.name);
+			display_cursor(2,1);
+			display_printf("native %d", loc.ast->_funcdec.is_native);
+			delay(2000);
+			 */
 
 			struct ast* param_decs = loc.ast->_funcdec.params;
 			struct ast* params = ast->_call.params;
@@ -165,11 +141,21 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 
 			}else{
 				struct native_function* f = find_native_function(ast->_call.name,native_functions);
+				/*
+				display_clear();
+				display_cursor(1,1);
+				display_printf("search");
+				display_cursor(2,1);
+				display_printf("name %s.",ast->_call.name);
+				display_cursor(3,1);
+				display_printf("length %d",strlen(ast->_call.name));
+				delay(10000);
+				*/
+
 				if(f != NULL){
 					f->func(evalstack,mem);
 				}else{
-					printf("native function %s not found.\n", ast->_call.name);
-					exit(-1);
+
 				}
 			}
 			pop_stack_frame(mem);
@@ -485,9 +471,13 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 		case WHILE:
 		{
 			interpret(ast->_while.condition , context, evalstack, mem, native_functions);
+			enum datatype type = resolve_datatype(ast->_while.statement,context);
 			int cond = pop(evalstack)._int;
 			while(cond){
 				interpret(ast->_while.statement,context,evalstack,mem, native_functions);
+				if(type != NONE){
+					pop(evalstack);
+				}
 				interpret(ast->_while.condition , context, evalstack, mem, native_functions);
 				cond = pop(evalstack)._int;
 			}
@@ -502,7 +492,6 @@ void interpret(struct ast* ast, struct ast* context, struct stack* evalstack, st
 
 
 			if(exprtype != vartype){
-				printf("implicit cast from %s to %s\n", type_name(exprtype), type_name(vartype));
 				cast(evalstack, exprtype, vartype);
 			}
 

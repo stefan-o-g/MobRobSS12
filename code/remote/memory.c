@@ -65,23 +65,16 @@ struct frame* jump_sl(struct memory* memory,struct frame* start, int steps){
 
 void mem_dump(struct memory* memory, FILE* out){
 
-	fprintf(out,"Memory Dump tos=%d\n[address][index][double][int]\n", memory->tos);
-	fflush(out);
+
 	int i;
 	for(i = memory->size-1; i >= 0 ; i--){
-		fprintf(out,"[%d][%d][%f][%d]\n",memory->entries+i, i, memory->entries[i]._double, memory->entries[i]._int);
-		fflush(out);
+
 	}
 }
 
-void mem_dump_frames(struct memory* memory, FILE* out){
-	struct frame* frame = get_frame(memory, memory->tos);
 
-}
 
-int varcount(struct frame* frame){
 
-}
 
 union entry int_entry(int i){
 	union entry e;
@@ -96,22 +89,4 @@ union entry double_entry(double d){
 }
 
 
-/*
-int main(){
-	struct memory* mem =  new_memory(20);
-	mem_dump(mem,stdout);
-	push_stack_frame(mem,3,0);
-	mem_dump(mem,stdout);
-	write(mem,0,0,int_entry(42));
-	write(mem,0,1,int_entry(43));
-	write(mem,0,2,int_entry(44));
-	mem_dump(mem,stdout);
-	push_stack_frame(mem,0,0);
-	write(mem,1,1,int_entry(50));
-	mem_dump(mem,stdout);
-	push_stack_frame(mem,0,1);
-	write(mem,1,2,int_entry(55));
-	mem_dump(mem,stdout);
-}
-*/
 

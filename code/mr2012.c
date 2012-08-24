@@ -1,7 +1,14 @@
+/*
+ * mr2012.c
+ *
+ *  Created on: 08.05.2012
+ *      Author: mr2012
+ */
+
 #include "include/mr2012.h"
-// #include "pl0/parser.h"
-// #include "pl0/ast.h"
-// #include "pl0/interpreter.h"
+#include "func/parser.h"
+#include "func/interpreter.h"
+#include "func/ast.h"
 
 
 
@@ -14,6 +21,8 @@ void motte_nonbehav(){
 	//Sensorwerte aktualliseren und Bildschirmausgabe
 	sensor_update();
 	display_clear();
+
+	int speed = 150;
 	display_printf("Motte");
 	display_cursor(2,1);
 	display_printf("R = %d", sensLDRR);
@@ -29,10 +38,10 @@ void motte_nonbehav(){
 	while(sensLDRR > sensLDRL && stopMotor++ < 20){
 		//Schnell drehen wenn der Unterschied groß ist...
 		if(sensLDRR > sensLDRL*2)
-			motor_set(-BOT_SPEED_NORMAL, BOT_SPEED_NORMAL);
+			motor_set(-speed, speed);
 		//...sonst langsam drehen
 		else
-			motor_set(-BOT_SPEED_FOLLOW, BOT_SPEED_MEDIUM);
+			motor_set(-speed, speed);
 		display_cursor(4,1);
 		display_printf("Turning left...");
 		sensor_update();
@@ -42,10 +51,10 @@ void motte_nonbehav(){
 	while(sensLDRR < sensLDRL && stopMotor++ < 20){
 		//Schnell drehen wenn der Unterschied groß ist...
 		if(sensLDRR*2 < sensLDRL)
-			motor_set(BOT_SPEED_NORMAL, -BOT_SPEED_NORMAL);
+			motor_set(speed, -speed);
 		//...sonst langsam drehen
 		else
-			motor_set(BOT_SPEED_MEDIUM, -BOT_SPEED_FOLLOW);
+			motor_set(speed, -speed);
 		display_cursor(4,1);
 		display_printf("Turning right...");
 		sensor_update();
@@ -54,7 +63,7 @@ void motte_nonbehav(){
 	//Richtung einige Zeit beibehalten wenn Sensorwerte gleich waren
 	stopMotor=0;
 	while(nearly_equal(sensLDRR, sensLDRL, 2) && stopMotor++ < 120){
-		motor_set(BOT_SPEED_MEDIUM, BOT_SPEED_MEDIUM);
+		motor_set(speed, speed);
 		display_cursor(4,1);
 		display_printf("Following...");
 		sensor_update();
@@ -126,6 +135,11 @@ void kakerlake_nonbehav(){
 			motor_set(BOT_SPEED_MEDIUM, BOT_SPEED_MEDIUM);
 		display_printf("Getting away...");
 	}
+
+	//stopMotor=0;
+	//display_cursor(4,1);
+	//display_printf("Stop");
+	//motor_set(BOT_SPEED_STOP,BOT_SPEED_STOP);
 }
 
 
@@ -137,7 +151,6 @@ void acht_nonbehav(){
 
 	display_clear();
 	display_printf("Acht!");
-
 	display_cursor(2,1);
 	display_printf("DistR=%d  IR=%5d", distr, ir);
 	display_cursor(3,1);
@@ -245,7 +258,7 @@ void light(int dir){
 	display_printf("Sum: %d",sensLDRL+sensLDRR);
 	
 	//speed variable
-	int16 speed = BOT_SPEED_FAST;
+	int16 speed = 200;
 
 	//grenzwert der entscheidet wann wieder zum licht hingedreht wird
 	int16 trsh = 80;
@@ -279,6 +292,7 @@ void line(){
 	int l_correction = 0;
 	sensLineR += r_correction;
 	sensLineL+= l_correction;
+	int speed = 150;
 	
 	//debug ausgabe
 	display_clear();
@@ -294,14 +308,14 @@ void line(){
 
 
 	if(delta < -300){
-		motor_set(200,-200);
+		motor_set(speed,-speed);
 	}else if(delta > 300){
-		motor_set(-200,200);
+		motor_set(-speed,speed);
 	}else{
 		if((sensLineL + sensLineR) < 100 ){
-			motor_set(0,200);
+			motor_set(0,speed);
 		}else{
-			motor_set(200,200);
+			motor_set(speed,speed);
 		}
 	}	
 }
@@ -344,6 +358,7 @@ command_t* read_command(){
 
 
 void entry_point(){
+	static int count = 0;
 	//Fernbedinungscode abfragen und funktion wechseln
 	//int code = get_code();
 	command_t* cmd = read_command();
@@ -363,21 +378,72 @@ void entry_point(){
 			break;
 			case 7: funktion = linie; //7 tv
 			break;
-			case 8: //8 tv
-			break;
-			case 9:  //9 tv
-			break;
-			case 'm': funktion = move; motor_set(cmd->data_l, cmd->data_r);
-			case 't':
+			case 'm':
 			{
 				display_clear();
 				display_cursor(1,1);
-				display_printf("hello world!");
-				struct ast* ast = parse_all();
-				run(ast,16,100);
+				display_printf("Mooooove %d",++count);
+				funktion = move; motor_set(cmd->data_l, cmd->data_r);
 			}
 			break;
-		}
+			case 't':
+			{
+				/*//Compiler is too big, so just printing tokens
+				if(cmd->data_l != -1){
+					display_clear();
+					display_cursor(1,1);
+					display_printf("Token: %d", cmd->data_l);
+					display_cursor(2,1);
+					uint8_t buf[50];
+					buf[cmd->payload] = '\0';
+					display_printf("Value: %s", read_payload(cmd, buf));
+				}
+				else{
+					display_clear();
+					display_cursor(1,1);
+					display_printf("All tokens received!");
+					display_cursor(2,1);
+					display_printf(":-)");
+				}*/
+
+				/*
+					struct ast* body = new_call("print_int",new_list(new_int_literal(1337),NULL));
+
+					struct ast* program = new_funcdec(NULL,"main",NULL,NULL,NULL,NONE,0,body);
+
+					struct ast* functions = new_list(new_funcdec(program,"print_int",new_list(new_param("i",INT),NULL),NULL,NULL,NONE,1,NULL),NULL);
+
+					program->_funcdec.functions = functions;
+				 */
+
+				funktion = move;
+
+				struct ast* program = parse_all();
+
+
+				//ast2xml(program);
+
+				display_clear();
+				display_cursor(1,1);
+				display_printf("done parsing!");
+				display_cursor(2,1);
+				display_printf("runs in 2 sec!");
+				delay(2000);
+				run(program,8,32);
+				display_clear();
+				display_cursor(1,1);
+				display_printf("done running \o/!");
+
+				delay(10000);
+			}
+			break;
+		}/*
+		display_clear();
+		display_cursor(1, 1);
+		display_printf("Remote v0.2");
+		display_cursor(2, 1);
+		display_printf("*sing* Nyan Nyan...");
+		*/
 	}
 	
 	switch(funktion){
